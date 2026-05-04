@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Greenhouse Music</title>
+
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+<style>
+body {
+  margin:0;
+  font-family: Arial;
+  background: linear-gradient(#d8f3dc, #95d5b2);
+}
+
+.container {
+  padding:40px;
+  text-align:center;
+}
+
+button {
+  padding:12px 20px;
+  border:none;
+  border-radius:10px;
+  background:#52b788;
+  color:white;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div id="root"></div>
+
+<script>
+
+const e = React.createElement;
+
+function App() {
+  return e("div", { className: "container" },
+    e("h1", null, "🌿 Greenhouse Music"),
+    e("p", null, "Si tu vois ce message → React fonctionne ✅"),
+    e("button", null, "Bouton test")
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(e(App));
+
+</script>
+
+</body>
+</html>
