@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page { size: 80mm 200mm; margin: 0; }
+        body {
+            width: 72mm;
+            margin: 0 auto;
+            padding: 10px;
+            background-color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            color: #000;
+            font-size: 11pt;
+            line-height: 1.2;
+        }
+        .header { text-align: center; border-bottom: 1px dashed #000; padding-bottom: 10px; margin-bottom: 10px; }
+        .logo { font-weight: bold; font-size: 1.4em; letter-spacing: 5px; }
+        .section { margin-bottom: 15px; }
+        .section-title { font-weight: bold; border-left: 10px solid #000; padding-left: 5px; margin-bottom: 5px; text-transform: uppercase; }
+        .message { font-style: italic; font-size: 1.1em; }
+        .divider { border-top: 1px solid #000; margin: 10px 0; }
+        .ascii-art { font-size: 8px; line-height: 8px; white-space: pre; text-align: center; margin: 10px 0; }
+        .footer { text-align: center; border-top: 1px dashed #000; padding-top: 10px; font-size: 0.8em; }
+        .pixel-box { border: 2px solid #000; padding: 5px; margin: 5px 0; text-align: center; }
+        .maze { font-family: monospace; font-size: 12px; line-height: 12px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">G U S</div>
+        <div>V.1.0-THERMIQUE</div>
+        <div>{{date}}</div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">01 MESSAGE</div>
+        <p class="message">"{{message}}"</p>
+    </div>
+
+    <div class="section">
+        <div class="section-title">02 METEO (MPL)</div>
+        <div class="ascii-art">
+           _   _
+          ( )_( )
+         (_   _)
+          (_) (_)
+        </div>
+        <div style="text-align:center">19°C - CIEL VOILE</div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">03 MOT DU JOUR</div>
+        <div class="pixel-box">
+            <strong>{{word}}</strong><br>
+            <small>{{definition}}</small>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">04 PUZZLE</div>
+        <div class="maze">
+        +-+-+-+-+-+<br>
+        | |     | |<br>
+        + + +-+ + +<br>
+        |   |   | |<br>
+        +-+-+ +-+ +<br>
+        |         |<br>
+        +-+-+-+-+-+
+        </div>
+        <div style="text-align:center; font-size: 0.7em;">(Trouve la sortie)</div>
+    </div>
+
+    <div class="footer">
+        *** TICKET NO {{id}} ***<br>
+        GARDEZ UN PEU DE DOUCEUR.<br>
+        PROJET-GUS.GITHUB.IO
+    </div>
+</body>
+</html>
