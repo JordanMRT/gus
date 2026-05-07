@@ -1,81 +1,1180 @@
 
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <style>
-        @page { size: 80mm 200mm; margin: 0; }
-        body {
-            width: 72mm;
-            margin: 0 auto;
-            padding: 10px;
-            background-color: #fff;
-            font-family: 'Courier New', Courier, monospace;
-            color: #000;
-            font-size: 11pt;
-            line-height: 1.2;
-        }
-        .header { text-align: center; border-bottom: 1px dashed #000; padding-bottom: 10px; margin-bottom: 10px; }
-        .logo { font-weight: bold; font-size: 1.4em; letter-spacing: 5px; }
-        .section { margin-bottom: 15px; }
-        .section-title { font-weight: bold; border-left: 10px solid #000; padding-left: 5px; margin-bottom: 5px; text-transform: uppercase; }
-        .message { font-style: italic; font-size: 1.1em; }
-        .divider { border-top: 1px solid #000; margin: 10px 0; }
-        .ascii-art { font-size: 8px; line-height: 8px; white-space: pre; text-align: center; margin: 10px 0; }
-        .footer { text-align: center; border-top: 1px dashed #000; padding-top: 10px; font-size: 0.8em; }
-        .pixel-box { border: 2px solid #000; padding: 5px; margin: 5px 0; text-align: center; }
-        .maze { font-family: monospace; font-size: 12px; line-height: 12px; text-align: center; }
-    </style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a1a1a;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:2rem 1rem;font-family:'Share Tech Mono',monospace}
+.gus-wrapper{display:flex;flex-direction:column;align-items:center;gap:1.5rem;width:100%;max-width:420px}
+.gus-header-label{font-family:'VT323',monospace;font-size:13px;color:#555;letter-spacing:3px;text-transform:uppercase}
+.ticket-machine{width:100%;background:#2a2a2a;border-radius:8px;padding:1rem 1rem 0;border:1px solid #3a3a3a}
+.machine-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid #3a3a3a}
+.machine-name{font-family:'VT323',monospace;font-size:22px;color:#c8c8c8;letter-spacing:2px}
+.machine-light{width:8px;height:8px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px #4ade80;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.ticket-slot{background:#111;border-radius:4px 4px 0 0;overflow:hidden;position:relative}
+.ticket-slot::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:repeating-linear-gradient(90deg,#222 0px,#222 6px,#111 6px,#111 12px)}
+.ticket{background:#f5f0e8;width:100%;padding:1.5rem 1.2rem;font-family:'Share Tech Mono',monospace;font-size:11.5px;color:#1a1a1a;line-height:1.5;position:relative;overflow:hidden;min-height:300px}
+.ticket::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 22px,rgba(0,0,0,.015) 22px,rgba(0,0,0,.015) 23px);pointer-events:none}
+.ticket-noise{position:absolute;inset:0;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:150px 150px;pointer-events:none}
+.t-section{margin-bottom:.9rem}
+.t-divider{border:none;border-top:1px dashed #999;margin:.75rem 0}
+.t-divider-solid{border:none;border-top:1px solid #aaa;margin:.75rem 0}
+.t-header{text-align:center;margin-bottom:.5rem}
+.t-logo{font-family:'VT323',monospace;font-size:28px;color:#1a1a1a;letter-spacing:4px;display:block;line-height:1}
+.t-subtitle{font-size:9px;color:#666;letter-spacing:2px;text-transform:uppercase}
+.t-date{text-align:center;font-size:10px;color:#555;margin-top:4px}
+.t-section-title{font-size:9px;letter-spacing:3px;color:#666;text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.t-section-num{background:#1a1a1a;color:#f5f0e8;font-size:8px;padding:1px 4px;letter-spacing:1px}
+.t-message{font-size:12px;line-height:1.7;color:#222;border-left:2px solid #aaa;padding-left:8px;font-style:italic}
+.t-weather-main{display:flex;align-items:flex-start;gap:10px}
+.t-weather-ascii{font-size:10px;line-height:1.35;color:#444;white-space:pre}
+.t-weather-data{flex:1}
+.t-weather-temp{font-family:'VT323',monospace;font-size:28px;color:#1a1a1a;line-height:1}
+.t-weather-desc{font-size:10px;color:#555;text-transform:uppercase;letter-spacing:1px}
+.t-weather-details{margin-top:6px;font-size:10px;color:#666}
+.t-mot-word{font-family:'VT323',monospace;font-size:22px;color:#1a1a1a;letter-spacing:1px}
+.t-mot-def{font-size:10.5px;color:#444;line-height:1.5;margin-top:2px}
+.t-mot-ex{font-size:10px;color:#777;font-style:italic;margin-top:4px}
+.t-blague{font-size:11px;line-height:1.5;color:#333;white-space:pre-line}
+.t-blague-rep{margin-top:6px;padding:4px 8px;border:1px dashed #bbb;font-size:10px;color:#666;display:inline-block;cursor:pointer;transition:all .2s}
+.t-blague-rep:hover{background:#1a1a1a;color:#f5f0e8;border-color:#1a1a1a}
+.t-decouverte{font-size:10.5px;line-height:1.6;color:#333}
+.t-collectionnable{text-align:center}
+.ascii-art{font-size:9.5px;line-height:1.3;color:#333;white-space:pre;display:inline-block;text-align:left}
+.ascii-label{font-size:9px;color:#888;letter-spacing:2px;margin-top:4px;text-align:center}
+.ascii-rarity{font-size:8px;color:#aaa;letter-spacing:1px;margin-top:2px}
+
+.t-barcode{
+  text-align:center;
+  margin:6px 0 2px;
+}
+
+.barcode-bars{
+  display:inline-flex;
+  align-items:flex-end;
+  gap:1px;
+  height:24px;
+  line-height:0;
+}
+
+.barcode-bars span{
+  display:block;
+  height:24px;
+  background:#1a1a1a;
+  flex-shrink:0;
+}
+
+.t-footer{text-align:center;font-size:9px;color:#999;letter-spacing:1px;margin-top:4px}
+.t-edition-badge{display:inline-block;background:#1a1a1a;color:#f5f0e8;font-size:8px;padding:2px 6px;letter-spacing:2px;text-transform:uppercase;}
+.t-loading{text-align:center;padding:2rem;color:#888;font-size:11px}
+.t-loading-dots::after{content:'';animation:dots 1.5s steps(4,end) infinite}
+@keyframes dots{0%,25%{content:''}50%{content:'.'}75%{content:'..'}100%{content:'...'}}
+.ticket-tear{height:16px;background:repeating-linear-gradient(-45deg,#111 0px,#111 4px,transparent 4px,transparent 8px);opacity:.6}
+.btn-generate{font-family:'Share Tech Mono',monospace;font-size:12px;background:transparent;border:1px solid #444;color:#888;padding:8px 20px;cursor:pointer;letter-spacing:2px;text-transform:uppercase;transition:all .2s;border-radius:2px}
+.btn-generate:hover{background:#f5f0e8;color:#1a1a1a;border-color:#f5f0e8}
+.btn-generate:disabled{opacity:.4;cursor:not-allowed}
+.status-line{font-family:'Share Tech Mono',monospace;font-size:10px;color:#444;letter-spacing:1px;text-align:center}
+.puzzle-container{font-size:10px}
+.sudoku-grid{display:grid;grid-template-columns:repeat(9,18px);gap:0;margin:4px 0;border:1.5px solid #555}
+.sudoku-cell{width:18px;height:18px;text-align:center;line-height:18px;font-size:10px;border:.5px solid #ccc;display:block;color:#333}
+.sudoku-cell.given{font-weight:bold;color:#111;background:#e8e3d8}
+.sudoku-cell.br{border-right:1.5px solid #555}
+.sudoku-cell.bb{border-bottom:1.5px solid #555}
+.word-grid{font-family:'Share Tech Mono',monospace;font-size:11px;line-height:1}
+.word-grid span{display:inline-block;width:14px;text-align:center}
+.connect-svg{display:block;margin:0 auto}
+
+.texture {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image: url('bg-dot.png');
+  background-repeat: repeat;
+  background-size: 25px 25px;
+  opacity: 0.1;
+  transition: filter 0.45s var(--ease);
+}
+</style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo">G U S</div>
-        <div>V.1.0-THERMIQUE</div>
-        <div>{{date}}</div>
-    </div>
 
-    <div class="section">
-        <div class="section-title">01 MESSAGE</div>
-        <p class="message">"{{message}}"</p>
+  <div class="texture"></div>
+<div class="gus-wrapper">
+  <p class="gus-header-label">◈ SYSTÈME GUS — v2.0 ◈</p>
+  <div class="ticket-machine">
+    <div class="machine-top">
+      <span class="machine-name">G.U.S.</span>
+      <div class="machine-light"></div>
     </div>
-
-    <div class="section">
-        <div class="section-title">02 METEO (MPL)</div>
-        <div class="ascii-art">
-           _   _
-          ( )_( )
-         (_   _)
-          (_) (_)
+    <div class="ticket-slot">
+      <div id="ticket" class="ticket">
+        <div class="ticket-noise"></div>
+        <div class="t-loading">
+          <span class="t-loading-dots">Initialisation de GUS</span><br><br>
+          <small style="color:#bbb">Appuie sur IMPRIMER pour imprimer<br>ton premier ticket du matin</small>
         </div>
-        <div style="text-align:center">19°C - CIEL VOILE</div>
+      </div>
+      <div class="ticket-tear"></div>
     </div>
+  </div>
+  <button class="btn-generate" id="btn-gen" onclick="generateTicket()">▸ IMPRIMER LE TICKET</button>
+  <p class="status-line" id="status">prêt</p>
+</div>
 
-    <div class="section">
-        <div class="section-title">03 MOT DU JOUR</div>
-        <div class="pixel-box">
-            <strong>{{word}}</strong><br>
-            <small>{{definition}}</small>
+<script>
+// ═══════════════════════════════════════════════════
+// BASE DE DONNÉES GUS — modifiable facilement
+// Chaque tableau = 366 entrées (ou moins, rotation auto)
+// ═══════════════════════════════════════════════════
+
+const DB = {
+
+messages: [
+// JANVIER
+"Tu as le droit d'avancer lentement aujourd'hui. Même les escargots arrivent quelque part.",
+"Quelque chose de beau peut se cacher dans un détail ordinaire. Garde l'œil ouvert.",
+"N'oublie pas de regarder le ciel aujourd'hui. Il change, comme toi.",
+"Tu n'as pas besoin d'être productif pour avoir le droit d'exister. Profite.",
+"Le temps qu'il faut pour faire une chose, c'est le temps qu'il faut.",
+"Pense à quelqu'un que tu n'as pas contacté depuis longtemps. Peut-être aujourd'hui.",
+"Laisse-toi surprendre par ta propre journée. Elle ne sait pas encore ce qu'elle va faire.",
+"Il y a une version de toi qui regardera en arrière et sourira de ce moment.",
+"Boire quelque chose de chaud, c'est un acte révolutionnaire de bienveillance envers soi-même.",
+"L'imperfection d'aujourd'hui est la texture de demain. Continue.",
+"Ce matin ressemble à une page blanche. Tu peux y écrire n'importe quoi.",
+"Les petites joies comptent autant que les grandes. Parfois plus.",
+"Tu es autorisé à changer d'avis. C'est même recommandé.",
+"Fais une chose aujourd'hui que tu n'aurais pas osé faire hier.",
+"Il n'y a pas de mauvaise météo pour être en vie.",
+"Prends le chemin le plus long aujourd'hui. Quelque chose t'y attend.",
+"Ton rythme est le bon rythme. Ne te compare pas.",
+"Une journée ordinaire peut contenir des trésors extraordinaires si on les cherche.",
+"Le silence du matin est un cadeau. Prends-le avant qu'il disparaisse.",
+"Aujourd'hui, autorise-toi à ne pas tout comprendre.",
+"Les meilleures choses arrivent quand on s'y attend le moins.",
+"Sois doux avec toi-même. Tu fais de ton mieux.",
+"Ce que tu ressens est valide. Même si tu ne sais pas encore pourquoi.",
+"Prends une grande respiration. Non, une vraie.",
+"Le monde a besoin de ta version spécifique de toi. Pas d'un autre.",
+"Aujourd'hui peut ressembler à hier. C'est aussi bien, parfois.",
+"Un geste simple peut changer la journée de quelqu'un. Peut-être la tienne.",
+"Tu es plus fort que tu ne le crois ce matin.",
+"Laisse entrer un peu de lumière par la fenêtre. Même symboliquement.",
+"Chaque nouveau jour est une seconde chance déguisée en routine.",
+"Janvier est le brouillon de l'année. Il a le droit d'être imparfait.",
+// FÉVRIER
+"L'hiver a ses beautés. Cherche-en une aujourd'hui.",
+"Tu n'as pas à tout faire aujourd'hui. Choisis une chose et fais-la bien.",
+"La douceur est une forme de courage.",
+"Il y a quelque chose de magnifique dans la constance.",
+"Aujourd'hui, remarque ce que tu remarques habituellement pas.",
+"Le froid rend les lumières plus belles. Souviens-t'en ce soir.",
+"Tu mérites autant de bienveillance que tu en donnes aux autres.",
+"Les petites victoires méritent d'être célébrées. Même seul.",
+"Un café bien préparé le matin peut changer une journée entière.",
+"Ne sous-estime pas le pouvoir d'une bonne nuit de sommeil.",
+"Faire une pause n'est pas perdre du temps. C'est en gagner.",
+"Aujourd'hui, écoute vraiment quelqu'un. Pas juste pour répondre.",
+"Il y a de la beauté dans ce qui est incomplet.",
+"Les nuages aussi ont une forme de grâce.",
+"Tu as survécu à tous tes mauvais jours jusqu'ici. Bravo.",
+"Une chose à la fois. C'est tout ce qu'on peut faire.",
+"Permets-toi de rêver quelques minutes ce matin.",
+"Ton intuition sait souvent mieux que ta tête.",
+"Février est le mois le plus court. Lui aussi s'en sort.",
+"Les mimosas fleurissent en ce moment quelque part. Souviens-toi de l'été.",
+"Parfois la solution arrive quand on arrête de la chercher.",
+"Le courage peut ressembler à beaucoup de choses. Même à rester au lit.",
+"Quelque chose que tu portes depuis longtemps peut être posé aujourd'hui.",
+"Les rituels du matin ont plus de pouvoir qu'on ne le croit.",
+"Prends soin de toi avec la même attention qu'une plante précieuse.",
+"Une idée qui dort n'est pas une idée morte.",
+"Le monde a l'air différent selon l'angle depuis lequel on le regarde.",
+"Aujourd'hui tu peux être gentil sans raison particulière.",
+// MARS
+"Le printemps s'annonce. Quelque chose en toi aussi se réveille.",
+"Le dégel a toujours l'air lent depuis l'intérieur.",
+"Planter quelque chose aujourd'hui, même une idée, c'est déjà commencer.",
+"Le vent du Languedoc nettoie tout. Laisse-le faire.",
+"Chaque matin est une petite résurrection.",
+"Les bourgeons ne savent pas encore ce qu'ils vont devenir. Eux non plus.",
+"Il y a une légèreté qui revient en mars. Laisse-la entrer.",
+"Aujourd'hui peut être le jour où tu commences quelque chose.",
+"Les oiseaux reviennent. Tu peux revenir aussi, de là où tu étais parti.",
+"Un pas dans la bonne direction vaut mieux que dix dans l'hésitation.",
+"La lumière dure un peu plus longtemps chaque jour désormais.",
+"Ton énergie te dira où tu en es. Écoute-la sans te juger.",
+"Les fleurs sauvages ne demandent pas la permission de pousser.",
+"Fais confiance au processus, même quand il est invisible.",
+"Mars sent le début de quelque chose qu'on ne sait pas encore nommer.",
+"Le sol se réchauffe. Toi aussi.",
+"Aujourd'hui, essaie quelque chose que tu as toujours repoussé.",
+"La nature ne se dépêche pas. Et pourtant tout arrive.",
+"Il y a une douceur dans les matins de mars. Elle mérite d'être remarquée.",
+"Recommencer n'est pas une défaite. C'est une mise à jour.",
+// AVRIL
+"Avril change d'avis plusieurs fois par jour. Il fait ce qu'il peut.",
+"La pluie d'avril prépare quelque chose de beau pour plus tard.",
+"Même les jours gris ont leur propre lumière.",
+"Aujourd'hui, laisse-toi surprendre par la météo intérieure.",
+"Le caprice du temps d'avril ressemble à la vie : imprévisible, mais vivant.",
+"Quelque chose fleurit en toi, même si tu ne le vois pas encore.",
+"Les papillons commencent à apparaître. Regarde autour de toi.",
+"Une journée de pluie et de soleil peut tenir dans les mêmes heures.",
+"Avril est le mois de toutes les possibilités encore ouvertes.",
+"Ouvre une fenêtre ce matin. L'air de dehors te dira quelque chose.",
+"Les hirondelles reviennent à Montpellier ce mois-ci. Guette-les.",
+"Ce qui germe ne se voit pas toujours tout de suite.",
+"Un après-midi de lecture est une forme de sagesse.",
+"Le présent contient déjà tout ce dont tu as besoin.",
+"Parfois la meilleure décision est celle qu'on n'avait pas prévue.",
+"Il n'y a pas de petits bonheurs. Juste des bonheurs qu'on n'a pas vus.",
+"Aujourd'hui, sois curieux de quelque chose d'inhabituel.",
+"Le printemps t'autorise à changer de forme.",
+"Ce que tu plantes maintenant, tu le récolteras plus tard.",
+"Avril est généreux avec ceux qui lui font confiance.",
+// MAI
+"Mai sent le jasmin et la promesse. Profites-en.",
+"Les journées s'allongent et avec elles, les possibilités.",
+"Quelque chose de doux se prépare pour ce mois.",
+"Le soleil du matin sur la garrigue a une odeur de résine et de liberté.",
+"Aujourd'hui, marche un peu plus lentement que d'habitude.",
+"Les premiers pique-niques arrivent. C'est une forme de philosophie.",
+"La lumière de mai est différente de toutes les autres. Remarque-la.",
+"Ce mois mérite d'être vécu dehors, au moins un peu.",
+"Prends le temps de regarder quelque chose pousser.",
+"L'air est chaud juste ce qu'il faut. C'est rare. Savoure-le.",
+"Chaque jour de mai est un cadeau légèrement différent.",
+"Ton enthousiasme d'aujourd'hui est une ressource précieuse. Utilise-la.",
+"Un pichet de rosé et une terrasse : philosophie méridionale de base.",
+"Les cigales se préparent. Dans quelques semaines, tu ne rêveras que d'elles.",
+"Mai est le mois où l'on se dit qu'on a le temps. Profitons-en.",
+"Aujourd'hui peut contenir une belle surprise. Sois disponible.",
+"La vie simple a sa propre élégance.",
+"Fais une chose dehors que tu faisais habituellement dedans.",
+"Le ciel de mai sur l'Hérault mérite un moment d'attention.",
+"Quelque part dans ta journée, il y a une petite joie qui t'attend.",
+// JUIN
+"L'été commence à pointer. Quelque chose en toi aussi s'impatiente.",
+"Aujourd'hui, laisse-toi aller à un peu de légèreté.",
+"Le bleu du ciel méditerranéen en juin n'a pas d'équivalent.",
+"La chaleur commence. Adapte ton rythme, pas tes ambitions.",
+"Un bain de mer imaginaire peut suffire à rafraîchir l'esprit.",
+"Aujourd'hui, mange quelque chose de bon.",
+"L'été méditerranéen commence par une douceur avant de s'emballer.",
+"Les soirées s'allongent. Tu peux en profiter.",
+"Un coucher de soleil ce soir mérite peut-être d'être regardé.",
+"Juin est le mois où l'on commence à vivre dehors pour de bon.",
+"Prends le temps d'un repas lent aujourd'hui.",
+"La garrigue en juin est dorée et odorante. Rappelle-toi-en.",
+"Quelque chose dans ta journée va te surprendre agréablement.",
+"Aujourd'hui, hydrate-toi. Et pas seulement en eau.",
+"L'été invite à simplifier. Commence par quelque chose.",
+"Une terrasse, même imaginaire, est un excellent endroit pour réfléchir.",
+"Les nuits de juin à Montpellier sont douces et longues. Profites-en.",
+"Ce que tu portes comme projet mérite un peu de soleil.",
+"Juin est généreux. Il donne plus de lumière que d'obscurité.",
+"Aujourd'hui, offre-toi quelque chose de petit mais vrai.",
+// JUILLET
+"La canicule a ses propres vertus : la lenteur et l'ombre.",
+"Aujourd'hui, suis le chat : cherche l'endroit le plus frais.",
+"La chaleur de juillet ralentit tout. C'est une invitation.",
+"L'ombre d'un platane est un luxe absolu. Profites-en si tu peux.",
+"Juillet invite à la sieste. La sieste invite à la clarté.",
+"Les cigales savent quelque chose que nous avons oublié. Écoute-les.",
+"La mer n'est pas loin. Même si tu n'y vas pas, tu le sais.",
+"Aujourd'hui, va lentement. Le soleil le mérite.",
+"Une limonade, un livre, une heure : c'est déjà beaucoup.",
+"L'été méditerranéen est une école de l'instant présent.",
+"Juillet rend tout un peu plus bruyant, un peu plus vivant.",
+"Les nuits sont chaudes et belles. Reste dehors un peu plus longtemps.",
+"Ce que tu reportes à l'automne peut peut-être attendre jusqu'à l'automne.",
+"Le bleu du ciel aujourd'hui est à couper le souffle. Regarde-le.",
+"Une brise légère est déjà un cadeau par ce temps.",
+"Aujourd'hui, mange des fruits du soleil.",
+"La chaleur fait ressortir les parfums. Remarque-les.",
+"Tu peux faire moins et vivre plus. Juillet l'autorise.",
+"L'été a sa propre forme de productivité : la joie.",
+"Quelque chose de doux t'attend cette semaine.",
+"La lumière dorée de juillet à dix-neuf heures est irremplaçable.",
+// AOÛT
+"Août est le mois du plein été. Tout est permis.",
+"Aujourd'hui, fais une chose qui te fait plaisir sans raison.",
+"Les vacanciers sont là. Toi aussi, d'une certaine façon.",
+"La mer est chaude quelque part pas très loin.",
+"Août a une odeur particulière : la crème solaire et le thym chaud.",
+"Ce matin, prends le temps que tu n'as jamais.",
+"Le mois d'août autorise à ne rien décider.",
+"Une glace peut être une expérience philosophique.",
+"Aujourd'hui, lis quelque chose de léger et de beau.",
+"Le village voisin a peut-être un marché ce matin.",
+"Août est le dernier grand souffle avant le retour.",
+"Quelque chose en toi sait que l'été se termine. Savoure ce qui reste.",
+"La lumière change légèrement en août. Elle devient dorée plus tôt.",
+"Aujourd'hui, reste dehors le plus longtemps possible.",
+"Les figues mûrissent en ce moment quelque part. Cherches-en.",
+"Ce que tu veux commencer à l'automne peut être préparé maintenant.",
+"Août est généreux avec les paresseux. Profites-en.",
+"Le soleil se couche un peu plus tôt qu'en juillet. On le sent.",
+"Un soir d'août à contempler les étoiles, c'est une décision sage.",
+"Le festin de l'été est presque terminé. Mange encore un peu.",
+"Aujourd'hui, fais la chose que tu remets depuis le début de l'été.",
+// SEPTEMBRE
+"Septembre ramène une douceur différente. Moins brûlante, plus profonde.",
+"La rentrée n'est pas une fin. C'est un recommencement.",
+"L'automne commence doucement. Il ne presse personne.",
+"La lumière de septembre est la plus belle de l'année, peut-être.",
+"Les raisins mûrissent dans les vignes de l'Hérault. C'est la vendange.",
+"Aujourd'hui, reprends quelque chose laissé en suspens.",
+"Septembre est le mois où l'on retrouve ses bonnes habitudes.",
+"L'air frais du matin revient. C'est un soulagement.",
+"Tu peux être reposé et curieux à la fois. Septembre le permet.",
+"La garrigue est encore chaude mais le soir rafraîchit. Beau moment.",
+"Ce que tu veux construire cet automne commence maintenant.",
+"Septembre invite à la relecture de soi. Qu'est-ce que tu retiens de l'été ?",
+"Les tournesols baissent la tête, mais ils ont bien vécu.",
+"Aujourd'hui, plante une intention pour les prochains mois.",
+"La rentrée est une forme de poésie pour qui sait la regarder.",
+"Les matins reprennent une structure. Ça peut être réconfortant.",
+"Quelque chose de nouveau commence ce mois-ci. Peut-être sans que tu le saches.",
+"L'automne méditerranéen est doux et lumineux. Il ne ressemble à aucun autre.",
+"Aujourd'hui, écris quelque chose. N'importe quoi.",
+"Septembre est le brouillon de l'automne. Il a le droit d'hésiter.",
+// OCTOBRE
+"L'automne est là pour de bon. Quelque chose en toi aussi change de couleur.",
+"Aujourd'hui, bois quelque chose de chaud en regardant la pluie.",
+"Les platanes perdent leurs feuilles sur la Promenade du Peyrou.",
+"Octobre à Montpellier est encore doux. C'est un privilège.",
+"La lumière baisse plus tôt. Profite des après-midis.",
+"Les champignons poussent dans les bois de l'Hérault. L'automne a ses trésors.",
+"Aujourd'hui, permets-toi d'être mélancolique sans culpabiliser.",
+"L'automne n'est pas une fin. C'est une saison entière.",
+"Un livre, un plaid, une lumière douce : la formule d'octobre.",
+"Les vendanges sont terminées. Le vin de cette année s'élabore en silence.",
+"Octobre invite à l'intériorité. C'est une bonne chose.",
+"La beauté des feuilles qui tombent est une leçon de lâcher-prise.",
+"Aujourd'hui, range quelque chose que tu n'utilises plus.",
+"Le brouillard matinal d'automne a quelque chose de magique.",
+"Tu n'as pas à savoir ce que tu veux. Pas encore.",
+"Octobre est le mois où l'on redevient sédentaire. C'est reposant.",
+"Un dimanche d'octobre mérite un repas long et lent.",
+"Les couleurs de l'automne sont une forme de générosité de la nature.",
+"Aujourd'hui, appelle quelqu'un qui compte pour toi.",
+"Octobre prépare quelque chose de beau pour novembre.",
+"Ce mois-ci, lis un livre que tu avais laissé de côté.",
+// NOVEMBRE
+"Novembre a mauvaise réputation, mais il a ses propres beautés.",
+"Aujourd'hui, cherche une lumière dans le gris.",
+"La Toussaint invite à penser à ceux qu'on aime, vivants ou non.",
+"Novembre est le mois des projets intérieurs.",
+"L'humidité de novembre sent la terre et le temps qui passe.",
+"Aujourd'hui, fais quelque chose de créatif, même cinq minutes.",
+"Le ciel bas de novembre peut être poétique si on le regarde autrement.",
+"Les arbres sont presque nus. Il y a une élégance dans leur franchise.",
+"Novembre est le mois où l'on se rapproche des gens qu'on aime.",
+"Aujourd'hui, cuisine quelque chose de réconfortant.",
+"Le feu de cheminée, réel ou imaginaire, est un bon compagnon.",
+"Tu as le droit d'hiberner un peu. Ce n'est pas de la paresse.",
+"Novembre prépare décembre. Ce n'est pas une mauvaise nouvelle.",
+"Aujourd'hui, offre-toi une heure sans écran.",
+"Les jours les plus courts de l'année s'approchent. La lumière va revenir.",
+"Un souvenir agréable est une ressource. Puises-y.",
+"Novembre est fait pour les thés chauds et les longues réflexions.",
+"Ce que tu ressens en ce moment est valide. Même le vague à l'âme.",
+"Aujourd'hui, lis quelque chose qui te fait du bien.",
+"Novembre est un mois de préparation silencieuse.",
+// DÉCEMBRE
+"Décembre commence. L'année s'achève. Tu as tenu.",
+"Les lumières de Noël compensent le manque de soleil.",
+"Aujourd'hui, pense à ce que tu veux garder de cette année.",
+"Le froid invite à se rapprocher. C'est peut-être son utilité.",
+"Décembre est le mois de la générosité. Elle commence par soi-même.",
+"L'année se termine. Tu as appris des choses. Même sans t'en rendre compte.",
+"Aujourd'hui, note trois choses que tu as faites cette année dont tu es fier.",
+"Les marchés de Noël sentent la cannelle et le vin chaud.",
+"Décembre invite à ralentir avant le grand recommencement.",
+"Prends soin des gens autour de toi ce mois-ci.",
+"Le solstice d'hiver arrive. Ensuite, les jours rallongent.",
+"Cette nuit sera peut-être la plus longue de l'année. Ensuite, ça remonte.",
+"Aujourd'hui, fais un cadeau à quelqu'un sans occasion particulière.",
+"L'année a été ce qu'elle a été. Tu peux la regarder avec douceur.",
+"Décembre est le temps des bilans doux, pas des jugements sévères.",
+"Quelque chose de nouveau approche. Accueille-le avec curiosité.",
+"La dernière semaine de l'année mérite d'être vécue lentement.",
+"Aujourd'hui, mange quelque chose qui te fait penser à l'enfance.",
+"L'année se termine et tu es là, debout, à lire un ticket imprimé. Bravo.",
+"Le 31 décembre n'est qu'un autre jour. Et en même temps, c'est un seuil.",
+"Demain commence une nouvelle année. Ce soir, profite encore de celle-ci.",
+// JOURS SUPPLÉMENTAIRES (jusqu'à 366)
+"Aujourd'hui est un jour bissextile. Tu as du temps bonus. Utilise-le bien.",
+"Ce matin, fais quelque chose que tu n'as jamais fait.",
+"Chaque jour est une occasion de recommencer.",
+"Tu es exactement là où tu devais être ce matin.",
+"Prends soin de toi comme tu prendrais soin de ce que tu aimes le plus.",
+"Aujourd'hui, émerveille-toi d'une chose ordinaire.",
+"La vie tient dans les petits moments. Celui-ci en fait partie.",
+"Tu n'as pas besoin d'une raison pour être content.",
+"Ce qui compte aujourd'hui, c'est que tu sois là.",
+"La journée commence. C'est déjà quelque chose.",
+],
+
+mots: [
+{mot:'pétrichor',def:'n.m. — Odeur de la terre mouillée après la pluie.',ex:'Le pétrichor de juillet remontait les rues comme une vieille promesse.'},
+{mot:'flâner',def:'v. — Se promener sans but précis, au gré de ses envies.',ex:'Elle flânait entre les étals comme si la ville lui appartenait.'},
+{mot:'clair-obscur',def:'n.m. — Contraste entre zones de lumière vive et zones d\'ombre.',ex:'Le clair-obscur de cinq heures habillait les murs de douceur.'},
+{mot:'sonder',def:'v. — Explorer en profondeur, chercher à comprendre l\'intérieur de quelque chose.',ex:'Il sondait le silence de la pièce comme un lac sans fond.'},
+{mot:'tintamarre',def:'n.m. — Grand bruit confus et désagréable, souvent joyeux.',ex:'Le tintamarre du marché se dissipait dans la chaleur de midi.'},
+{mot:'lumineux',def:'adj. — Qui répand ou reflète une lumière douce et claire.',ex:'Un sourire lumineux dans un couloir sombre change tout.'},
+{mot:'murmure',def:'n.m. — Son doux et continu, comme une voix très basse.',ex:'Les murmures du vent dans les pins avaient l\'accent du sud.'},
+{mot:'constellation',def:'n.f. — Groupe d\'étoiles formant une figure dans le ciel.',ex:'Chaque souvenir était une constellation personnelle, introuvable sur les cartes.'},
+{mot:'torpeur',def:'n.f. — Engourdissement physique et mental, douceur pesante.',ex:'La torpeur de l\'après-midi invitait à ne rien faire du tout.'},
+{mot:'palimpseste',def:'n.m. — Manuscrit dont on a effacé l\'écriture pour réécrire dessus.',ex:'Sa mémoire était un palimpseste — chaque souvenir effaçait le précédent.'},
+{mot:'garrigue',def:'n.f. — Végétation méditerranéenne odorante sur sols calcaires.',ex:'L\'odeur de la garrigue en été est une forme de bonheur absolu.'},
+{mot:'tramontane',def:'n.f. — Vent froid et violent venu du nord en Méditerranée.',ex:'La tramontane balayait la terrasse comme si elle avait des comptes à régler.'},
+{mot:'effleurer',def:'v. — Toucher très légèrement, frôler sans s\'arrêter.',ex:'Ses doigts effleurèrent la surface de l\'eau et elle frissonna.'},
+{mot:'zénith',def:'n.m. — Point du ciel situé à la verticale d\'un observateur.',ex:'Le soleil atteignait son zénith et tout se taisait dans la chaleur.'},
+{mot:'sérendipité',def:'n.f. — Fait de faire une découverte heureuse par hasard.',ex:'C\'est par sérendipité qu\'il trouva ce café caché dans la ruelle.'},
+{mot:'épiphanie',def:'n.f. — Manifestation soudaine d\'une vérité ou d\'une beauté évidente.',ex:'Regarder le ciel à l\'aube fut pour elle une épiphanie silencieuse.'},
+{mot:'lacune',def:'n.f. — Manque, absence de quelque chose qui devrait être là.',ex:'Il y avait une lacune dans ce récit, un blanc qui parlait plus que les mots.'},
+{mot:'bienveillance',def:'n.f. — Disposition favorable envers les autres, douceur active.',ex:'Sa bienveillance n\'était pas naïve. Elle avait été choisie.'},
+{mot:'frémissement',def:'n.m. — Léger tremblement, vibration douce et rapide.',ex:'Un frémissement parcourut les feuilles avant que l\'orage n\'arrive.'},
+{mot:'interstice',def:'n.m. — Petit espace vide entre deux choses.',ex:'La lumière entrait par les interstices du volet et dessinait des lignes sur le sol.'},
+{mot:'méandre',def:'n.m. — Courbe sinueuse d\'un cours d\'eau ou d\'une route.',ex:'La rivière dessinait ses méandres entre les vignes et les rochers.'},
+{mot:'résilience',def:'n.f. — Capacité à surmonter une épreuve et à se reconstruire.',ex:'Sa résilience n\'était pas de l\'indifférence. C\'était de la profondeur.'},
+{mot:'crépuscule',def:'n.m. — Lumière diffuse après le coucher du soleil.',ex:'Le crépuscule sur l\'étang de Thau avait des couleurs d\'aquarelle.'},
+{mot:'velléité',def:'n.f. — Désir vague, intention sans véritable volonté d\'agir.',ex:'Il avait des velléités d\'écriture depuis des années, mais les cahiers restaient vides.'},
+{mot:'fugace',def:'adj. — Qui passe très vite, éphémère.',ex:'Ce bonheur-là était fugace, mais il était réel.'},
+{mot:'mansuétude',def:'n.f. — Douceur indulgente envers ceux qui ont tort ou tort.',ex:'Il reçut la critique avec mansuétude, sans se défendre.'},
+{mot:'limpide',def:'adj. — Clair, transparent, facile à comprendre.',ex:'L\'eau de la source était limpide et froide comme une vérité.'},
+{mot:'nostalgie',def:'n.f. — Mélancolie douce causée par le souvenir d\'un passé heureux.',ex:'Cette odeur de pain grillé avait le goût exact de la nostalgie.'},
+{mot:'acuité',def:'n.f. — Précision et finesse de perception ou de jugement.',ex:'Son acuité visuelle était remarquable — elle voyait ce que les autres rataient.'},
+{mot:'bruissement',def:'n.m. — Léger bruit continu, comme des feuilles agitées.',ex:'Le bruissement des roseaux de Camargue avait quelque chose d\'hypnotique.'},
+{mot:'dénuement',def:'n.m. — État de grande pauvreté, absence de tout.',ex:'Dans le dénuement de cette chambre vide, il y avait une forme de paix.'},
+{mot:'quiétude',def:'n.f. — Calme profond, état de tranquillité paisible.',ex:'La quiétude du village à l\'aube était précieuse et fragile.'},
+{mot:'effusion',def:'n.f. — Manifestation expansive d\'un sentiment, élan affectif.',ex:'Il n\'était pas homme aux effusions, mais ce jour-là il l\'embrassa longuement.'},
+{mot:'atermoyer',def:'v. — Remettre à plus tard, tergiverser.',ex:'Il atermoie depuis des semaines. Le projet attend, patient.'},
+{mot:'galvaniser',def:'v. — Stimuler, animer d\'un enthousiasme soudain.',ex:'Ce discours l\'avait galvanisé pour toute la semaine.'},
+{mot:'estuaire',def:'n.m. — Embouchure large d\'un fleuve soumise aux marées.',ex:'L\'estuaire de l\'Orb se perdait dans la lumière du soir.'},
+{mot:'sinuosité',def:'n.f. — Caractère de ce qui est sinueux, tortueux avec grâce.',ex:'Les sinuosités des ruelles de l\'Écusson étaient une invitation à se perdre.'},
+{mot:'tangible',def:'adj. — Que l\'on peut percevoir, réel, concret.',ex:'Son bonheur était enfin tangible, après des mois d\'attente.'},
+{mot:'prémices',def:'n.f.pl. — Premiers signes annonciateurs de quelque chose.',ex:'Ce matin lumineux était les prémices d\'un printemps extraordinaire.'},
+{mot:'subtilité',def:'n.f. — Finesse, qualité de ce qui est délicat et peu évident.',ex:'La subtilité de ce vin tenait dans une nuance florale presque imperceptible.'},
+],
+
+blagues: [
+{q:'Pourquoi les plongeurs plongent-ils toujours en arrière ?',r:'Parce que sinon ils tomberaient dans le bateau.'},
+{q:'Un homme entre dans une bibliothèque :\n— Vous avez des livres sur la paranoïa ?\nLa bibliothécaire chuchote :',r:'— Ils sont juste derrière vous.'},
+{q:'Qu\'est-ce qu\'un crocodile qui surveille la cour d\'école ?',r:'Un sac à dents.'},
+{q:'Pourquoi les biologistes marins sont-ils tristes ?',r:'Parce qu\'ils ont le cafard des profondeurs.'},
+{q:'Un canif, c\'est quoi ?',r:'Un petit fien.'},
+{q:'Qu\'est-ce qui est jaune et qui attend ?',r:'Jonathan.'},
+{q:'Pourquoi l\'épouvantail a eu une promotion ?',r:'Parce qu\'il était exceptionnel dans son domaine.'},
+{q:'Qu\'est-ce qu\'un Belge qui voit une armoire ouverte ?',r:'Un Belge surpris.'},
+{q:'Comment appelle-t-on un chat tombé dans un pot de peinture le jour de Noël ?',r:'Un chat-peint de Noël.'},
+{q:'Quelle est la différence entre un croissant et une pharmacie ?',r:'On ne peut pas croissant.'},
+{q:'Pourquoi les vaches portent des cloches ?',r:'Parce que leurs cornes ne sonnent pas.'},
+{q:'Qu\'est-ce qu\'un canif ?',r:'Attends... c\'est déjà dans la liste. Un vrai canif ne se répète pas.'},
+{q:'Quel est le comble pour un électricien ?',r:'Être dans le noir.'},
+{q:'Qu\'est-ce qu\'un chat qui tombe d\'un immeuble ?',r:'Un catastrophe.'},
+{q:'Pourquoi les fantômes sont mauvais menteurs ?',r:'Parce qu\'on voit à travers eux.'},
+{q:'Qu\'est-ce qu\'une fourmi sportive ?',r:'Un athlète. (ant-lète)'},
+{q:'Quel animal voit à travers les paupières ?',r:'Le mouton : il ferme les yeux et il voit des moutons.'},
+{q:'Comment savoir si un éléphant est passé dans ta cuisine ?',r:'Les empreintes dans le beurre.'},
+{q:'Qu\'est-ce qu\'un escargot sur une autoroute ?',r:'Une escargot-mobiles.'},
+{q:'Pourquoi l\'araignée est sur l\'ordinateur ?',r:'Pour surveiller le web.'},
+{q:'Qu\'est-ce qu\'un alligator qui surveille les manteaux au vestiaire ?',r:'Un vestiaire-dacty.'},
+{q:'Comment appelle-t-on un chien sans pattes ?',r:'Peu importe, il ne viendra pas de toute façon.'},
+{q:'Quelle est la femelle du hamster ?',r:'L\'hamstère.'},
+{q:'Qu\'est-ce qu\'un pingouin en slip ?',r:'Je ne sais pas, mais si tu en vois un, c\'est déjà une bonne journée.'},
+{q:'Que dit un informaticien quand il s\'ennuie ?',r:'Je m\'octets de temps en temps.'},
+{q:'Quel est le sport préféré des tuyaux ?',r:'Le karaté. Ils adorent les coups de robinet.'},
+{q:'Pourquoi les fantômes ne mangent pas de bonbons ?',r:'Parce qu\'ils ont peur des caries qui font des trous.'},
+{q:'Qu\'est-ce qu\'un cheval qui habite dans un immeuble ?',r:'Un cheval-maison.'},
+{q:'Comment s\'appelle un chat tombé dans une friture ?',r:'Un chat-pawl... non, un beignet.'},
+{q:'Un squelette entre dans un café et dit :', r:'— Un café et un balai, s\'il vous plaît.'},
+],
+
+decouvertes: [
+"Les fourmis peuvent soulever jusqu'à 50 fois leur propre poids. Si tu avais cette force, tu porterais une voiture sous chaque bras.",
+"Il existe un mot japonais — 'komorebi' — pour désigner la lumière du soleil qui filtre à travers les feuilles des arbres.",
+"Les pieuvres ont trois cœurs. Deux pompent le sang vers les branchies, le troisième vers le reste du corps.",
+"En moyenne, un nuage pèse 500 tonnes. Ils tiennent dans le ciel parce que leurs gouttelettes descendent si lentement que les courants d'air les maintiennent.",
+"Le son du tonnerre est causé par l'expansion rapide de l'air chauffé par la foudre. L'éclair chauffe l'air à 30 000°C en quelques microsecondes.",
+"Il y a plus d'arbres sur Terre que d'étoiles dans la Voie Lactée. Environ 3 000 milliards d'arbres.",
+"Les dauphins ont des prénoms. Ils s'appellent les uns les autres par des sifflements uniques, comme des noms propres.",
+"La Tour de la Babote à Montpellier date du XIIe siècle et était autrefois une tour de rempart. Elle a longtemps servi d'observatoire astronomique.",
+"L'Hérault est l'un des fleuves les plus courts de France avec seulement 148 km, mais il traverse des paysages parmi les plus spectaculaires du Midi.",
+"Les flamants roses de Camargue tirent leur couleur rose des crevettes et algues qu'ils mangent. Un flamant mal nourri est blanc.",
+"Le platane commun, omniprésent sur les places du Languedoc, n'est pas une espèce naturelle. C'est un hybride créé en 1646 en Angleterre.",
+"Les cigales ne chantent pas avec leur bouche. Elles utilisent des membranes vibrantes sur leur abdomen appelées tympanes.",
+"L'Université de Montpellier est l'une des plus anciennes universités du monde encore en activité, fondée en 1289.",
+"Le mistral peut atteindre 200 km/h dans les épisodes extrêmes. Il peut souffler plus de 100 jours par an dans certaines régions.",
+"La grotte de Clamouse, près de Saint-Guilhem-le-Désert, abrite des concrétions cristallines uniques au monde, formées sur des millions d'années.",
+"L'étang de Thau est une lagune méditerranéenne et le premier site mytilicole (élevage de moules) de France.",
+"Les hommes de Neandertal vivaient dans les grottes de l'Hérault il y a 40 000 ans. Des outils et des ossements ont été retrouvés à La Baume Latrone.",
+"Le cèdre de l'Atlas visible au Jardin des Plantes de Montpellier a été planté en 1804. Il est classé arbre remarquable de France.",
+"Les abeilles voient dans l'ultraviolet. Ce que nous voyons comme une fleur jaune est pour elles un guide lumineux sophistiqué.",
+"Le Pic Saint-Loup est visible depuis Montpellier par temps clair. Il culmine à 658 mètres et sa forme caractéristique est due à une faille géologique.",
+"Un escargot peut dormir jusqu'à trois ans. Il entre en hibernation ou en estivation selon la chaleur ou le froid.",
+"La lumière du soleil met environ huit minutes et vingt secondes à parvenir jusqu'à la Terre.",
+"Le caméléon ne change pas de couleur pour se camoufler mais pour communiquer ses émotions et sa température.",
+"La Faculté de Médecine de Montpellier est la plus ancienne école de médecine encore en activité au monde, fondée au XIIIe siècle.",
+"Les oliviers peuvent vivre plus de 2 000 ans. Certains oliviers en Méditerranée sont contemporains de l'Empire romain.",
+"L'eau couvre 71% de la surface de la Terre, mais l'eau douce accessible ne représente que 0,007% de toute l'eau terrestre.",
+"Le sablé du Languedoc est une roche sédimentaire qui donne au vin de la région ses arômes minéraux particuliers.",
+"Les pieuvres sont capables de résoudre des puzzles et d'ouvrir des bocaux. Elles jouent même parfois avec des objets, juste pour s'amuser.",
+"La Tour Magne à Nîmes est la plus grande tour de l'enceinte romaine et date du Ier siècle avant J.-C. Elle était encore plus haute à l'origine.",
+"L'Arche de Noé ne pourrait pas contenir deux de chaque espèce animale connue : il y a plus de 8 millions d'espèces sur Terre.",
+],
+
+};
+
+// ═══════════════════════════════════════════════════
+// COLLECTIONNABLES ASCII — mix météo + saison + Montpellier
+// ═══════════════════════════════════════════════════
+const COLLECTIONNABLES = {
+  // MÉTÉO
+  soleil: {
+    art: `   \ | /
+ '-  ☼  -'
+   / | \ `,
+    label: 'SOLEIL DU MIDI', rarity: '✦ commun'
+  },
+  pluie: {
+    art: `   .--.
+ .(    ).
+(___.__)__)
+ ʻ ʻ ʻ ʻ`,
+    label: 'PLUIE CÉVENOLE', rarity: '✦ commun'
+  },
+  orage: {
+    art: `  .#####.
+ (########)
+  '######'
+   /####\\
+  / #### \\
+    ####
+     ##  ⚡`,
+    label: 'ORAGE D\'ÉTÉ', rarity: '✦✦ peu commun'
+  },
+  brouillard: {
+    art: `~  ~  ~  ~
+  ~  ~  ~  ~
+~  ~  ~  ~
+  ~  ~  ~`,
+    label: 'BROUILLARD MATIN', rarity: '✦ commun'
+  },
+  neige: {
+    art: `  *   *   *
+*   *   *
+  *   *   *
+*   * ❄ *
+  *   *   *`,
+    label: 'NEIGE RARE', rarity: '✦✦✦ rare'
+  },
+  // SAISONS
+  cigale: {
+    art: `    /\\
+   /  \\
+  / () \\
+ /  /\\  \\
+/__/  \\__\\
+   |  |
+   '--'`,
+    label: 'CIGALE D\'AOÛT', rarity: '✦ commun (été)'
+  },
+  mimosa: {
+    art: `   *  *  *
+  * *** *
+ * ***** *
+  * *** *
+   *  *  *
+    ||||
+    ||||`,
+    label: 'MIMOSA DE FÉVRIER', rarity: '✦✦ hivernal'
+  },
+  vendange: {
+    art: `  oo  oo
+ oooooooo
+oooooooooo
+ oooooooo
+   ||||
+   ||||`,
+    label: 'GRAPPE D\'HÉRAULT', rarity: '✦ automne'
+  },
+  coquelicot: {
+    art: `  (   )
+ (  *  )
+(  ***  )
+ ( *** )
+  (   )
+    |
+    |`,
+    label: 'COQUELICOT DE MAI', rarity: '✦ printemps'
+  },
+  // MONTPELLIER & RÉGION
+  ecusson: {
+    art: `┌─────────┐
+│ L'ÉCUSSON│
+│  .-~~~-. │
+│ ( Moyen )│
+│ ( -Âge  )│
+│  '-___-' │
+└─────────┘`,
+    label: 'L\'ÉCUSSON', rarity: '✦✦ local'
+  },
+  arc_triomphe: {
+    art: `    ___
+   /   \\
+  | ( ) |
+  |     |
+  |_____|
+ /|     |\\
+/_|_____|_\\`,
+    label: 'ARC DE TRIOMPHE MPL', rarity: '✦✦ local'
+  },
+  flamant: {
+    art: `    _
+   ( )
+    |
+   /|
+  / |
+ /  '-.
+'      \\
+        \\
+   ~~~~~~`,
+    label: 'FLAMANT DE CAMARGUE', rarity: '✦✦ rare'
+  },
+  pic_saint_loup: {
+    art: `          /\\
+         /  \\
+        /    \\
+       / P.S.L\\
+      /________\\
+ ~~~~~~~~~~~~~~~~~~~~`,
+    label: 'PIC SAINT-LOUP', rarity: '✦✦ local'
+  },
+  peyrou: {
+    art: `  ___________
+ |           |
+ |  PEYROU  |
+ |___________|
+ /           \\
+/    .___.    \\
+\\_____|_|_____/`,
+    label: 'PROMENADE DU PEYROU', rarity: '✦ local'
+  },
+  etang_thau: {
+    art: `≈≈≈≈≈≈≈≈≈≈≈
+≈  THAU   ≈
+≈≈≈  oo  ≈≈
+≈   o  o  ≈
+≈≈≈≈≈≈≈≈≈≈≈`,
+    label: 'ÉTANG DE THAU', rarity: '✦✦ local'
+  },
+  saint_guilhem: {
+    art: `    /|\\
+   / | \\
+  /  |  \\
+ / ABBAYE\\
+/_________|
+|  [   ]  |
+|_________|`,
+    label: 'SAINT-GUILHEM', rarity: '✦✦✦ rare'
+  },
+  olive: {
+    art: `    .-.
+   ( o )
+  .-' '-.
+ /       \\
+|  OLIVE  |
+ \\       /
+  '-----'`,
+    label: 'OLIVE D\'HÉRAULT', rarity: '✦ commun'
+  },
+  montagne_noire: {
+    art: `     ^   ^
+    /^\\ /^\\
+   /   X   \\
+  / MONTAGNE\\
+ /___NOIRE___\\`,
+    label: 'MONTAGNE NOIRE', rarity: '✦✦ rare'
+  },
+  // AUTRES
+canard: {
+  art: `   __
+<(o )___
+ ( ._> /
+  '---'`,
+  label: 'CANARD',
+  rarity: '✦ commun'
+},
+};
+
+function pickCollectionnable(weatherCode, date) {
+  const m = date.getMonth();
+  const d = date.getDay();
+  const day = date.getDate();
+
+  // Orage rare
+  if(weatherCode>=95) return COLLECTIONNABLES.orage;
+  // Neige très rare
+  if(weatherCode>=71&&weatherCode<=75) return COLLECTIONNABLES.neige;
+  // Pluie
+  if(weatherCode>=51&&weatherCode<=82) return COLLECTIONNABLES.pluie;
+  // Brouillard
+  if(weatherCode===45||weatherCode===48) return COLLECTIONNABLES.brouillard;
+
+  // Saisonniers
+  const seed = day + m*31;
+  const localItems = [
+    COLLECTIONNABLES.ecusson, COLLECTIONNABLES.arc_triomphe,
+    COLLECTIONNABLES.flamant, COLLECTIONNABLES.pic_saint_loup,
+    COLLECTIONNABLES.peyrou, COLLECTIONNABLES.etang_thau,
+    COLLECTIONNABLES.saint_guilhem, COLLECTIONNABLES.olive,
+    COLLECTIONNABLES.montagne_noire,
+  ];
+
+  if(m===1) return seed%5===0 ? COLLECTIONNABLES.mimosa : localItems[seed%localItems.length];
+  if(m>=5&&m<=7) return seed%3===0 ? COLLECTIONNABLES.cigale : (seed%3===1 ? COLLECTIONNABLES.soleil : localItems[seed%localItems.length]);
+  if(m>=8&&m<=9) return seed%4===0 ? COLLECTIONNABLES.vendange : localItems[seed%localItems.length];
+  if(m===3||m===4) return seed%4===0 ? COLLECTIONNABLES.coquelicot : localItems[seed%localItems.length];
+  if(weatherCode===0||weatherCode===1) return seed%4===0 ? COLLECTIONNABLES.soleil : localItems[seed%localItems.length];
+
+  return localItems[seed%localItems.length];
+}
+
+// ═══════════════════════════════════════════════════
+// MÉTÉO — Open-Meteo (gratuit, sans clé)
+// ═══════════════════════════════════════════════════
+const WMO = {
+  0:'Ciel dégagé',1:'Principalement dégagé',2:'Partiellement nuageux',3:'Couvert',
+  45:'Brouillard',48:'Brouillard givrant',
+  51:'Bruine légère',53:'Bruine modérée',55:'Bruine dense',
+  61:'Pluie légère',63:'Pluie modérée',65:'Pluie forte',
+  71:'Neige légère',73:'Neige modérée',75:'Neige forte',
+  80:'Averses légères',81:'Averses modérées',82:'Averses violentes',
+  95:'Orage',96:'Orage avec grêle',99:'Orage violent',
+};
+
+function getWeatherAscii(code) {
+  if(code===0||code===1) return `  \\  |  /\n  .---.\n  | ☀ |\n  '---'\n  /  |  \\`;
+  if(code===2) return `  .----.\n (nuage)\n  '----'\n   |☀|`;
+  if(code===3) return `  .~~~~~~.\n (  nuageux )\n  '~~~~~~'`;
+  if(code===45||code===48) return `~~~~~~~~~\n brouil.\n~~~~~~~~~`;
+  if(code>=51&&code<=65||code>=80&&code<=82) return `  .~~~.\n (     )\n ' . . '\n. . . .`;
+  if(code>=71&&code<=75) return `  .~~~.\n (     )\n ' * * '\n* * * *`;
+  if(code>=95) return `  .###.\n (####)\n /####\\\n ##⚡##`;
+  return `  .~~~.\n (     )\n '-----'`;
+}
+
+function getEdition(code, date) {
+  const d = date.getDay();
+  if(code>=95) return 'ÉDITION ORAGE';
+  if(code>=61&&code<=82) return 'ÉDITION PLUIE';
+  if(d===0||d===6) return 'ÉDITION WEEK-END';
+  const m = date.getMonth();
+  if(m>=5&&m<=7) return 'ÉDITION ÉTÉ';
+  if(m>=11||m<=1) return 'ÉDITION HIVER';
+  if(m>=2&&m<=4) return 'ÉDITION PRINTEMPS';
+  if(m>=8&&m<=10) return 'ÉDITION AUTOMNE';
+  return null;
+}
+
+function fmtDate(d) {
+  const j=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+  const mo=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  return `${j[d.getDay()]} ${d.getDate()} ${mo[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+function fmtTime(iso) {
+  if(!iso) return '--:--';
+  const d=new Date(iso);
+  return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+
+function pickByDay(arr, date, offset=0) {
+  const d = date;
+  const dayOfYear = Math.floor((d - new Date(d.getFullYear(),0,0))/(1000*60*60*24));
+  return arr[(dayOfYear + offset) % arr.length];
+}
+
+// ═══════════════════════════════════════════════════
+// PUZZLES — 7 types en rotation selon jour de la semaine
+// Lun=Labyrinthe Mer=Sudoku Jeu=Mots-Mêlés
+// Ven=Relier Pts Sam=Pathfinding Dim=Mini-Logique Mar=Crossword
+// ═══════════════════════════════════════════════════
+
+function genMaze(size=9, seed=42) {
+  let r = seed;
+  function rng(){r=(r*1664525+1013904223)&0xffffffff;return Math.abs(r)/0xffffffff;}
+
+  const W=size,H=size;
+  const visited=Array(H).fill(null).map(()=>Array(W).fill(false));
+  const walls={h:Array(H+1).fill(null).map(()=>Array(W).fill(true)),v:Array(H).fill(null).map(()=>Array(W+1).fill(true))};
+
+  function carve(x,y){
+    visited[y][x]=true;
+    const dirs=[[0,-1],[1,0],[0,1],[-1,0]].sort(()=>rng()-.5);
+    for(const[dx,dy]of dirs){
+      const nx=x+dx,ny=y+dy;
+      if(nx>=0&&nx<W&&ny>=0&&ny<H&&!visited[ny][nx]){
+        if(dy<0)walls.h[y][x]=false;
+        if(dy>0)walls.h[y+1][x]=false;
+        if(dx<0)walls.v[y][x]=false;
+        if(dx>0)walls.v[y][x+1]=false;
+        carve(nx,ny);
+      }
+    }
+  }
+  carve(0,0);
+  const cs=16,cw=W*cs+1,ch=H*cs+1;
+  let svg=`<svg width="${cw}" height="${ch}" viewBox="0 0 ${cw} ${ch}" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:4px auto;border:.5px solid #aaa;">`;
+  svg+=`<rect width="${cw}" height="${ch}" fill="#f9f5ed"/>`;
+  for(let y=0;y<=H;y++)for(let x=0;x<W;x++)if(walls.h[y][x])svg+=`<line x1="${x*cs}" y1="${y*cs}" x2="${(x+1)*cs}" y2="${y*cs}" stroke="#333" stroke-width="1"/>`;
+  for(let y=0;y<H;y++)for(let x=0;x<=W;x++)if(walls.v[y][x])svg+=`<line x1="${x*cs}" y1="${y*cs}" x2="${x*cs}" y2="${(y+1)*cs}" stroke="#333" stroke-width="1"/>`;
+  svg+=`<line x1="0" y1="0" x2="0" y2="${cs}" stroke="#f9f5ed" stroke-width="2"/>`;
+  svg+=`<line x1="${cw}" y1="${(H-1)*cs}" x2="${cw}" y2="${H*cs}" stroke="#f9f5ed" stroke-width="2"/>`;
+  svg+=`<text x="1" y="${cs-3}" font-size="7" fill="#888" font-family="monospace">▶</text>`;
+  svg+=`<text x="${cw-8}" y="${H*cs-2}" font-size="7" fill="#888" font-family="monospace">◀</text>`;
+  svg+='</svg>';
+  return `<div class="t-puzzle-title">Labyrinthe — trouve la sortie →</div>${svg}`;
+}
+
+function genSudoku(seed=42) {
+  // Génère un sudoku 9x9 valide simplifié
+  const base=[[5,3,0,0,7,0,0,0,0],[6,0,0,1,9,5,0,0,0],[0,9,8,0,0,0,0,6,0],[8,0,0,0,6,0,0,0,3],[4,0,0,8,0,3,0,0,1],[7,0,0,0,2,0,0,0,6],[0,6,0,0,0,0,2,8,0],[0,0,0,4,1,9,0,0,5],[0,0,0,0,8,0,0,7,9]];
+  const alts=[
+    [[0,0,0,2,6,9,7,4,3],[6,0,0,7,0,0,0,0,0],[0,7,0,0,0,4,5,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,4,0,0,0,0,6],[0,0,0,0,0,0,0,5,0],[0,0,3,0,0,0,0,6,0],[0,0,0,0,0,0,0,0,0],[0,0,0,3,0,0,0,1,0]],
+    [[0,2,0,0,0,0,0,0,0],[0,0,0,6,0,0,0,0,3],[0,7,4,0,8,0,0,0,0],[0,0,0,0,0,3,0,0,2],[0,8,0,0,4,0,0,1,0],[6,0,0,5,0,0,0,0,0],[0,0,0,0,1,0,7,8,0],[5,0,0,0,0,9,0,0,0],[0,0,0,0,0,0,0,4,0]],
+  ];
+  const grid = alts[seed%alts.length]||base;
+  let html=`<div class="t-puzzle-title">Sudoku — complète la grille (9×9)</div><div class="sudoku-grid">`;
+  for(let r=0;r<9;r++){
+    for(let c=0;c<9;c++){
+      const v=grid[r][c];
+      let cls='sudoku-cell'+(v?' given':'');
+      if(c===2||c===5)cls+=' br';
+      if(r===2||r===5)cls+=' bb';
+      html+=`<span class="${cls}">${v||''}</span>`;
+    }
+  }
+  html+='</div>';
+  return html;
+}
+
+function genMotsMeles(seed=42) {
+  const wordSets=[
+    ['SOLEIL','MER','VENT','GARRIGUE','THYM'],
+    ['CIGALE','MISTRAL','OLIVE','VIGNE','ETANG'],
+    ['CAMARGUE','FLAMANT','SEL','SABLE','ROSEAU'],
+    ['PEYROU','ECUSSON','FABRE','AGROPOLIS','TRAM'],
+    ['MONTAGNE','RIVIERE','GORGES','CAUSSE','AIGLE'],
+  ];
+  const words=wordSets[seed%wordSets.length];
+  const SIZE=10;
+  let grid=Array(SIZE).fill(null).map(()=>Array(SIZE).fill(''));
+  const placed=[];
+  let r=seed;
+  function rng(){r=(r*1664525+1013904223)&0xffffffff;return Math.abs(r)/0xffffffff;}
+
+  function tryPlace(word){
+    for(let attempt=0;attempt<50;attempt++){
+      const dir=Math.floor(rng()*3);// 0=H 1=V 2=D
+      const row=Math.floor(rng()*SIZE);
+      const col=Math.floor(rng()*SIZE);
+      let fits=true;
+      const cells=[];
+      for(let i=0;i<word.length;i++){
+        const nr=row+(dir>=1?i:0);
+        const nc=col+(dir===0||dir===2?i:0);
+        if(nr>=SIZE||nc>=SIZE){fits=false;break;}
+        if(grid[nr][nc]&&grid[nr][nc]!==word[i]){fits=false;break;}
+        cells.push([nr,nc]);
+      }
+      if(fits){
+        cells.forEach(([nr,nc],i)=>grid[nr][nc]=word[i]);
+        placed.push(word);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  words.forEach(w=>tryPlace(w));
+  const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  for(let row=0;row<SIZE;row++)for(let col=0;col<SIZE;col++)if(!grid[row][col])grid[row][col]=letters[Math.floor(rng()*26)];
+
+  let html=`<div class="t-puzzle-title">Mots mêlés — trouve les mots cachés</div>`;
+  html+=`<div style="font-size:9px;color:#888;margin-bottom:4px">→ ${placed.join(' · ')}</div>`;
+  html+=`<div class="word-grid">`;
+  for(let row=0;row<SIZE;row++){
+    for(let col=0;col<SIZE;col++)html+=`<span>${grid[row][col]}</span>`;
+    html+=`<br>`;
+  }
+  html+=`</div>`;
+  return html;
+}
+
+function genRelierPoints(seed=42) {
+  let r=seed;
+  function rng(){r=(r*1664525+1013904223)&0xffffffff;return Math.abs(r)/0xffffffff;}
+  const N=8;
+  const pts=[];
+  const W=140,H=120;
+  for(let i=0;i<N;i++){
+    pts.push({x:20+Math.floor(rng()*(W-40)),y:10+Math.floor(rng()*(H-20)),n:i+1});
+  }
+  let svg=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:4px auto;border:.5px solid #aaa;background:#f9f5ed;">`;
+  pts.forEach(p=>{
+    svg+=`<circle cx="${p.x}" cy="${p.y}" r="3" fill="#333"/>`;
+    svg+=`<text x="${p.x+5}" y="${p.y+3}" font-size="8" fill="#555" font-family="monospace">${p.n}</text>`;
+  });
+  svg+='</svg>';
+  return `<div class="t-puzzle-title">Relier les points — dans l'ordre 1→${N}</div>${svg}`;
+}
+
+function genPathfinding(seed=42) {
+  let r=seed;
+  function rng(){r=(r*1664525+1013904223)&0xffffffff;return Math.abs(r)/0xffffffff;}
+  const W=9,H=9;
+  const grid=Array(H).fill(null).map(()=>Array(W).fill(0));
+  // Murs aléatoires ~30%
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(rng()<.28&&!(y===0&&x===0)&&!(y===H-1&&x===W-1))grid[y][x]=1;
+  grid[0][0]=0;grid[H-1][W-1]=0;
+  const cs=14;
+  let svg=`<svg width="${W*cs}" height="${H*cs}" viewBox="0 0 ${W*cs} ${H*cs}" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:4px auto;border:.5px solid #aaa;">`;
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){
+    let fill=grid[y][x]?'#333':'#f9f5ed';
+    if(y===0&&x===0)fill='#c8e6c9';
+    if(y===H-1&&x===W-1)fill='#ffccbc';
+    svg+=`<rect x="${x*cs}" y="${y*cs}" width="${cs}" height="${cs}" fill="${fill}" stroke="#bbb" stroke-width=".5"/>`;
+  }
+  svg+=`<text x="1" y="${cs-2}" font-size="7" fill="#2e7d32" font-family="monospace">A</text>`;
+  svg+=`<text x="${(W-1)*cs+2}" y="${H*cs-2}" font-size="7" fill="#bf360c" font-family="monospace">B</text>`;
+  svg+='</svg>';
+  return `<div class="t-puzzle-title">Pathfinding — trouve le chemin de A → B</div>${svg}`;
+}
+
+function genMiniCrossword(seed=42) {
+  // 5×5 crossword simplifié
+  const grids=[
+    {layout:[[1,1,0,1,1],[1,0,0,0,1],[1,1,1,1,1],[1,0,0,0,1],[1,1,0,1,1]],
+     clues:'Horizontal: 1. Ville de lumière (4) | 3. Vent du nord (6) | Vertical: 2. Fleuve héraultais (5)'},
+    {layout:[[1,1,1,0,1],[1,0,1,0,1],[1,1,1,1,1],[1,0,0,0,1],[1,1,1,0,1]],
+     clues:'Horizontal: 1. Petit déj méridional (4) | 3. Saison chaude (3) | Vertical: 2. Aromate de garrigue (4)'},
+  ];
+  const g=grids[seed%grids.length];
+  const cs=18;
+  const SIZE=5;
+  let svg=`<svg width="${SIZE*cs}" height="${SIZE*cs}" viewBox="0 0 ${SIZE*cs} ${SIZE*cs}" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:4px auto;border:.5px solid #aaa;">`;
+  for(let y=0;y<SIZE;y++)for(let x=0;x<SIZE;x++){
+    const fill=g.layout[y][x]?'#f9f5ed':'#2a2a2a';
+    svg+=`<rect x="${x*cs}" y="${y*cs}" width="${cs}" height="${cs}" fill="${fill}" stroke="#bbb" stroke-width=".5"/>`;
+  }
+  svg+='</svg>';
+  return `<div class="t-puzzle-title">Mini Mots Croisés 5×5</div>${svg}<div style="font-size:9px;color:#777;margin-top:4px;line-height:1.5">${g.clues}</div>`;
+}
+
+function genMiniLogique(seed=42) {
+  const puzzles=[
+    {q:'Il y a 3 maisons. La rouge est à gauche de la bleue. La verte est à droite de la bleue. Dans quelle maison habite Paul qui aime le rouge ?',r:'La maison de gauche.'},
+    {q:'Marie a deux enfants. L\'un d\'eux est une fille. Quelle est la probabilité que les deux soient des filles ?',r:'1/3 (pas 1/2 — il y a 3 cas possibles : GF, FG, FF).'},
+    {q:'Un train part de Paris à 14h à 200 km/h. Un autre part de Lyon (500 km) à 15h à 150 km/h. Se croisent-ils avant Lyon ?',r:'Oui. Le 1er train parcourt 200 km en 1h. À 15h, il reste 300 km. Ils se rapprochent à 350 km/h → se croisent à ~15h51.'},
+    {q:'Tu as 8 billes identiques. L\'une est plus lourde. Avec une balance à deux plateaux, combien de pesées minimum pour la trouver ?',r:'2 pesées suffisent.'},
+    {q:'Un escargot est au fond d\'un puits de 10m. Chaque jour il monte 3m, chaque nuit il redescend 2m. Combien de jours pour sortir ?',r:'8 jours. (Le 8e jour il monte à 10m sans redescendre.)'},
+  ];
+  const p=puzzles[seed%puzzles.length];
+  return `<div class="t-puzzle-title">Énigme logique du jour</div>
+    <div style="font-size:10.5px;line-height:1.6;color:#333;margin-bottom:6px">${p.q}</div>
+    <div class="t-blague-rep" id="blague-rep" onclick="revealReponse('${p.r.replace(/'/g,"\\'")}')">[ révéler la réponse ]</div>`;
+}
+
+function getPuzzle(date) {
+  const day = date.getDay(); // 0=dim 1=lun 2=mar 3=mer 4=jeu 5=ven 6=sam
+  const seed = date.getDate() * 31 + date.getMonth() * 366;
+  const titles = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+  let puzzle, type;
+  switch(day) {
+    case 1: puzzle=genMaze(9,seed); type='LABYRINTHE'; break;
+    case 2: puzzle=genMiniCrossword(seed); type='MOTS CROISÉS'; break;
+    case 3: puzzle=genSudoku(seed); type='SUDOKU'; break;
+    case 4: puzzle=genMotsMeles(seed); type='MOTS MÊLÉS'; break;
+    case 5: puzzle=genRelierPoints(seed); type='RELIER LES POINTS'; break;
+    case 6: puzzle=genPathfinding(seed); type='PATHFINDING'; break;
+    case 0: puzzle=genMiniLogique(seed); type='ÉNIGME LOGIQUE'; break;
+    default: puzzle=genMaze(9,seed); type='LABYRINTHE';
+  }
+  return {puzzle, type};
+}
+
+function genBarcode(length = 42) {
+  // Guard bars début / centre / fin
+  const startGuard = [1, 1, 1];
+  const middleGuard = [1, 1, 1, 1, 1];
+  const endGuard = [1, 1, 1];
+
+  // Génération des barres principales
+  const randomBars = [];
+
+  for (let i = 0; i < length; i++) {
+    // Majorité de barres fines + quelques épaisses
+    const width = [1,1,1,2,2,3][Math.floor(Math.random() * 6)];
+    randomBars.push(width);
+  }
+
+  // Pattern final
+  const pattern = [
+    ...startGuard,
+    ...randomBars.slice(0, length / 2),
+    ...middleGuard,
+    ...randomBars.slice(length / 2),
+    ...endGuard
+  ];
+
+  return `
+    <div class="barcode-bars">
+      ${pattern.map(w => `
+        <span style="width:${w * 2}px;"></span>
+      `).join('')}
+    </div>
+  `;
+}
+
+let currentReponse='';
+function revealReponse(r) {
+  const el=document.getElementById('blague-rep');
+  if(!el)return;
+  if(el.dataset.open==='1'){el.textContent='[ masquer ]';el.dataset.open='0';el.textContent='[ révéler la réponse ]';return;}
+  el.textContent=r||currentReponse||'...';
+  el.dataset.open='1';
+}
+
+async function fetchWeather() {
+  try {
+    const url='https://api.open-meteo.com/v1/forecast?latitude=43.6119&longitude=3.8772&current=temperature_2m,weathercode,windspeed_10m,precipitation&daily=sunrise,sunset&timezone=Europe/Paris&forecast_days=1';
+    const res=await fetch(url);
+    const j=await res.json();
+    return {temp:Math.round(j.current.temperature_2m),code:j.current.weathercode,wind:Math.round(j.current.windspeed_10m),rain:j.current.precipitation,sunrise:j.daily.sunrise?.[0],sunset:j.daily.sunset?.[0]};
+  } catch(e) {
+    return {temp:22,code:1,wind:15,rain:0,sunrise:null,sunset:null};
+  }
+}
+
+async function generateTicket() {
+  const btn=document.getElementById('btn-gen');
+  const status=document.getElementById('status');
+  btn.disabled=true;
+  status.textContent='impression en cours...';
+
+  const now=new Date();
+  status.textContent='récupération météo Montpellier...';
+  const w=await fetchWeather();
+
+  status.textContent='composition du ticket...';
+
+  const msg=pickByDay(DB.messages,now);
+  const mot=pickByDay(DB.mots,now,7);
+  const blague=pickByDay(DB.blagues,now,13);
+  const dec=pickByDay(DB.decouvertes,now,19);
+  const coll=pickCollectionnable(w.code,now);
+  const {puzzle,type}=getPuzzle(now);
+  const edition=getEdition(w.code,now);
+  const seed=now.getDate()*31+now.getMonth()*366;
+  const ticketNum=`GUS-${String(now.getFullYear()).slice(2)}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}-${String(seed).slice(-3)}`;
+  const heure=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+  currentReponse=blague.r;
+
+  let html=`<div class="ticket-noise"></div>`;
+
+  // HEADER
+  html+=`<div class="t-header t-section">
+    <span class="t-logo">G.U.S.</span>
+    <span class="t-subtitle">Générateur d'Utilité Sensible</span>
+    <div class="t-date">${fmtDate(now)} — ${heure}</div>
+    ${edition?`<div style="margin-top:6px"><span class="t-edition-badge">${edition}</span></div>`:''}
+  </div>`;
+  html+=`<hr class="t-divider-solid">`;
+
+  // 01 MESSAGE
+  html+=`<div class="t-section">
+    <div class="t-section-title"><span class="t-section-num">01</span> message du jour</div>
+    <div class="t-message">${msg}</div>
+  </div>`;
+  html+=`<hr class="t-divider">`;
+
+  // 02 MÉTÉO
+  html+=`<div class="t-section">
+    <div class="t-section-title"><span class="t-section-num">02</span> météo — montpellier</div>
+    <div class="t-weather-main">
+      <div class="t-weather-ascii">${getWeatherAscii(w.code)}</div>
+      <div class="t-weather-data">
+        <div class="t-weather-temp">${w.temp}°C</div>
+        <div class="t-weather-desc">${WMO[w.code]||'Variable'}</div>
+        <div class="t-weather-details">
+          Vent : ${w.wind} km/h${w.rain>0?' | Pluie : '+w.rain+'mm':''}
+          ${w.sunrise?`<br>↑ ${fmtTime(w.sunrise)}  ↓ ${fmtTime(w.sunset)}`:''}
         </div>
+      </div>
     </div>
+  </div>`;
+  html+=`<hr class="t-divider">`;
 
-    <div class="section">
-        <div class="section-title">04 PUZZLE</div>
-        <div class="maze">
-        +-+-+-+-+-+<br>
-        | |     | |<br>
-        + + +-+ + +<br>
-        |   |   | |<br>
-        +-+-+ +-+ +<br>
-        |         |<br>
-        +-+-+-+-+-+
-        </div>
-        <div style="text-align:center; font-size: 0.7em;">(Trouve la sortie)</div>
-    </div>
+  // 03 MOT DU JOUR
+  html+=`<div class="t-section">
+    <div class="t-section-title"><span class="t-section-num">03</span> mot du jour</div>
+    <div class="t-mot-word">${mot.mot.toUpperCase()}</div>
+    <div class="t-mot-def">${mot.def}</div>
+    <div class="t-mot-ex">${mot.ex}</div>
+  </div>`;
+  html+=`<hr class="t-divider">`;
 
-    <div class="footer">
-        *** TICKET NO {{id}} ***<br>
-        GARDEZ UN PEU DE DOUCEUR.<br>
-        PROJET-GUS.GITHUB.IO
+  // 04 BLAGUE
+  html+=`<div class="t-section">
+    <div class="t-section-title"><span class="t-section-num">04</span> blague / devinette</div>
+    <div class="t-blague">${blague.q}</div>
+    <div class="t-blague-rep" id="blague-rep" onclick="revealReponse()" data-open="0">[ révéler la réponse ]</div>
+  </div>`;
+  html+=`<hr class="t-divider">`;
+
+  // 05 PUZZLE
+  html+=`<div class="t-section">
+    <div class="t-section-title"><span class="t-section-num">05</span> puzzle — ${type}</div>
+    <div class="puzzle-container">${puzzle}</div>
+  </div>`;
+  html+=`<hr class="t-divider">`;
+
+  // 06 DÉCOUVERTE
+  html+=`<div class="t-section">
+    <div class="t-section-title"><span class="t-section-num">06</span> petite découverte</div>
+    <div class="t-decouverte">${dec}</div>
+  </div>`;
+  html+=`<hr class="t-divider">`;
+
+  // 07 COLLECTIONNABLE
+  html+=`<div class="t-section">
+    <div class="t-section-title"><span class="t-section-num">07</span> objet du jour ✦ collectionnable</div>
+    <div class="t-collectionnable">
+      <pre class="ascii-art">${coll.art}</pre>
+      <div class="ascii-label">${coll.label}</div>
+      <div class="ascii-rarity">${coll.rarity}</div>
     </div>
+  </div>`;
+  html+=`<hr class="t-divider-solid">`;
+
+  // FOOTER
+  html+=`<div class="t-barcode">${genBarcode()}</div>`;
+  html+=`<div class="t-footer">${ticketNum}<br>IMPRIMÉ PAR G.U.S. · MONTPELLIER · ${now.getFullYear()}<br><small style="font-size:8px;color:#bbb">conserve ce ticket. il ne passera qu'une fois.</small></div>`;
+
+  document.getElementById('ticket').innerHTML=html;
+  btn.disabled=false;
+  status.textContent=`${ticketNum} imprimé ✓`;
+  setTimeout(()=>{status.textContent='prêt';},4000);
+}
+</script>
 </body>
 </html>
