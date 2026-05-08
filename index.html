@@ -1092,6 +1092,7 @@ async function generateTicket() {
   const heure=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 
   currentReponse=blague.r;
+  window.currentReponse=blague.r;
 
   let html=`<div class="ticket-noise"></div>`;
 

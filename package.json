@@ -1,0 +1,16 @@
+{
+  "name": "gus-ticket",
+  "version": "1.0.0",
+  "description": "GUS — Générateur d'Utilité Sensible. Ticket thermique quotidien.",
+  "main": "send.js",
+  "scripts": {
+    "generate": "node generate.js",
+    "send": "node send.js",
+    "test": "node send.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "nodemailer": "^6.9.13",
+    "puppeteer": "^24.43.0"
+  }
+}
