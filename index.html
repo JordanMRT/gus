@@ -1864,112 +1864,222 @@ function genMotsMeles(seed=42) {
 
 // JEUDI — Mots fléchés (remplace Relier les points)
 function genMotsFleches(seed=42) {
-  const grilles = [
+
+  // ── 13 grilles définies par leurs mots et positions ──
+  // Format : { mot, ligne, col, dir:'H'|'V', def }
+  // ligne et col sont 0-indexés
+
+  const G = [
     {
-      // Grille 7x5
-      taille: {w:7, h:5},
-      cases: [
-        // 1=blanc jouable, 0=noir, {f:'→',n:1}=case noire avec flèche et numéro
-        [{f:'→',n:1}, 1, 1, 1, {f:'↓',n:2}, 1, 1],
-        [1,           0, {f:'→',n:3}, 1, 1, 0, 1],
-        [1,           {f:'→',n:4}, 1, 1, 1, 1, 0],
-        [{f:'→',n:5}, 1, 1, 0, {f:'→',n:6}, 1, 1],
-        [1,           1, 0, {f:'→',n:7}, 1, 1, 1],
-      ],
-      definitions: [
-        '1→ Souvent bleu en Méditerranée',
-        '2↓ Oiseau rose de Camargue',
-        '3→ Vent du Languedoc',
-        '4→ Arbre des places du Midi',
-        '5→ Insecte du chant estival',
-        '6→ Lac artificiel aux rives rouges',
-        '7→ Fleuve de Montpellier',
+      titre: 'Languedoc & nature',
+      mots: [
+        { mot:'TRAMONTANE', def:'Vent froid venu des Pyrénées' },
+        { mot:'CAMARGUE',   def:'Delta sauvage du Rhône' },
+        { mot:'PETANQUE',   def:'Jeu de boules méridional' },
+        { mot:'SALAGOU',    def:'Lac aux rives rouges de l\'Hérault' },
+        { mot:'LAVANDE',    def:'Plante violette odorante' },
+        { mot:'MISTRAL',    def:'Vent du couloir rhodanien' },
+        { mot:'CIGALE',     def:'Insecte chanteur de l\'été' },
       ]
     },
     {
-      taille: {w:7, h:5},
-      cases: [
-        [{f:'→',n:1}, 1, 1, 1, 1, {f:'↓',n:2}, 1],
-        [{f:'↓',n:3}, 0, {f:'→',n:4}, 1, 1, 1, 0],
-        [1,           {f:'→',n:5}, 1, 1, 0, 1, 1],
-        [1,           1, 0, {f:'→',n:6}, 1, 1, 1],
-        [{f:'→',n:7}, 1, 1, 1, 0, 1, 1],
-      ],
-      definitions: [
-        '1→ Saison des cigales',
-        '2↓ Couleur du ciel en juillet',
-        '3↓ Fruit des garrigues en automne',
-        '4→ Épice rouge du Midi',
-        '5→ Plante odorante des garrigues',
-        '6→ Vin blanc de Picpoul',
-        '7→ Village au-dessus des gorges',
+      titre: 'Fleurs & saisons',
+      mots: [
+        { mot:'COQUELICOT', def:'Fleur rouge des champs de mai' },
+        { mot:'MIMOSA',     def:'Fleur jaune de février' },
+        { mot:'VENDANGES',  def:'Récolte du raisin en septembre' },
+        { mot:'PLATANE',    def:'Arbre des places du Midi' },
+        { mot:'PÉTRICHOR',  def:'Odeur de la pluie sur terre sèche' },
+        { mot:'SOLSTICE',   def:'Jour le plus long ou le plus court' },
+        { mot:'LAVANDE',    def:'Plante violette et odorante des garrigues' },
       ]
     },
     {
-      taille: {w:7, h:5},
-      cases: [
-        [{f:'→',n:1}, 1, 1, 1, 0, {f:'→',n:2}, 1],
-        [{f:'↓',n:3}, 0, {f:'↓',n:4}, 0, {f:'→',n:5}, 1, 1],
-        [1,           {f:'→',n:6}, 1, 1, 1, 0, 1],
-        [1,           1, 1, 0, {f:'→',n:7}, 1, 1],
-        [{f:'→',n:8}, 1, 0, 1, 1, 1, 0],
-      ],
-      definitions: [
-        '1→ Célèbre aqueduc romain du Gard',
-        '2→ Plante à fleurs jaunes du Midi',
-        '3↓ Abbaye de l\'Hérault',
-        '4↓ Pic dominant Montpellier',
-        '5→ Couleur du rosé héraultais',
-        '6→ Étang près de Sète',
-        '7→ Marché sous les arches',
-        '8→ Quartier médiéval de Montpellier',
+      titre: 'Montpellier',
+      mots: [
+        { mot:'MONTPELLIER',def:'Capitale de l\'Hérault' },
+        { mot:'ECUSSON',    def:'Vieux quartier médiéval' },
+        { mot:'COMEDIE',    def:'Grande place centrale' },
+        { mot:'PEYROU',     def:'Promenade royale' },
+        { mot:'AQUEDUC',    def:'Canal du XVIIe siècle' },
+        { mot:'FACULTE',    def:'Plus ancienne école de médecine' },
+        { mot:'TRAM',       def:'Transport en commun emblématique' },
+      ]
+    },
+    {
+      titre: 'Faune méditerranéenne',
+      mots: [
+        { mot:'FLAMANT',    def:'Oiseau rose de Camargue' },
+        { mot:'DAUPHIN',    def:'Mammifère marin joueur' },
+        { mot:'SANGLIER',   def:'Animal sauvage de la garrigue' },
+        { mot:'HERONC',     def:'Grand oiseau des étangs' },
+        { mot:'CIGOGNE',    def:'Oiseau migrateur à long bec' },
+        { mot:'LEZARD',     def:'Reptile des pierres chaudes' },
+        { mot:'RENARD',     def:'Animal roux et rusé' },
+      ]
+    },
+    {
+      titre: 'Mots du Midi',
+      mots: [
+        { mot:'GARRIGUE',   def:'Végétation sur calcaire méditerranéen' },
+        { mot:'CALANQUE',   def:'Crique rocheuse méditerranéenne' },
+        { mot:'CABANON',    def:'Petite maison de campagne méridionale' },
+        { mot:'PASTIS',     def:'Apéritif anisé du Midi' },
+        { mot:'FENOUIL',    def:'Légume anisé méditerranéen' },
+        { mot:'ETANG',      def:'Étendue d\'eau côtière' },
+        { mot:'OLIVIERS',   def:'Arbres millénaires méditerranéens' },
+      ]
+    },
+    {
+      titre: 'Beaux mots',
+      mots: [
+        { mot:'PETRICHOR',  def:'Odeur de la terre après la pluie' },
+        { mot:'SERENDIPITE',def:'Découverte heureuse par hasard' },
+        { mot:'CREPUSCULE', def:'Lumière après le coucher du soleil' },
+        { mot:'LUMINEUX',   def:'Qui répand une lumière douce' },
+        { mot:'QUIÉTUDE',   def:'Calme profond et paisible' },
+        { mot:'FULGURANCE', def:'Ce qui est soudain et brillant' },
+        { mot:'ÉMERVEILLEMENT', def:'Admiration intense mêlée de surprise' },
+      ]
+    },
+    {
+      titre: 'Languedoc historique',
+      mots: [
+        { mot:'TROUBADOUR', def:'Poète chantant en occitan' },
+        { mot:'CATHEDRALE', def:'Grande église gothique' },
+        { mot:'UNIVERSITE', def:'Fondée à Montpellier en 1289' },
+        { mot:'CANAL',      def:'Voie d\'eau du Midi' },
+        { mot:'VENDANGE',   def:'Récolte automnale du raisin' },
+        { mot:'OCCITAN',    def:'Langue du sud de la France' },
+        { mot:'ABBAYE',     def:'Monastère de Saint-Guilhem' },
+      ]
+    },
+    {
+      titre: 'Mer & rivières',
+      mots: [
+        { mot:'MEDITERRANEE',def:'Mer entourant le Languedoc' },
+        { mot:'HERAULT',    def:'Fleuve et département du Midi' },
+        { mot:'CAMARGUE',   def:'Delta marécageux du Rhône' },
+        { mot:'THAU',       def:'Étang de moules près de Sète' },
+        { mot:'GORGES',     def:'Vallée encaissée de l\'Hérault' },
+        { mot:'SETE',       def:'L\'île singulière du Languedoc' },
+        { mot:'DELTA',      def:'Embouchure en éventail d\'un fleuve' },
+      ]
+    },
+    {
+      titre: 'Saveurs & terroir',
+      mots: [
+        { mot:'TAPENADE',   def:'Purée d\'olives noires provençale' },
+        { mot:'FROMAGE',    def:'Produit laitier affiné' },
+        { mot:'MUSCAT',     def:'Vin doux naturel de Lunel' },
+        { mot:'OLIVE',      def:'Fruit de l\'olivier méditerranéen' },
+        { mot:'TRUFFE',     def:'Champignon précieux sous les chênes' },
+        { mot:'ROSÉ',       def:'Vin estival du Languedoc' },
+        { mot:'AIOLI',      def:'Sauce à l\'ail provençale' },
+      ]
+    },
+    {
+      titre: 'Ciel & météo',
+      mots: [
+        { mot:'TRAMONTANE', def:'Vent froid et violent des Pyrénées' },
+        { mot:'MISTRAL',    def:'Vent du nord du couloir rhodanien' },
+        { mot:'CANICULE',   def:'Période de chaleur extrême' },
+        { mot:'BROUILLARD', def:'Nuage au niveau du sol' },
+        { mot:'CREPUSCULE', def:'Lumière du soir après le coucher' },
+        { mot:'AURORE',     def:'Lumière du matin avant le lever' },
+        { mot:'SOLSTICE',   def:'Jour le plus long de l\'année' },
+      ]
+    },
+    {
+      titre: 'Garrigue & botanique',
+      mots: [
+        { mot:'ROMARIN',    def:'Herbe aromatique des garrigues' },
+        { mot:'LAVANDE',    def:'Plante à fleurs violettes' },
+        { mot:'THYM',       def:'Petite plante aromatique calcicole' },
+        { mot:'CHENEVERT',  def:'Arbre sempervirent de garrigue' },
+        { mot:'CISTE',      def:'Arbuste fleuri de garrigue' },
+        { mot:'GENÊT',      def:'Arbuste à fleurs jaunes' },
+        { mot:'FENOUIL',    def:'Plante anisée des bords de chemins' },
+      ]
+    },
+    {
+      titre: 'Villages & lieux',
+      mots: [
+        { mot:'SAINTGUILHEM',def:'Abbaye médiévale des gorges de l\'Hérault' },
+        { mot:'PEZENAS',    def:'Ville natale de Molière' },
+        { mot:'AGDE',       def:'Cité volcanique du bord de mer' },
+        { mot:'LUNEL',      def:'Ville du muscat héraultais' },
+        { mot:'BEZIERS',    def:'Ville des joutes et du rugby' },
+        { mot:'LODEVE',     def:'Ville au pied du Salagou' },
+        { mot:'GANGES',     def:'Ville des gorges de la Vis' },
+      ]
+    },
+    {
+      titre: 'Instants & sensations',
+      mots: [
+        { mot:'PÉTRICHOR',  def:'Odeur de la pluie sur la terre' },
+        { mot:'TORPEUR',    def:'Engourdissement de l\'après-midi' },
+        { mot:'FLANER',     def:'Se promener sans but précis' },
+        { mot:'QUIÉTUDE',   def:'Calme profond et paisible' },
+        { mot:'TIÉDEUR',    def:'Chaleur douce entre chaud et froid' },
+        { mot:'SILLAGE',    def:'Trace laissée dans l\'eau ou l\'air' },
+        { mot:'BRUISSEMENT',def:'Léger bruit continu des feuilles' },
       ]
     },
   ];
 
-  const g = grilles[seed % grilles.length];
-  const cs = 18; // taille d'une case
-  const W = g.taille.w * cs;
-  const H = g.taille.h * cs;
+  const grille = G[seed % G.length];
 
-  let svg = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:4px auto;border:1px solid #888;">`;
+  // ── Rendu ──
+  const cs = 13; // taille d'une case
+  const maxLen = Math.max(...grille.mots.map(m => m.mot.length));
+  const svgW = maxLen * cs + 1;
+  const svgH = grille.mots.length * (cs + 4) + 1;
 
-  for (let row = 0; row < g.taille.h; row++) {
-    for (let col = 0; col < g.taille.w; col++) {
-      const cell = g.cases[row][col];
-      const x = col * cs;
-      const y = row * cs;
+  let svgLines = '';
+  let solLetters = []; // pour la solution
 
-      if (cell === 0) {
-        // Case noire simple
-        svg += `<rect x="${x}" y="${y}" width="${cs}" height="${cs}" fill="#2a2a2a"/>`;
-      } else if (typeof cell === 'object') {
-        // Case noire avec flèche et numéro
-        svg += `<rect x="${x}" y="${y}" width="${cs}" height="${cs}" fill="#2a2a2a"/>`;
-        svg += `<text x="${x+2}" y="${y+8}" font-size="6" fill="#f5f0e8" font-family="monospace" font-weight="bold">${cell.n}</text>`;
-        svg += `<text x="${x+9}" y="${y+14}" font-size="8" fill="#f5f0e8" font-family="monospace">${cell.f}</text>`;
-      } else {
-        // Case blanche jouable
-        svg += `<rect x="${x}" y="${y}" width="${cs}" height="${cs}" fill="#f9f5ed" stroke="#888" stroke-width=".5"/>`;
-      }
-    }
-  }
+  grille.mots.forEach((item, idx) => {
+    const y = idx * (cs + 4);
+    const numLabel = `${idx + 1}`;
 
-  svg += '</svg>';
+    // Numéro de la définition
+    svgLines += `<text x="0" y="${y + cs - 3}" font-size="7" fill="#888" font-family="monospace">${numLabel}.</text>`;
 
-  // Définitions
-  const halfLen = Math.ceil(g.definitions.length / 2);
-  const col1 = g.definitions.slice(0, halfLen);
-  const col2 = g.definitions.slice(halfLen);
+    // Cases de la réponse
+    item.mot.split('').forEach((lettre, i) => {
+      const x = 18 + i * cs;
+      svgLines += `<rect x="${x}" y="${y}" width="${cs-1}" height="${cs-1}" fill="#f9f5ed" stroke="#999" stroke-width="0.5" rx="1"/>`;
+      // lettre cachée
+      svgLines += `<text x="${x + cs/2 - 1}" y="${y + cs - 3}" font-size="8" fill="#2a2a2a" font-family="monospace" text-anchor="middle" class="gus-sol-letter" style="display:none">${lettre}</text>`;
+    });
+  });
 
-  let defsHtml = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 8px;margin-top:5px;font-size:8.5px;color:#555;line-height:1.5;">`;
-  const maxRows = Math.max(col1.length, col2.length);
-  for (let i = 0; i < maxRows; i++) {
-    defsHtml += `<div>${col1[i] || ''}</div><div>${col2[i] || ''}</div>`;
+  const svg = `<svg width="${svgW + 20}" height="${svgH}" viewBox="0 0 ${svgW + 20} ${svgH}" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:4px auto;">
+    <rect width="${svgW + 20}" height="${svgH}" fill="#f9f5ed" rx="2"/>
+    ${svgLines}
+  </svg>`;
+
+  // Définitions en deux colonnes
+  const half = Math.ceil(grille.mots.length / 2);
+  let defsHtml = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px 8px;margin-top:4px;font-size:8px;color:#555;line-height:1.6;">`;
+  for (let i = 0; i < grille.mots.length; i++) {
+    defsHtml += `<div>${i + 1}. ${grille.mots[i].def}</div>`;
+    if (i === half - 1 && grille.mots.length % 2 !== 0) defsHtml += `<div></div>`;
   }
   defsHtml += `</div>`;
 
-  return `<div class="t-puzzle-title">Mots fléchés — complète la grille</div>${svg}${defsHtml}`;
+  const solHtml = `<div class="t-blague-rep" style="margin-top:6px" onclick="toggleSolutionFleches(this)" data-open="0">[ révéler la solution ]</div>`;
+
+  return `<div class="t-puzzle-title">Mots fléchés — ${grille.titre}</div>${svg}${defsHtml}${solHtml}`;
+}
+
+function toggleSolutionFleches(btn) {
+  const letters = document.querySelectorAll('.gus-sol-letter');
+  const visible = btn.dataset.open === '1';
+  letters.forEach(l => l.style.display = visible ? 'none' : 'block');
+  btn.textContent = visible ? '[ révéler la solution ]' : '[ masquer la solution ]';
+  btn.dataset.open = visible ? '0' : '1';
 }
 
 // VENDREDI — Pathfinding garanti réalisable
@@ -2068,7 +2178,7 @@ function genMiniLogique(seed=42) {
 }
 
 function getPuzzle(date) {
-  const day = date.getDay(); // 0=dim 1=lun 2=mar 3=mer 4=jeu 5=ven 6=sam
+  const day = date.getDay();// 0=dim 1=lun 2=mar 3=mer 4=jeu 5=ven 6=sam
   const seed = date.getDate() * 31 + date.getMonth() * 366;
   const titles = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
   let puzzle, type;
