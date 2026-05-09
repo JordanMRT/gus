@@ -923,43 +923,174 @@ function genMotsMeles(seed=42) {
   return html;
 }
 
-function genRelierPoints(seed=42) {
-  let r=seed;
-  function rng(){r=(r*1664525+1013904223)&0xffffffff;return Math.abs(r)/0xffffffff;}
-  const N=8;
-  const pts=[];
-  const W=140,H=120;
-  for(let i=0;i<N;i++){
-    pts.push({x:20+Math.floor(rng()*(W-40)),y:10+Math.floor(rng()*(H-20)),n:i+1});
+// JEUDI — Mots fléchés (remplace Relier les points)
+function genMotsFleches(seed=42) {
+  const grilles = [
+    {
+      // Grille 7x5
+      taille: {w:7, h:5},
+      cases: [
+        // 1=blanc jouable, 0=noir, {f:'→',n:1}=case noire avec flèche et numéro
+        [{f:'→',n:1}, 1, 1, 1, {f:'↓',n:2}, 1, 1],
+        [1,           0, {f:'→',n:3}, 1, 1, 0, 1],
+        [1,           {f:'→',n:4}, 1, 1, 1, 1, 0],
+        [{f:'→',n:5}, 1, 1, 0, {f:'→',n:6}, 1, 1],
+        [1,           1, 0, {f:'→',n:7}, 1, 1, 1],
+      ],
+      definitions: [
+        '1→ Souvent bleu en Méditerranée',
+        '2↓ Oiseau rose de Camargue',
+        '3→ Vent du Languedoc',
+        '4→ Arbre des places du Midi',
+        '5→ Insecte du chant estival',
+        '6→ Lac artificiel aux rives rouges',
+        '7→ Fleuve de Montpellier',
+      ]
+    },
+    {
+      taille: {w:7, h:5},
+      cases: [
+        [{f:'→',n:1}, 1, 1, 1, 1, {f:'↓',n:2}, 1],
+        [{f:'↓',n:3}, 0, {f:'→',n:4}, 1, 1, 1, 0],
+        [1,           {f:'→',n:5}, 1, 1, 0, 1, 1],
+        [1,           1, 0, {f:'→',n:6}, 1, 1, 1],
+        [{f:'→',n:7}, 1, 1, 1, 0, 1, 1],
+      ],
+      definitions: [
+        '1→ Saison des cigales',
+        '2↓ Couleur du ciel en juillet',
+        '3↓ Fruit des garrigues en automne',
+        '4→ Épice rouge du Midi',
+        '5→ Plante odorante des garrigues',
+        '6→ Vin blanc de Picpoul',
+        '7→ Village au-dessus des gorges',
+      ]
+    },
+    {
+      taille: {w:7, h:5},
+      cases: [
+        [{f:'→',n:1}, 1, 1, 1, 0, {f:'→',n:2}, 1],
+        [{f:'↓',n:3}, 0, {f:'↓',n:4}, 0, {f:'→',n:5}, 1, 1],
+        [1,           {f:'→',n:6}, 1, 1, 1, 0, 1],
+        [1,           1, 1, 0, {f:'→',n:7}, 1, 1],
+        [{f:'→',n:8}, 1, 0, 1, 1, 1, 0],
+      ],
+      definitions: [
+        '1→ Célèbre aqueduc romain du Gard',
+        '2→ Plante à fleurs jaunes du Midi',
+        '3↓ Abbaye de l\'Hérault',
+        '4↓ Pic dominant Montpellier',
+        '5→ Couleur du rosé héraultais',
+        '6→ Étang près de Sète',
+        '7→ Marché sous les arches',
+        '8→ Quartier médiéval de Montpellier',
+      ]
+    },
+  ];
+
+  const g = grilles[seed % grilles.length];
+  const cs = 18; // taille d'une case
+  const W = g.taille.w * cs;
+  const H = g.taille.h * cs;
+
+  let svg = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:4px auto;border:1px solid #888;">`;
+
+  for (let row = 0; row < g.taille.h; row++) {
+    for (let col = 0; col < g.taille.w; col++) {
+      const cell = g.cases[row][col];
+      const x = col * cs;
+      const y = row * cs;
+
+      if (cell === 0) {
+        // Case noire simple
+        svg += `<rect x="${x}" y="${y}" width="${cs}" height="${cs}" fill="#2a2a2a"/>`;
+      } else if (typeof cell === 'object') {
+        // Case noire avec flèche et numéro
+        svg += `<rect x="${x}" y="${y}" width="${cs}" height="${cs}" fill="#2a2a2a"/>`;
+        svg += `<text x="${x+2}" y="${y+8}" font-size="6" fill="#f5f0e8" font-family="monospace" font-weight="bold">${cell.n}</text>`;
+        svg += `<text x="${x+9}" y="${y+14}" font-size="8" fill="#f5f0e8" font-family="monospace">${cell.f}</text>`;
+      } else {
+        // Case blanche jouable
+        svg += `<rect x="${x}" y="${y}" width="${cs}" height="${cs}" fill="#f9f5ed" stroke="#888" stroke-width=".5"/>`;
+      }
+    }
   }
-  let svg=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:4px auto;border:.5px solid #aaa;background:#f9f5ed;">`;
-  pts.forEach(p=>{
-    svg+=`<circle cx="${p.x}" cy="${p.y}" r="3" fill="#333"/>`;
-    svg+=`<text x="${p.x+5}" y="${p.y+3}" font-size="8" fill="#555" font-family="monospace">${p.n}</text>`;
-  });
-  svg+='</svg>';
-  return `<div class="t-puzzle-title">Relier les points — dans l'ordre 1→${N}</div>${svg}`;
+
+  svg += '</svg>';
+
+  // Définitions
+  const halfLen = Math.ceil(g.definitions.length / 2);
+  const col1 = g.definitions.slice(0, halfLen);
+  const col2 = g.definitions.slice(halfLen);
+
+  let defsHtml = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 8px;margin-top:5px;font-size:8.5px;color:#555;line-height:1.5;">`;
+  const maxRows = Math.max(col1.length, col2.length);
+  for (let i = 0; i < maxRows; i++) {
+    defsHtml += `<div>${col1[i] || ''}</div><div>${col2[i] || ''}</div>`;
+  }
+  defsHtml += `</div>`;
+
+  return `<div class="t-puzzle-title">Mots fléchés — complète la grille</div>${svg}${defsHtml}`;
 }
 
+// VENDREDI — Pathfinding garanti réalisable
 function genPathfinding(seed=42) {
-  let r=seed;
-  function rng(){r=(r*1664525+1013904223)&0xffffffff;return Math.abs(r)/0xffffffff;}
-  const W=9,H=9;
-  const grid=Array(H).fill(null).map(()=>Array(W).fill(0));
-  // Murs aléatoires ~30%
-  for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(rng()<.28&&!(y===0&&x===0)&&!(y===H-1&&x===W-1))grid[y][x]=1;
-  grid[0][0]=0;grid[H-1][W-1]=0;
-  const cs=14;
-  let svg=`<svg width="${W*cs}" height="${H*cs}" viewBox="0 0 ${W*cs} ${H*cs}" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:4px auto;border:.5px solid #aaa;">`;
-  for(let y=0;y<H;y++)for(let x=0;x<W;x++){
-    let fill=grid[y][x]?'#333':'#f9f5ed';
-    if(y===0&&x===0)fill='#c8e6c9';
-    if(y===H-1&&x===W-1)fill='#ffccbc';
-    svg+=`<rect x="${x*cs}" y="${y*cs}" width="${cs}" height="${cs}" fill="${fill}" stroke="#bbb" stroke-width=".5"/>`;
+  let r = seed;
+  function rng() { r=(r*1664525+1013904223)&0xffffffff; return Math.abs(r)/0xffffffff; }
+
+  const W=9, H=9;
+  const grid = Array(H).fill(null).map(() => Array(W).fill(1)); // 1=mur par défaut
+
+  // 1. Creuse un chemin garanti de (0,0) à (W-1,H-1) par DFS
+  const visited = Array(H).fill(null).map(() => Array(W).fill(false));
+  function carve(x, y) {
+    visited[y][x] = true;
+    grid[y][x] = 0; // libre
+    const dirs = [[0,-1],[1,0],[0,1],[-1,0]].sort(() => rng() - .5);
+    for (const [dx, dy] of dirs) {
+      const nx = x + dx*2, ny = y + dy*2; // saute une case
+      if (nx>=0 && nx<W && ny>=0 && ny<H && !visited[ny][nx]) {
+        grid[y+dy][x+dx] = 0; // libère la case intermédiaire
+        carve(nx, ny);
+      }
+    }
   }
-  svg+=`<text x="1" y="${cs-2}" font-size="7" fill="#2e7d32" font-family="monospace">A</text>`;
-  svg+=`<text x="${(W-1)*cs+2}" y="${H*cs-2}" font-size="7" fill="#bf360c" font-family="monospace">B</text>`;
-  svg+='</svg>';
+  // Grille impaire pour le DFS
+  const GW = W%2===0 ? W-1 : W;
+  const GH = H%2===0 ? H-1 : H;
+  carve(0, 0);
+
+  // Force départ et arrivée libres
+  grid[0][0] = 0;
+  grid[H-1][W-1] = 0;
+
+  // 2. Ajoute quelques murs supplémentaires (max 15%) sans bloquer
+  // (on ne touche pas aux cases déjà libres du chemin principal)
+  for (let y=0; y<H; y++) {
+    for (let x=0; x<W; x++) {
+      if (grid[y][x]===1 && rng()<0.4) grid[y][x]=1; // reste mur
+      else if (grid[y][x]===1) grid[y][x]=0; // ouvre quelques passages bonus
+    }
+  }
+  grid[0][0] = 0;
+  grid[H-1][W-1] = 0;
+
+  const cs = 14;
+  let svg = `<svg width="${W*cs}" height="${H*cs}" viewBox="0 0 ${W*cs} ${H*cs}" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:4px auto;border:.5px solid #aaa;">`;
+
+  for (let y=0; y<H; y++) {
+    for (let x=0; x<W; x++) {
+      let fill = grid[y][x] ? '#333' : '#f9f5ed';
+      if (y===0 && x===0) fill = '#c8e6c9';
+      if (y===H-1 && x===W-1) fill = '#ffccbc';
+      svg += `<rect x="${x*cs}" y="${y*cs}" width="${cs}" height="${cs}" fill="${fill}" stroke="#bbb" stroke-width=".5"/>`;
+    }
+  }
+
+  svg += `<text x="2" y="${cs-3}" font-size="7" fill="#2e7d32" font-family="monospace" font-weight="bold">A</text>`;
+  svg += `<text x="${(W-1)*cs+2}" y="${H*cs-3}" font-size="7" fill="#bf360c" font-family="monospace" font-weight="bold">B</text>`;
+  svg += '</svg>';
+
   return `<div class="t-puzzle-title">Pathfinding — trouve le chemin de A → B</div>${svg}`;
 }
 
@@ -1007,7 +1138,7 @@ function getPuzzle(date) {
     case 2: puzzle=genMiniCrossword(seed); type='MOTS CROISÉS'; break;
     case 3: puzzle=genSudoku(seed); type='SUDOKU'; break;
     case 4: puzzle=genMotsMeles(seed); type='MOTS MÊLÉS'; break;
-    case 5: puzzle=genRelierPoints(seed); type='RELIER LES POINTS'; break;
+    case 5: puzzle=genMotsFleches(seed); type='MOTS FLÉCHÉS'; break;
     case 6: puzzle=genPathfinding(seed); type='PATHFINDING'; break;
     case 0: puzzle=genMiniLogique(seed); type='ÉNIGME LOGIQUE'; break;
     default: puzzle=genMaze(9,seed); type='LABYRINTHE';
