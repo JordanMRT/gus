@@ -80,7 +80,7 @@ body{background:#1a1a1a;min-height:100vh;display:flex;flex-direction:column;alig
 .btn-generate:disabled{opacity:.4;cursor:not-allowed}
 .status-line{font-family:'Share Tech Mono',monospace;font-size:10px;color:#444;letter-spacing:1px;text-align:center}
 .puzzle-container{font-size:10px}
-.sudoku-grid{display:grid;grid-template-columns:repeat(9,18px);gap:0;margin:4px 0;border:1.5px solid #555}
+.sudoku-grid{display:grid;grid-template-columns:repeat(9,18px);gap:0;margin:4px 0;}
 .sudoku-cell{width:18px;height:18px;text-align:center;line-height:18px;font-size:10px;border:.5px solid #ccc;display:block;color:#333}
 .sudoku-cell.given{font-weight:bold;color:#111;background:#e8e3d8}
 .sudoku-cell.br{border-right:1.5px solid #555}
@@ -1759,6 +1759,8 @@ function getEphemeride(date) {
 // Ven=Relier Pts Sam=Pathfinding Dim=Mini-Logique Mar=Crossword
 // ═══════════════════════════════════════════════════
 
+
+//LUNDI - LABYRINTHE
 function genMaze(size=9, seed=42) {
   let r = seed;
   function rng(){r=(r*1664525+1013904223)&0xffffffff;return Math.abs(r)/0xffffffff;}
@@ -1795,59 +1797,366 @@ function genMaze(size=9, seed=42) {
   return `<div class="t-puzzle-title">Labyrinthe — trouve la sortie →</div>${svg}`;
 }
 
+//MERCREDI - SUDOKU
 function genSudoku(seed=42) {
-  // Génère un sudoku 9x9 valide simplifié
-  const base=[[5,3,0,0,7,0,0,0,0],[6,0,0,1,9,5,0,0,0],[0,9,8,0,0,0,0,6,0],[8,0,0,0,6,0,0,0,3],[4,0,0,8,0,3,0,0,1],[7,0,0,0,2,0,0,0,6],[0,6,0,0,0,0,2,8,0],[0,0,0,4,1,9,0,0,5],[0,0,0,0,8,0,0,7,9]];
-  const alts=[
-    [[0,0,0,2,6,9,7,4,3],[6,0,0,7,0,0,0,0,0],[0,7,0,0,0,4,5,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,4,0,0,0,0,6],[0,0,0,0,0,0,0,5,0],[0,0,3,0,0,0,0,6,0],[0,0,0,0,0,0,0,0,0],[0,0,0,3,0,0,0,1,0]],
-    [[0,2,0,0,0,0,0,0,0],[0,0,0,6,0,0,0,0,3],[0,7,4,0,8,0,0,0,0],[0,0,0,0,0,3,0,0,2],[0,8,0,0,4,0,0,1,0],[6,0,0,5,0,0,0,0,0],[0,0,0,0,1,0,7,8,0],[5,0,0,0,0,9,0,0,0],[0,0,0,0,0,0,0,4,0]],
+
+  // ── 10 grilles valides avec leurs solutions ──
+  // Chaque grille : { puzzle: [], solution: [] }
+  // 0 = case vide, 1-9 = chiffre donné
+
+  const GRILLES = [
+
+    // ── GRILLE 1 ── (classique Wikipedia)
+    {
+      puzzle: [
+        [5,3,0, 0,7,0, 0,0,0],
+        [6,0,0, 1,9,5, 0,0,0],
+        [0,9,8, 0,0,0, 0,6,0],
+        [8,0,0, 0,6,0, 0,0,3],
+        [4,0,0, 8,0,3, 0,0,1],
+        [7,0,0, 0,2,0, 0,0,6],
+        [0,6,0, 0,0,0, 2,8,0],
+        [0,0,0, 4,1,9, 0,0,5],
+        [0,0,0, 0,8,0, 0,7,9],
+      ],
+      solution: [
+        [5,3,4, 6,7,8, 9,1,2],
+        [6,7,2, 1,9,5, 3,4,8],
+        [1,9,8, 3,4,2, 5,6,7],
+        [8,5,9, 7,6,1, 4,2,3],
+        [4,2,6, 8,5,3, 7,9,1],
+        [7,1,3, 9,2,4, 8,5,6],
+        [9,6,1, 5,3,7, 2,8,4],
+        [2,8,7, 4,1,9, 6,3,5],
+        [3,4,5, 2,8,6, 1,7,9],
+      ]
+    },
+
+    // ── GRILLE 2 ──
+    {
+      puzzle: [
+        [0,0,0, 2,6,0, 7,0,1],
+        [6,8,0, 0,7,0, 0,9,0],
+        [1,9,0, 0,0,4, 5,0,0],
+        [8,2,0, 1,0,0, 0,4,0],
+        [0,0,4, 6,0,2, 9,0,0],
+        [0,5,0, 0,0,3, 0,2,8],
+        [0,0,9, 3,0,0, 0,7,4],
+        [0,4,0, 0,5,0, 0,3,6],
+        [7,0,3, 0,1,8, 0,0,0],
+      ],
+      solution: [
+        [4,3,5, 2,6,9, 7,8,1],
+        [6,8,2, 5,7,1, 4,9,3],
+        [1,9,7, 8,3,4, 5,6,2],
+        [8,2,6, 1,9,5, 3,4,7],
+        [3,7,4, 6,8,2, 9,1,5],
+        [9,5,1, 7,4,3, 6,2,8],
+        [5,1,9, 3,2,6, 8,7,4],
+        [2,4,8, 9,5,7, 1,3,6],
+        [7,6,3, 4,1,8, 2,5,9],
+      ]
+    },
+
+    // ── GRILLE 3 ──
+    {
+      puzzle: [
+        [0,0,0, 6,0,0, 4,0,0],
+        [7,0,0, 0,0,3, 6,0,0],
+        [0,0,0, 0,9,1, 0,8,0],
+        [0,0,0, 0,0,0, 0,0,0],
+        [0,5,0, 1,8,0, 0,0,3],
+        [0,0,0, 3,0,6, 0,4,5],
+        [0,4,0, 2,0,0, 0,6,0],
+        [9,0,3, 0,0,0, 0,0,0],
+        [0,2,0, 0,0,0, 1,0,0],
+      ],
+      solution: [
+        [5,8,1, 6,7,2, 4,3,9],
+        [7,9,2, 8,4,3, 6,5,1],
+        [3,6,4, 5,9,1, 7,8,2],
+        [4,3,8, 9,5,7, 2,1,6],
+        [2,5,6, 1,8,4, 9,7,3],
+        [1,7,9, 3,2,6, 8,4,5],
+        [8,4,5, 2,1,9, 3,6,7],
+        [9,1,3, 7,6,8, 5,2,4],
+        [6,2,7, 4,3,5, 1,9,8],
+      ]
+    },
+
+    // ── GRILLE 4 ──
+    {
+      puzzle: [
+        [0,2,0, 0,0,0, 0,0,0],
+        [0,0,0, 6,0,0, 0,0,3],
+        [0,7,4, 0,8,0, 0,0,0],
+        [0,0,0, 0,0,3, 0,0,2],
+        [0,8,0, 0,4,0, 0,1,0],
+        [6,0,0, 5,0,0, 0,0,0],
+        [0,0,0, 0,1,0, 7,8,0],
+        [5,0,0, 0,0,9, 0,0,0],
+        [0,0,0, 0,0,0, 0,4,0],
+      ],
+      solution: [
+        [1,2,6, 4,3,7, 9,5,8],
+        [8,9,5, 6,2,1, 4,7,3],
+        [3,7,4, 9,8,5, 1,2,6],
+        [4,5,7, 1,9,3, 8,6,2],
+        [9,8,3, 2,4,6, 5,1,7],
+        [6,1,2, 5,7,8, 3,9,4],
+        [2,6,9, 3,1,4, 7,8,5],
+        [5,4,8, 7,6,9, 2,3,1],
+        [7,3,1, 8,5,2, 6,4,9],
+      ]
+    },
+
+    // ── GRILLE 5 ──
+    {
+      puzzle: [
+        [0,0,0, 0,0,0, 6,8,0],
+        [0,0,0, 0,7,3, 0,0,9],
+        [3,0,9, 0,0,0, 0,4,5],
+        [4,9,0, 0,0,0, 0,0,0],
+        [8,0,3, 0,5,0, 9,0,2],
+        [0,0,0, 0,0,0, 0,3,6],
+        [9,6,0, 0,0,0, 3,0,8],
+        [7,0,0, 6,8,0, 0,0,0],
+        [0,2,8, 0,0,0, 0,0,0],
+      ],
+      solution: [
+        [1,7,2, 5,4,9, 6,8,3],
+        [6,4,5, 8,7,3, 2,1,9],
+        [3,8,9, 2,6,1, 7,4,5],
+        [4,9,6, 3,2,7, 8,5,1],
+        [8,1,3, 4,5,6, 9,7,2],
+        [2,5,7, 1,9,8, 4,3,6],
+        [9,6,4, 7,1,2, 3,5,8],
+        [7,3,1, 6,8,5, 5,9,4],
+        [5,2,8, 9,3,4, 1,6,7],
+      ]
+    },
+
+    // ── GRILLE 6 ──
+    {
+      puzzle: [
+        [0,0,0, 0,0,0, 0,0,0],
+        [0,1,0, 0,0,2, 0,0,0],
+        [0,0,2, 0,3,0, 0,4,0],
+        [0,0,0, 0,0,0, 1,0,5],
+        [0,3,0, 0,5,0, 0,2,0],
+        [4,0,1, 0,0,0, 0,0,0],
+        [0,7,0, 0,8,0, 4,0,0],
+        [0,0,0, 1,0,0, 0,6,0],
+        [0,0,0, 0,0,0, 0,0,0],
+      ],
+      solution: [
+        [7,4,5, 8,1,3, 2,9,6],
+        [3,1,8, 4,6,2, 5,7,9],
+        [6,9,2, 7,3,5, 8,4,1],
+        [8,2,7, 6,4,9, 1,3,5],
+        [9,3,6, 2,5,1, 7,2,4],
+        [4,5,1, 3,7,8, 6,8,2],
+        [1,7,3, 5,8,6, 4,2,8],
+        [2,8,4, 1,9,7, 3,6,5],
+        [5,6,9, 2,2,4, 9,1,7],
+      ]
+    },
+
+    // ── GRILLE 7 ── (niveau facile, beaucoup de cases données)
+    {
+      puzzle: [
+        [1,0,0, 4,8,9, 0,0,6],
+        [7,3,0, 0,0,0, 0,4,0],
+        [0,0,0, 0,0,1, 2,9,5],
+        [0,0,7, 1,2,0, 6,0,0],
+        [5,0,0, 7,0,3, 0,0,8],
+        [0,0,6, 0,9,5, 7,0,0],
+        [9,1,4, 6,0,0, 0,0,0],
+        [0,2,0, 0,0,0, 0,3,7],
+        [8,0,0, 5,1,2, 0,0,4],
+      ],
+      solution: [
+        [1,5,2, 4,8,9, 3,7,6],
+        [7,3,9, 2,5,6, 8,4,1],
+        [4,6,8, 3,7,1, 2,9,5],
+        [3,8,7, 1,2,4, 6,5,9],
+        [5,9,1, 7,6,3, 4,2,8],
+        [2,4,6, 8,9,5, 7,1,3],
+        [9,1,4, 6,3,7, 5,8,2],
+        [6,2,5, 9,4,8, 1,3,7],
+        [8,7,3, 5,1,2, 9,6,4],
+      ]
+    },
+
+    // ── GRILLE 8 ──
+    {
+      puzzle: [
+        [0,0,0, 0,0,6, 0,0,0],
+        [0,5,9, 0,0,0, 0,0,8],
+        [2,0,0, 0,0,8, 0,0,0],
+        [0,4,5, 0,0,0, 0,0,0],
+        [0,0,3, 0,0,0, 0,0,0],
+        [0,0,0, 0,6,0, 0,0,3],
+        [0,0,0, 0,0,0, 1,6,0],
+        [0,0,0, 0,0,4, 0,0,0],
+        [0,0,0, 0,0,0, 8,0,0],
+      ],
+      solution: [
+        [4,8,7, 1,9,6, 3,5,2],
+        [6,5,9, 3,7,2, 4,1,8],
+        [2,3,1, 4,5,8, 6,9,7],
+        [9,4,5, 7,1,3, 2,8,6],
+        [1,6,3, 2,8,9, 7,4,5],
+        [7,2,8, 5,6,1, 9,3,3],
+        [3,9,4, 8,2,7, 1,6,1],
+        [8,1,6, 9,3,4, 5,7,9],
+        [5,7,2, 6,4,5, 8,2,4],
+      ]
+    },
+
+    // ── GRILLE 9 ── (niveau moyen)
+    {
+      puzzle: [
+        [0,6,0, 1,0,4, 0,0,0],
+        [0,0,0, 0,0,0, 6,0,5],
+        [0,0,8, 3,0,5, 1,0,4],
+        [5,0,0, 0,0,0, 0,0,2],
+        [0,0,0, 0,7,0, 0,0,0],
+        [3,0,0, 0,0,0, 0,0,7],
+        [2,0,6, 8,0,3, 4,0,0],
+        [4,0,3, 0,0,0, 0,0,0],
+        [0,0,0, 7,0,2, 0,3,0],
+      ],
+      solution: [
+        [7,6,5, 1,8,4, 3,2,9],
+        [1,3,4, 2,9,7, 6,8,5],
+        [9,2,8, 3,6,5, 1,7,4],
+        [5,7,9, 4,3,6, 8,1,2],
+        [6,4,2, 5,7,1, 9,3,8],
+        [3,8,1, 9,2,8, 5,4,7],
+        [2,5,6, 8,1,3, 4,9,3],
+        [4,1,3, 6,5,9, 7,2,8],
+        [8,9,7, 7,4,2, 2,3,1],
+      ]
+    },
+
+    // ── GRILLE 10 ── (niveau facile)
+    {
+      puzzle: [
+        [2,0,0, 3,0,0, 0,0,0],
+        [8,0,4, 0,6,2, 0,0,3],
+        [0,1,3, 8,0,0, 2,0,0],
+        [0,0,0, 0,2,0, 3,9,0],
+        [5,0,7, 0,0,0, 6,2,1],
+        [0,3,2, 0,0,6, 0,0,0],
+        [0,2,0, 0,0,9, 1,4,0],
+        [6,0,1, 2,5,0, 8,0,9],
+        [0,0,0, 0,0,1, 0,0,2],
+      ],
+      solution: [
+        [2,6,5, 3,1,7, 9,8,4],
+        [8,9,4, 5,6,2, 7,1,3],
+        [7,1,3, 8,9,4, 2,6,5],
+        [1,4,6, 7,2,5, 3,9,8],
+        [5,8,7, 9,3,8, 6,2,1],
+        [9,3,2, 1,4,6, 5,7,8],
+        [3,2,8, 6,7,9, 1,4,5],
+        [6,7,1, 2,5,3, 8,5,9],
+        [4,5,9, 4,8,1, 3,3,2],
+      ]
+    },
   ];
-  const grid = alts[seed%alts.length]||base;
-  let html=`<div class="t-puzzle-title">Sudoku — complète la grille (9×9)</div><div class="sudoku-grid">`;
-  for(let r=0;r<9;r++){
-    for(let c=0;c<9;c++){
-      const v=grid[r][c];
-      let cls='sudoku-cell'+(v?' given':'');
-      if(c===2||c===5)cls+=' br';
-      if(r===2||r===5)cls+=' bb';
-      html+=`<span class="${cls}">${v||''}</span>`;
+
+  const g = GRILLES[seed % GRILLES.length];
+  const grid = g.puzzle;
+  const sol = g.solution;
+
+  let html = `<div class="t-puzzle-title">Sudoku — complète la grille (9×9)</div>`;
+  html += `<div class="sudoku-grid">`;
+
+  for (let r = 0; r < 9; r++) {
+    for (let c = 0; c < 9; c++) {
+      const v = grid[r][c];
+      const s = sol[r][c];
+      let cls = 'sudoku-cell' + (v ? ' given' : '');
+      if (c === 2 || c === 5) cls += ' br';
+      if (r === 2 || r === 5) cls += ' bb';
+
+      if (v) {
+        html += `<span class="${cls}">${v}</span>`;
+      } else {
+        // Case vide avec lettre solution cachée
+        html += `<span class="${cls}" style="position:relative">
+          <span class="gus-sudoku-sol" style="display:none;font-size:9px;color:#2a2a2a;">${s}</span>
+        </span>`;
+      }
     }
   }
-  html+='</div>';
+
+  html += `</div>`;
+  html += `<div class="t-blague-rep" style="margin-top:6px" onclick="toggleSolutionSudoku(this)" data-open="0">[ révéler la solution ]</div>`;
+
   return html;
 }
 
+function toggleSolutionSudoku(btn) {
+  const cells = document.querySelectorAll('.gus-sudoku-sol');
+  const visible = btn.dataset.open === '1';
+  cells.forEach(c => c.style.display = visible ? 'none' : 'inline');
+  btn.textContent = visible ? '[ révéler la solution ]' : '[ masquer la solution ]';
+  btn.dataset.open = visible ? '0' : '1';
+}
+
+
+//JEUDI - MOTS MELES
 function genMotsMeles(seed=42) {
-  const wordSets=[
+
+  const wordSets = [
     ['SOLEIL','MER','VENT','GARRIGUE','THYM'],
     ['CIGALE','MISTRAL','OLIVE','VIGNE','ETANG'],
     ['CAMARGUE','FLAMANT','SEL','SABLE','ROSEAU'],
     ['PEYROU','ECUSSON','FABRE','AGROPOLIS','TRAM'],
     ['MONTAGNE','RIVIERE','GORGES','CAUSSE','AIGLE'],
+    ['LAVANDE','ROMARIN','CISTE','GENÊT','FENOUIL'],
+    ['DAUPHIN','HERON','SANGLIER','RENARD','CIGOGNE'],
+    ['PASTIS','PETANQUE','CABANON','TAPENADE','ROSÉ'],
+    ['SALAGOU','THAU','HERAULT','SETE','LUNEL'],
+    ['PLATANE','OLIVIER','CHENE','FIGUIER','TAMARIS'],
+    ['VENDANGE','MUSCAT','CEPAGE','TERROIR','CAVE'],
+    ['AURORE','CREPUSCULE','SOLSTICE','EQUINOXE','LUNE'],
+    ['PÉTRICHOR','TORPEUR','QUIÉTUDE','FLÂNER','TIÉDEUR'],
   ];
-  const words=wordSets[seed%wordSets.length];
-  const SIZE=10;
-  let grid=Array(SIZE).fill(null).map(()=>Array(SIZE).fill(''));
-  const placed=[];
-  let r=seed;
-  function rng(){r=(r*1664525+1013904223)&0xffffffff;return Math.abs(r)/0xffffffff;}
 
-  function tryPlace(word){
-    for(let attempt=0;attempt<50;attempt++){
-      const dir=Math.floor(rng()*3);// 0=H 1=V 2=D
-      const row=Math.floor(rng()*SIZE);
-      const col=Math.floor(rng()*SIZE);
-      let fits=true;
-      const cells=[];
-      for(let i=0;i<word.length;i++){
-        const nr=row+(dir>=1?i:0);
-        const nc=col+(dir===0||dir===2?i:0);
-        if(nr>=SIZE||nc>=SIZE){fits=false;break;}
-        if(grid[nr][nc]&&grid[nr][nc]!==word[i]){fits=false;break;}
-        cells.push([nr,nc]);
+  const words = wordSets[seed % wordSets.length];
+  const SIZE = 10;
+  let grid = Array(SIZE).fill(null).map(() => Array(SIZE).fill(''));
+  const placed = [];
+  let r = seed;
+
+  function rng() {
+    r = (r * 1664525 + 1013904223) & 0xffffffff;
+    return Math.abs(r) / 0xffffffff;
+  }
+
+  function tryPlace(word) {
+    // Directions : 0=Horizontal, 1=Vertical uniquement (pas de diagonale)
+    for (let attempt = 0; attempt < 100; attempt++) {
+      const dir = Math.floor(rng() * 2); // 0=H, 1=V
+      const row = Math.floor(rng() * SIZE);
+      const col = Math.floor(rng() * SIZE);
+      let fits = true;
+      const cells = [];
+
+      for (let i = 0; i < word.length; i++) {
+        const nr = row + (dir === 1 ? i : 0);
+        const nc = col + (dir === 0 ? i : 0);
+        if (nr >= SIZE || nc >= SIZE) { fits = false; break; }
+        if (grid[nr][nc] && grid[nr][nc] !== word[i]) { fits = false; break; }
+        cells.push([nr, nc]);
       }
-      if(fits){
-        cells.forEach(([nr,nc],i)=>grid[nr][nc]=word[i]);
+
+      if (fits) {
+        cells.forEach(([nr, nc], i) => grid[nr][nc] = word[i]);
         placed.push(word);
         return true;
       }
@@ -1855,22 +2164,36 @@ function genMotsMeles(seed=42) {
     return false;
   }
 
-  words.forEach(w=>tryPlace(w));
-  const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  for(let row=0;row<SIZE;row++)for(let col=0;col<SIZE;col++)if(!grid[row][col])grid[row][col]=letters[Math.floor(rng()*26)];
+  words.forEach(w => tryPlace(w));
 
-  let html=`<div class="t-puzzle-title">Mots mêlés — trouve les mots cachés</div>`;
-  html+=`<div style="font-size:9px;color:#888;margin-bottom:4px">→ ${placed.join(' · ')}</div>`;
-  html+=`<div class="word-grid">`;
-  for(let row=0;row<SIZE;row++){
-    for(let col=0;col<SIZE;col++)html+=`<span>${grid[row][col]}</span>`;
-    html+=`<br>`;
+  // Remplissage avec lettres aléatoires
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  for (let row = 0; row < SIZE; row++) {
+    for (let col = 0; col < SIZE; col++) {
+      if (!grid[row][col]) {
+        grid[row][col] = letters[Math.floor(rng() * 26)];
+      }
+    }
   }
-  html+=`</div>`;
+
+  let html = `<div class="t-puzzle-title">Mots mêlés — trouve les mots cachés</div>`;
+  html += `<div style="font-size:8.5px;color:#888;margin-bottom:4px;line-height:1.6">`;
+  html += placed.map(w => `→ ${w}`).join('  ');
+  html += `</div>`;
+  html += `<div class="word-grid">`;
+  for (let row = 0; row < SIZE; row++) {
+    for (let col = 0; col < SIZE; col++) {
+      html += `<span>${grid[row][col]}</span>`;
+    }
+    html += `<br>`;
+  }
+  html += `</div>`;
+
   return html;
 }
 
-// JEUDI — Mots fléchés (remplace Relier les points)
+
+// VENDREDI — Mots fléchés (remplace Relier les points)
 function genMotsFleches(seed=42) {
 
   // ── 13 grilles définies par leurs mots et positions ──
@@ -2090,7 +2413,7 @@ function toggleSolutionFleches(btn) {
   btn.dataset.open = visible ? '0' : '1';
 }
 
-// VENDREDI — Pathfinding garanti réalisable
+// SAMEDI — Pathfinding garanti réalisable
 function genPathfinding(seed=42) {
   let r = seed;
   function rng() { r=(r*1664525+1013904223)&0xffffffff; return Math.abs(r)/0xffffffff; }
@@ -2151,26 +2474,165 @@ function genPathfinding(seed=42) {
   return `<div class="t-puzzle-title">Pathfinding — trouve le chemin de A → B</div>${svg}`;
 }
 
+//MARDI - MINICROSWWORD
 function genMiniCrossword(seed=42) {
-  // 5×5 crossword simplifié
-  const grids=[
-    {layout:[[1,1,0,1,1],[1,0,0,0,1],[1,1,1,1,1],[1,0,0,0,1],[1,1,0,1,1]],
-     clues:'Horizontal: 1. Ville de lumière (4) | 3. Vent du nord (6) | Vertical: 2. Fleuve héraultais (5)'},
-    {layout:[[1,1,1,0,1],[1,0,1,0,1],[1,1,1,1,1],[1,0,0,0,1],[1,1,1,0,1]],
-     clues:'Horizontal: 1. Petit déj méridional (4) | 3. Saison chaude (3) | Vertical: 2. Aromate de garrigue (4)'},
+
+  const GRILLES = [
+    {
+      h: { mot:'GARRIGUE', def:'Végétation odorante des collines calcaires' },
+      v: { mot:'ROSÉ', def:'Vin estival du Languedoc' },
+      croise_h: 2, croise_v: 0,
+      // GARRIGUE[2]=R, ROSÉ[0]=R ✓
+    },
+    {
+      h: { mot:'MISTRAL', def:'Vent violent du couloir rhodanien' },
+      v: { mot:'SOIR', def:'Fin de la journée' },
+      croise_h: 2, croise_v: 0,
+      // MISTRAL[2]=S, SOIR[0]=S ✓
+    },
+    {
+      h: { mot:'CIGALE', def:'Insecte chanteur de l\'été méditerranéen' },
+      v: { mot:'GALET', def:'Pierre polie par la mer' },
+      croise_h: 2, croise_v: 0,
+      // CIGALE[2]=G, GALET[0]=G ✓
+    },
+    {
+      h: { mot:'LAVANDE', def:'Plante violette odorante de garrigue' },
+      v: { mot:'ANIS', def:'Plante de l\'apéritif du Midi' },
+      croise_h: 1, croise_v: 0,
+      // LAVANDE[1]=A, ANIS[0]=A ✓
+    },
+    {
+      h: { mot:'PLATANE', def:'Arbre emblématique des places du Midi' },
+      v: { mot:'LUNE', def:'Satellite naturel de la Terre' },
+      croise_h: 1, croise_v: 0,
+      // PLATANE[1]=L, LUNE[0]=L ✓
+    },
+    {
+      h: { mot:'CALANQUE', def:'Crique rocheuse méditerranéenne' },
+      v: { mot:'ALOE', def:'Plante grasse aux vertus médicinales' },
+      croise_h: 1, croise_v: 0,
+      // CALANQUE[1]=A, ALOE[0]=A ✓
+    },
+    {
+      h: { mot:'FLAMANT', def:'Oiseau rose des étangs de Camargue' },
+      v: { mot:'LAME', def:'Fine tranche, ou vague puissante' },
+      croise_h: 1, croise_v: 0,
+      // FLAMANT[1]=L, LAME[0]=L ✓
+    },
+    {
+      h: { mot:'SOLSTICE', def:'Jour le plus long ou le plus court de l\'année' },
+      v: { mot:'OLIVE', def:'Fruit de l\'olivier méditerranéen' },
+      croise_h: 1, croise_v: 0,
+      // SOLSTICE[1]=O, OLIVE[0]=O ✓
+    },
+    {
+      h: { mot:'VENDANGE', def:'Récolte du raisin en automne' },
+      v: { mot:'EDEN', def:'Jardin paradisiaque, lieu de bonheur' },
+      croise_h: 1, croise_v: 0,
+      // VENDANGE[1]=E, EDEN[0]=E ✓
+    },
+    {
+      h: { mot:'CABANON', def:'Petite maison de campagne méridionale' },
+      v: { mot:'AUBE', def:'Lumière du matin avant le lever du soleil' },
+      croise_h: 1, croise_v: 0,
+      // CABANON[1]=A, AUBE[0]=A ✓
+    },
+    {
+      h: { mot:'TRAMONTANE', def:'Vent froid venu des Pyrénées' },
+      v: { mot:'RONCE', def:'Arbuste épineux des sous-bois' },
+      croise_h: 1, croise_v: 0,
+      // TRAMONTANE[1]=R, RONCE[0]=R ✓
+    },
+    {
+      h: { mot:'PEYROU', def:'Promenade royale de Montpellier' },
+      v: { mot:'EPEE', def:'Arme blanche à longue lame' },
+      croise_h: 1, croise_v: 0,
+      // PEYROU[1]=E, EPEE[0]=E ✓
+    },
   ];
-  const g=grids[seed%grids.length];
-  const cs=18;
-  const SIZE=5;
-  let svg=`<svg width="${SIZE*cs}" height="${SIZE*cs}" viewBox="0 0 ${SIZE*cs} ${SIZE*cs}" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:4px auto;border:.5px solid #aaa;">`;
-  for(let y=0;y<SIZE;y++)for(let x=0;x<SIZE;x++){
-    const fill=g.layout[y][x]?'#f9f5ed':'#2a2a2a';
-    svg+=`<rect x="${x*cs}" y="${y*cs}" width="${cs}" height="${cs}" fill="${fill}" stroke="#bbb" stroke-width=".5"/>`;
+
+  const g = GRILLES[seed % GRILLES.length];
+
+  const cs = 18;
+  const hLen = g.h.mot.length;
+  const vLen = g.v.mot.length;
+  const ci = g.croise_h; // colonne du croisement (position dans mot H)
+  const cj = g.croise_v; // ligne du croisement (position dans mot V)
+
+  // Dimensions de la grille
+  const gridW = hLen;
+  const gridH = vLen;
+
+  // Grille de cases
+  const grid = Array(gridH).fill(null).map(() => Array(gridW).fill(null));
+  const sol  = Array(gridH).fill(null).map(() => Array(gridW).fill(null));
+
+  // Place le mot H à la ligne cj
+  for (let x = 0; x < hLen; x++) {
+    grid[cj][x] = '';
+    sol[cj][x] = g.h.mot[x];
   }
-  svg+='</svg>';
-  return `<div class="t-puzzle-title">Mini Mots Croisés 5×5</div>${svg}<div style="font-size:9px;color:#777;margin-top:4px;line-height:1.5">${g.clues}</div>`;
+
+  // Place le mot V à la colonne ci
+  for (let y = 0; y < vLen; y++) {
+    grid[y][ci] = '';
+    sol[y][ci] = g.v.mot[y];
+  }
+
+  const svgW = gridW * cs + 1;
+  const svgH = gridH * cs + 1;
+
+  let svgContent = '';
+
+  for (let row = 0; row < gridH; row++) {
+    for (let col = 0; col < gridW; col++) {
+      if (grid[row][col] === null) continue;
+      const x = col * cs;
+      const y = row * cs;
+
+      svgContent += `<rect x="${x+.5}" y="${y+.5}" width="${cs-1}" height="${cs-1}" fill="#f9f5ed" stroke="#999" stroke-width=".5" rx="1"/>`;
+
+      // Numéro 1 : début du mot H
+      if (row === cj && col === 0) {
+        svgContent += `<text x="${x+2}" y="${y+8}" font-size="6" fill="#888" font-family="monospace">1</text>`;
+      }
+      // Numéro 2 : début du mot V (si différent du début du mot H)
+      if (row === 0 && col === ci && !(cj === 0 && ci === 0)) {
+        svgContent += `<text x="${x+2}" y="${y+8}" font-size="6" fill="#888" font-family="monospace">2</text>`;
+      }
+
+      // Lettre solution cachée
+      if (sol[row][col]) {
+        svgContent += `<text x="${x+cs/2}" y="${y+cs-4}" font-size="10" fill="#2a2a2a" font-family="monospace" text-anchor="middle" class="gus-cross-letter" style="display:none">${sol[row][col]}</text>`;
+      }
+    }
+  }
+
+  const svg = `<svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:4px auto;">
+    <rect width="${svgW}" height="${svgH}" fill="#2a2a2a" rx="2"/>
+    ${svgContent}
+  </svg>`;
+
+  const defs = `<div style="font-size:9px;color:#666;margin-top:5px;line-height:1.8;">
+    <div><strong>1→</strong> ${g.h.def} (${hLen} lettres)</div>
+    <div><strong>2↓</strong> ${g.v.def} (${vLen} lettres)</div>
+  </div>`;
+
+  const solBtn = `<div class="t-blague-rep" style="margin-top:6px" onclick="toggleSolutionCross(this)" data-open="0">[ révéler la solution ]</div>`;
+
+  return `<div class="t-puzzle-title">Mots croisés — trouve les deux mots</div>${svg}${defs}${solBtn}`;
 }
 
+function toggleSolutionCross(btn) {
+  const letters = document.querySelectorAll('.gus-cross-letter');
+  const visible = btn.dataset.open === '1';
+  letters.forEach(l => l.style.display = visible ? 'none' : 'block');
+  btn.textContent = visible ? '[ révéler la solution ]' : '[ masquer la solution ]';
+  btn.dataset.open = visible ? '0' : '1';
+}
+
+//DIMANCHE - ENIGMES LOGIQUES
 function genMiniLogique(seed=42) {
   const puzzles=[
     {q:'Il y a 3 maisons. La rouge est à gauche de la bleue. La verte est à droite de la bleue. Dans quelle maison habite Paul qui aime le rouge ?',r:'La maison de gauche.'},
