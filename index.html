@@ -1691,7 +1691,25 @@ if (editionSpeciale) {
     <div class="t-section-title"><span class="t-section-num">01</span> message du jour</div>
     <div class="t-message">${msg}</div>
   </div>`;
-  html+=`<hr class="t-divider">`;
+
+  //02 INTENTION DE LA SEMAINE (LUNDI)
+  if (now.getDay() === 1) {
+  html += `<hr class="t-divider">`;
+  html += `<div class="t-section">
+    <div class="t-section-title"><span class="t-section-num">ツ</span> intention de la semaine</div>
+    <div style="font-size:11px;line-height:1.6;color:#444;">${getIntention(now)}</div>
+  </div>`;
+}
+
+  //02 RESTROSPECTIVE DE LA SEMAINE (VENDREDI)
+if (now.getDay() === 5) {
+  html += `<hr class="t-divider">`;
+  html += `<div class="t-section">
+    <div class="t-section-title"><span class="t-section-num">ツ</span> rétrospective de la semaine</div>
+    <div style="font-size:11px;line-height:1.6;color:#444;">${getRetrospective(now)}</div>
+  </div>`;
+}
+ html+=`<hr class="t-divider">`;
 
   // 02 MÉTÉO
   html+=`<div class="t-section">
@@ -1751,7 +1769,18 @@ if (editionSpeciale) {
     </div>
   </div>`;
 
-  // 08 EPHEMERIDE
+  //08 CITATIONS
+  const citation = getCitation(now);
+if (citation) {
+  html += `<hr class="t-divider">`;
+  html += `<div class="t-section">
+    <div class="t-section-title"><span class="t-section-num">08</span> citation</div>
+    <div style="font-size:11px;line-height:1.6;color:#333;font-style:italic;border-left:2px solid #aaa;padding-left:8px;">"${citation.texte}"</div>
+    <div style="font-size:9px;color:#888;margin-top:4px;letter-spacing:1px;">— ${citation.auteur}</div>
+  </div>`;
+}
+
+  // 09 EPHEMERIDE
   const ephem = getEphemeride(now);
 if (ephem) {
   html += `<hr class="t-divider">`;
@@ -2348,6 +2377,252 @@ function renderEditionSpeciale(edition, weatherData, date) {
   </div>`;
 
   return html;
+}
+
+// ═══════════════════════════════════════════════════
+// GUS — CITATIONS, INTENTIONS LUNDI & RÉTROSPECTIVES VENDREDI
+// À intégrer dans index.html
+// ═══════════════════════════════════════════════════
+
+// ───────────────────────────────────────────────────
+// 1. CITATIONS DU JOUR
+// Apparaît : dimanche (toujours) + mercredi + 1 jour / semaine
+// ───────────────────────────────────────────────────
+
+const CITATIONS = [
+  // MÉDITERRANÉE & SUD
+  { texte: "La mer est tout. Elle couvre les sept dixièmes du globe.", auteur: "Jules Verne" },
+  { texte: "Le soleil ne sait pas qui il éclaire. Mais tout le monde le sait.", auteur: "Proverbe occitan" },
+  { texte: "J'ai grandi dans la beauté et ma jeunesse n'a pas de regrets.", auteur: "Albert Camus" },
+  { texte: "La Méditerranée est la mer qui a donné naissance à la civilisation.", auteur: "Fernand Braudel" },
+  { texte: "Le midi de la France est une leçon de lumière.", auteur: "Paul Valéry" },
+  { texte: "Ici bas, toutes les choses belles sont rares.", auteur: "Jean de La Fontaine" },
+  { texte: "On revient toujours à ses premières amours.", auteur: "Étienne de Méhul" },
+
+  // PAUL VALÉRY — Sétois, proche de Montpellier
+  { texte: "Le vent se lève… il faut tenter de vivre.", auteur: "Paul Valéry" },
+  { texte: "Un poème n'est jamais fini, seulement abandonné.", auteur: "Paul Valéry" },
+  { texte: "Ce qui a été cru par tous, toujours et partout, a toutes les chances d'être faux.", auteur: "Paul Valéry" },
+  { texte: "Voir, c'est oublier le nom de la chose qu'on voit.", auteur: "Paul Valéry" },
+  { texte: "La simplicité extrême est la suprême sophistication.", auteur: "Paul Valéry" },
+
+  // ALBERT CAMUS
+  { texte: "Au milieu de l'hiver, j'ai découvert en moi un invincible été.", auteur: "Albert Camus" },
+  { texte: "Il faut imaginer Sisyphe heureux.", auteur: "Albert Camus" },
+  { texte: "La beauté est insupportable, elle nous désespère, elle nous donne une dernière chance.", auteur: "Albert Camus" },
+  { texte: "Mal nommer les choses, c'est ajouter au malheur du monde.", auteur: "Albert Camus" },
+  { texte: "Il n'y a qu'un problème philosophique vraiment sérieux : c'est le suicide.", auteur: "Albert Camus" },
+
+  // RENÉ CHAR — poète provençal
+  { texte: "Impose ta chance, serre ton bonheur et va vers ton risque.", auteur: "René Char" },
+  { texte: "La lucidité est la blessure la plus rapprochée du soleil.", auteur: "René Char" },
+  { texte: "Qui n'a pas de désirs n'a pas besoin d'espoir.", auteur: "René Char" },
+  { texte: "Les mots qui vont surgir savent de nous ce que nous ignorons d'eux.", auteur: "René Char" },
+
+  // JEAN GIONO — Manosque, Provence
+  { texte: "On ne peut pas être heureux tout seul. Le bonheur est quelque chose qui se partage.", auteur: "Jean Giono" },
+  { texte: "Il n'y a pas de bonheur sans liberté, ni de liberté sans courage.", auteur: "Jean Giono" },
+  { texte: "La nature est une œuvre d'art perpétuelle.", auteur: "Jean Giono" },
+  { texte: "Le printemps n'a besoin de personne pour arriver.", auteur: "Jean Giono" },
+
+  // GEORGES BRASSENS — Sétois
+  { texte: "Mourir pour des idées, l'idée est séduisante. Mais de quelle idée ?", auteur: "Georges Brassens" },
+  { texte: "Le temps ne fait rien à l'affaire, quand on est con, on est con.", auteur: "Georges Brassens" },
+  { texte: "Les gens qui ne rient jamais ne sont pas des gens sérieux.", auteur: "Alphonse Allais" },
+
+  // TROUBADOURS & OCCITANIE
+  { texte: "Tant ai mo cor ple de joya. — J'ai le cœur si plein de joie.", auteur: "Guillaume IX d'Aquitaine, XIIe s." },
+  { texte: "La gent qui no sap d'amor non pot aver bon cor. — Qui ne sait pas aimer ne peut avoir bon cœur.", auteur: "Proverbe occitan" },
+
+  // PHILOSOPHIE DOUCE
+  { texte: "La vie est ce qui arrive quand on est occupé à faire d'autres projets.", auteur: "John Lennon" },
+  { texte: "Le bonheur n'est pas quelque chose de prêt à l'emploi. Il vient de vos propres actions.", auteur: "Dalaï-Lama" },
+  { texte: "Sois le changement que tu veux voir dans le monde.", auteur: "Gandhi" },
+  { texte: "La simplicité est la sophistication suprême.", auteur: "Léonard de Vinci" },
+  { texte: "Connais-toi toi-même.", auteur: "Socrate" },
+  { texte: "On ne se baigne jamais deux fois dans le même fleuve.", auteur: "Héraclite" },
+  { texte: "L'homme est la mesure de toutes choses.", auteur: "Protagoras" },
+  { texte: "Je pense, donc je suis.", auteur: "René Descartes" },
+
+  // LITTÉRATURE FRANÇAISE
+  { texte: "Les absents ont toujours tort.", auteur: "Philippe Destouches" },
+  { texte: "On n'est jamais si heureux ni si malheureux qu'on se l'imagine.", auteur: "La Rochefoucauld" },
+  { texte: "Le cœur a ses raisons que la raison ne connaît point.", auteur: "Blaise Pascal" },
+  { texte: "Tout ce qui est excessif est insignifiant.", auteur: "Talleyrand" },
+  { texte: "Il vaut mieux être riche et bien portant que pauvre et malade.", auteur: "Coluche" },
+  { texte: "Un seul être vous manque et tout est dépeuplé.", auteur: "Alphonse de Lamartine" },
+  { texte: "Les grandes pensées viennent du cœur.", auteur: "Vauvenargues" },
+  { texte: "La liberté commence où l'ignorance finit.", auteur: "Victor Hugo" },
+  { texte: "Vivre sans philosophie, c'est naviguer sans boussole.", auteur: "Montaigne" },
+  { texte: "Que sais-je ?", auteur: "Montaigne" },
+  { texte: "L'hypocrisie est un hommage que le vice rend à la vertu.", auteur: "La Rochefoucauld" },
+  { texte: "Rien ne se perd, rien ne se crée, tout se transforme.", auteur: "Antoine Lavoisier" },
+
+  // POÉSIE
+  { texte: "La terre est bleue comme une orange.", auteur: "Paul Éluard" },
+  { texte: "Et j'ai deux fois vainqueur traversé l'Achéron.", auteur: "Gérard de Nerval" },
+  { texte: "Mon cœur, lassé de tout, même de l'espérance.", auteur: "Alfred de Musset" },
+  { texte: "Sous le pont Mirabeau coule la Seine.", auteur: "Guillaume Apollinaire" },
+  { texte: "Il pleure dans mon cœur comme il pleut sur la ville.", auteur: "Paul Verlaine" },
+  { texte: "Ô temps, suspends ton vol.", auteur: "Alphonse de Lamartine" },
+
+  // SAGESSE SIMPLE
+  { texte: "Le mieux est l'ennemi du bien.", auteur: "Voltaire" },
+  { texte: "Chaque jour est un cadeau.", auteur: "Proverbe" },
+  { texte: "Fais de ta vie un rêve, et d'un rêve, une réalité.", auteur: "Antoine de Saint-Exupéry" },
+  { texte: "On voit bien les pailles dans les yeux des autres, et non les poutres dans les nôtres.", auteur: "Proverbe" },
+  { texte: "Après la pluie, le beau temps.", auteur: "Proverbe français" },
+  { texte: "Il n'est jamais trop tard pour apprendre.", auteur: "Proverbe" },
+  { texte: "La nuit porte conseil.", auteur: "Proverbe français" },
+  { texte: "Les voyages forment la jeunesse.", auteur: "Michel de Montaigne" },
+  { texte: "Tout vient à point à qui sait attendre.", auteur: "Rabelais" },
+  { texte: "Mieux vaut tard que jamais.", auteur: "Proverbe" },
+
+  // CONTEMPORAINS
+  { texte: "Un livre doit être la hache qui brise la mer gelée en nous.", auteur: "Franz Kafka" },
+  { texte: "On n'est pas sérieux quand on a dix-sept ans.", auteur: "Arthur Rimbaud" },
+  { texte: "J'ai voulu dire quelque chose et je l'ai dit.", auteur: "Henri Matisse" },
+  { texte: "La créativité, c'est l'intelligence qui s'amuse.", auteur: "Albert Einstein" },
+  { texte: "L'imagination est plus importante que la connaissance.", auteur: "Albert Einstein" },
+  { texte: "Si vous voulez vivre une vie heureuse, attachez-la à un but, pas à des gens ou des choses.", auteur: "Albert Einstein" },
+  { texte: "La logique vous conduira d'un point A à un point B. L'imagination vous emmènera partout.", auteur: "Albert Einstein" },
+
+  // NATURE & SAISONS
+  { texte: "En toute chose, c'est la fin qui est l'essentiel.", auteur: "Sophocle" },
+  { texte: "La forêt précède les peuples, le désert les suit.", auteur: "Chateaubriand" },
+  { texte: "La nature ne fait rien en vain.", auteur: "Aristote" },
+  { texte: "L'arbre qui a de profondes racines rit des tempêtes.", auteur: "Proverbe" },
+  { texte: "Méfie-toi de l'homme qui n'aime pas le vin, les femmes et le chant.", auteur: "Luther" },
+
+  // DOUCEUR & BIENVEILLANCE
+  { texte: "La gentillesse est une langue que les sourds peuvent entendre et les aveugles voir.", auteur: "Mark Twain" },
+  { texte: "Aucun acte de gentillesse, aussi petit soit-il, n'est jamais gaspillé.", auteur: "Ésope" },
+  { texte: "La plus perdue de toutes les journées est celle où l'on n'a pas ri.", auteur: "Nicolas Chamfort" },
+  { texte: "Le rire est le soleil qui chasse l'hiver du visage humain.", auteur: "Victor Hugo" },
+  { texte: "Souriez, cela ne coûte rien et cela peut tout changer.", auteur: "Proverbe" },
+  { texte: "Il faut beaucoup de sérieux pour être vraiment drôle.", auteur: "Sacha Guitry" },
+  { texte: "Le bonheur est dans le pré. Cours-y vite, cours-y vite.", auteur: "Paul Fort" },
+  { texte: "La vie est brève, l'art est long, l'occasion fugace.", auteur: "Hippocrate" },
+  { texte: "Ce n'est pas parce que les choses sont difficiles que nous n'osons pas. C'est parce que nous n'osons pas qu'elles sont difficiles.", auteur: "Sénèque" },
+  { texte: "La vie est trop courte pour être petite.", auteur: "Benjamin Disraeli" },
+  { texte: "Il faut cultiver notre jardin.", auteur: "Voltaire" },
+  { texte: "Vis comme si tu devais mourir demain. Apprends comme si tu devais vivre toujours.", auteur: "Gandhi" },
+  { texte: "Le secret du bonheur, c'est la liberté. Et le secret de la liberté, c'est le courage.", auteur: "Thucydide" },
+  { texte: "Chaque minute que vous passez en colère, vous perdez soixante secondes de bonheur.", auteur: "Emerson" },
+  { texte: "Là où il y a de l'amour, il y a de la vie.", auteur: "Gandhi" },
+  { texte: "On a deux vies, et la deuxième commence quand on réalise qu'on n'en a qu'une.", auteur: "Confucius" },
+  { texte: "La meilleure façon de prédire l'avenir est de le créer.", auteur: "Peter Drucker" },
+  { texte: "Faites que le rêve dévore votre vie afin que la vie ne dévore pas votre rêve.", auteur: "Antoine de Saint-Exupéry" },
+  { texte: "Ce que nous sommes est un cadeau de Dieu. Ce que nous devenons est notre cadeau à Dieu.", auteur: "Eleanor Powell" },
+  { texte: "La vraie générosité envers l'avenir consiste à tout donner au présent.", auteur: "Albert Camus" },
+  { texte: "Nous ne voyons pas les choses telles qu'elles sont, nous les voyons telles que nous sommes.", auteur: "Anaïs Nin" },
+  { texte: "La vie, c'est comme une bicyclette, il faut avancer pour ne pas perdre l'équilibre.", auteur: "Albert Einstein" },
+  { texte: "Le voyage de mille lieues commence par un pas.", auteur: "Lao Tseu" },
+  { texte: "Quand on veut, on peut. Quand on peut, on doit.", auteur: "Victor Hugo" },
+  { texte: "Celui qui déplace les montagnes commence par enlever les petites pierres.", auteur: "Confucius" },
+  { texte: "Le temps est ce que nous voulons le plus, mais ce que nous utilisons le moins.", auteur: "William Penn" },
+  { texte: "Le plus grand remède à tous les maux est la patience.", auteur: "Molière" },
+];
+
+function shouldShowCitation(date) {
+  const wd = date.getDay();
+  const d = date.getDate();
+  // Dimanche toujours, mercredi toujours
+  if (wd === 0 || wd === 3) return true;
+  // 1 autre jour sur 5 selon la date
+  const otherDays = [1, 2, 4, 5]; // lun mar jeu ven
+  const idx = Math.floor(d / 7) % otherDays.length;
+  return wd === otherDays[idx];
+}
+
+function getCitation(date) {
+  if (!shouldShowCitation(date)) return null;
+  const seed = date.getDate() * 17 + date.getMonth() * 83;
+  return CITATIONS[seed % CITATIONS.length];
+}
+
+// ───────────────────────────────────────────────────
+// 2. INTENTIONS DU LUNDI (30 entrées)
+// ───────────────────────────────────────────────────
+
+const INTENTIONS = [
+  "Cette semaine, essaie de faire une chose que tu as reportée depuis trop longtemps.",
+  "Cette semaine, remarque un beau détail que tu aurais normalement ignoré.",
+  "Cette semaine, offre-toi au moins une pause sans écran et sans but.",
+  "Cette semaine, dis quelque chose de vrai à quelqu'un qui compte pour toi.",
+  "Cette semaine, marche un peu plus lentement que d'habitude.",
+  "Cette semaine, commence quelque chose de petit que tu pourras continuer.",
+  "Cette semaine, mange au moins un repas sans distraction.",
+  "Cette semaine, lis quelques pages de quelque chose qui te fait du bien.",
+  "Cette semaine, appelle ou écris à quelqu'un que tu n'as pas contacté depuis longtemps.",
+  "Cette semaine, remarque ce qui te donne de l'énergie et ce qui t'en prend.",
+  "Cette semaine, autorise-toi à ne pas avoir de plan pour au moins une soirée.",
+  "Cette semaine, fais quelque chose pour la première fois.",
+  "Cette semaine, range un endroit qui t'a été pesant sans que tu t'en rendes compte.",
+  "Cette semaine, observe le ciel au moins une fois par jour.",
+  "Cette semaine, dis merci pour quelque chose de très ordinaire.",
+  "Cette semaine, prends note d'une idée qui te traverse, même incomplète.",
+  "Cette semaine, accepte l'aide qu'on te propose sans culpabiliser.",
+  "Cette semaine, fais une chose que tu ferais si personne ne regardait.",
+  "Cette semaine, écoute quelque chose que tu n'as jamais écouté.",
+  "Cette semaine, prends soin d'une plante, d'un espace, ou d'une personne.",
+  "Cette semaine, laisse quelque chose inachevé et passe à autre chose.",
+  "Cette semaine, remarque à quelle heure tu te sens le mieux. Et protège ce moment.",
+  "Cette semaine, écris une liste de ce que tu aimes — pas ce que tu dois faire.",
+  "Cette semaine, fais confiance à ton instinct au moins une fois.",
+  "Cette semaine, accorde-toi le droit de changer d'avis.",
+  "Cette semaine, trouve un endroit où t'asseoir dehors, même cinq minutes.",
+  "Cette semaine, fais quelque chose de créatif sans te soucier du résultat.",
+  "Cette semaine, pose une question à quelqu'un plutôt que de supposer.",
+  "Cette semaine, remarque ce qui te fait sourire sans raison.",
+  "Cette semaine, commence le lundi avec une seule vraie priorité — pas une liste.",
+];
+
+function getIntention(date) {
+  const seed = date.getDate() * 7 + date.getMonth() * 31;
+  return INTENTIONS[seed % INTENTIONS.length];
+}
+
+// ───────────────────────────────────────────────────
+// 3. RÉTROSPECTIVES DU VENDREDI (30 entrées)
+// ───────────────────────────────────────────────────
+
+const RETROSPECTIVES = [
+  "Cette semaine, qu'est-ce qui t'a surpris agréablement ?",
+  "Cette semaine, quel moment tu garderais si tu ne pouvais en garder qu'un ?",
+  "Cette semaine, qu'est-ce que tu as appris — sur toi ou sur autre chose ?",
+  "Cette semaine, à qui tu aurais aimé dire quelque chose et tu ne l'as pas dit ?",
+  "Cette semaine, qu'est-ce qui t'a semblé plus facile qu'avant ?",
+  "Cette semaine, qu'est-ce que tu aurais voulu faire autrement ?",
+  "Cette semaine, qu'est-ce qui t'a donné de l'énergie ?",
+  "Cette semaine, as-tu pris soin de toi autant que des autres ?",
+  "Cette semaine, quel petit plaisir as-tu savouré sans te presser ?",
+  "Cette semaine, qu'est-ce que tu as accompli dont tu es fier, même discrètement ?",
+  "Cette semaine, as-tu vu quelque chose de beau que tu n'avais pas prévu de voir ?",
+  "Cette semaine, qu'est-ce qui t'a pesé ? Est-ce que ça compte vraiment ?",
+  "Cette semaine, as-tu ri ? Si oui, de quoi ?",
+  "Cette semaine, as-tu eu une conversation qui valait vraiment la peine ?",
+  "Cette semaine, qu'est-ce que tu laisses derrière toi sans regret ?",
+  "Cette semaine, qu'est-ce qui a pris plus de place que prévu — en bien ou en mal ?",
+  "Cette semaine, as-tu pris le temps de ne rien faire ? Comment tu t'es senti ?",
+  "Cette semaine, qu'est-ce que tu aurais aimé avoir commencé plus tôt ?",
+  "Cette semaine, as-tu dit oui à quelque chose qui te faisait peur ?",
+  "Cette semaine, qu'est-ce qui t'a rendu curieux ?",
+  "Cette semaine, as-tu été patient avec toi-même ?",
+  "Cette semaine, qu'est-ce que tu as envie de continuer la semaine prochaine ?",
+  "Cette semaine, as-tu remarqué quelqu'un qui méritait qu'on le remarque ?",
+  "Cette semaine, qu'est-ce qui t'a semblé important lundi et qui ne l'est plus vendredi ?",
+  "Cette semaine, as-tu fait quelque chose sans raison particulière, juste pour le plaisir ?",
+  "Cette semaine, qu'est-ce que tu portes comme question sans réponse ?",
+  "Cette semaine, as-tu eu un moment de silence que tu as apprécié ?",
+  "Cette semaine, qu'est-ce que tu répéterais exactement pareil si tu pouvais ?",
+  "Cette semaine, as-tu laissé entrer quelque chose de nouveau ?",
+  "Cette semaine, qu'est-ce que tu veux emporter dans la prochaine ?",
+];
+
+function getRetrospective(date) {
+  const seed = date.getDate() * 11 + date.getMonth() * 53;
+  return RETROSPECTIVES[seed % RETROSPECTIVES.length];
 }
 
 </script>
