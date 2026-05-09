@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUS — Archive</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #1a1a1a;
+  min-height: 100vh;
+  font-family: 'Share Tech Mono', monospace;
+  color: #f5f0e8;
+  overflow-x: hidden;
+}
+
+/* ── HEADER ── */
+.archive-header {
+  text-align: center;
+  padding: 2.5rem 1rem 1.5rem;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.archive-logo {
+  font-family: 'VT323', monospace;
+  font-size: 32px;
+  letter-spacing: 4px;
+  color: #f5f0e8;
+  display: block;
+}
+
+.archive-subtitle {
+  font-size: 10px;
+  color: #555;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.archive-count {
+  font-size: 10px;
+  color: #444;
+  margin-top: 8px;
+  letter-spacing: 1px;
+}
+
+.back-btn {
+  display: inline-block;
+  margin-top: 1rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: #555;
+  text-decoration: none;
+  letter-spacing: 2px;
+  border: 1px solid #333;
+  padding: 5px 14px;
+  transition: all 0.2s;
+}
+
+.back-btn:hover {
+  color: #f5f0e8;
+  border-color: #555;
+}
+
+/* ── LOADING ── */
+.loading {
+  text-align: center;
+  padding: 4rem 1rem;
+  font-size: 11px;
+  color: #444;
+  letter-spacing: 2px;
+}
+
+.loading::after {
+  content: '';
+  animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+  0%, 25% { content: ''; }
+  50%      { content: '.'; }
+  75%      { content: '..'; }
+  100%     { content: '...'; }
+}
+
+/* ── GRILLE DES TICKETS ── */
+.archive-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 2rem 1.5rem 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ── CARTE TICKET ── */
+.ticket-card {
+  width: 200px;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(60px) rotate(var(--rot, 0deg));
+  transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.1s;
+  position: relative;
+}
+
+.ticket-card.visible {
+  opacity: 1;
+  transform: translateY(0) rotate(var(--rot, 0deg));
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+              opacity 0.3s ease,
+              box-shadow 0.25s ease;
+}
+
+.ticket-card:hover {
+  transform: translateY(-8px) rotate(0deg) scale(1.04);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+  z-index: 10;
+}
+
+.ticket-card img {
+  width: 100%;
+  display: block;
+  border-radius: 3px;
+  border: 1px solid #2a2a2a;
+}
+
+.ticket-card .card-date {
+  text-align: center;
+  font-size: 9px;
+  color: #444;
+  letter-spacing: 1px;
+  margin-top: 6px;
+}
+
+.ticket-card .card-date.today {
+  color: #f5f0e8;
+}
+
+/* ── MODAL LIGHTBOX ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  padding: 1rem;
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-inner {
+  position: relative;
+  max-width: 420px;
+  width: 100%;
+  transform: scale(0.92);
+  transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.modal-overlay.open .modal-inner {
+  transform: scale(1);
+}
+
+.modal-inner img {
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid #333;
+}
+
+.modal-date {
+  text-align: center;
+  font-size: 10px;
+  color: #555;
+  letter-spacing: 2px;
+  margin-top: 10px;
+}
+
+.modal-close {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 28px;
+  height: 28px;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  color: #888;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  font-family: 'Share Tech Mono', monospace;
+  transition: all 0.15s;
+}
+
+.modal-close:hover {
+  background: #f5f0e8;
+  color: #1a1a1a;
+  border-color: #f5f0e8;
+}
+
+.modal-nav {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 12px;
+}
+
+.modal-nav button {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  background: transparent;
+  border: 1px solid #333;
+  color: #555;
+  padding: 5px 14px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.15s;
+}
+
+.modal-nav button:hover {
+  border-color: #f5f0e8;
+  color: #f5f0e8;
+}
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: #333;
+  font-size: 11px;
+  letter-spacing: 1px;
+  line-height: 2;
+}
+
+/* ── TICKET DU JOUR BADGE ── */
+.today-badge {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #f5f0e8;
+  color: #1a1a1a;
+  font-size: 7px;
+  padding: 2px 6px;
+  letter-spacing: 2px;
+  white-space: nowrap;
+  border-radius: 1px;
+}
+</style>
+</head>
+<body>
+
+<div class="archive-header">
+  <span class="archive-logo">G.U.S.</span>
+  <span class="archive-subtitle">Archive des tickets</span>
+  <div class="archive-count" id="count">chargement...</div>
+  <a href="index.html" class="back-btn">← retour à la machine</a>
+</div>
+
+<div id="loading" class="loading">récupération des tickets</div>
+<div id="grid" class="archive-grid" style="display:none"></div>
+<div id="empty" class="empty-state" style="display:none">
+  aucun ticket archivé pour l'instant.<br>
+  le premier arrivera demain matin à 8h30.
+</div>
+
+<!-- Modal lightbox -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal-inner">
+    <button class="modal-close" onclick="closeModalBtn()">✕</button>
+    <img id="modal-img" src="" alt="Ticket GUS">
+    <div class="modal-date" id="modal-date"></div>
+    <div class="modal-nav">
+      <button onclick="navigateModal(-1)">← précédent</button>
+      <button onclick="navigateModal(1)">suivant →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const GITHUB_USER = 'JordanMRT';
+const GITHUB_REPO = 'gus';
+const ARCHIVE_PATH = 'archive';
+const API_URL = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${ARCHIVE_PATH}`;
+
+let tickets = []; // [{date, url, name}]
+let currentIndex = 0;
+
+const JOURS = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+const MOIS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+
+function formatDate(filename) {
+  // filename = YYYY-MM-DD.png
+  const match = filename.match(/^(\d{4})-(\d{2})-(\d{2})\.png$/);
+  if (!match) return filename;
+  const d = new Date(match[1], parseInt(match[2]) - 1, parseInt(match[3]));
+  return `${JOURS[d.getDay()]} ${d.getDate()} ${MOIS[d.getMonth()]} ${match[1]}`;
+}
+
+function isToday(filename) {
+  const today = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  const todayStr = `${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}.png`;
+  return filename === todayStr;
+}
+
+function randomRot() {
+  return (Math.random() * 4 - 2).toFixed(1) + 'deg';
+}
+
+async function loadArchive() {
+  try {
+    const res = await fetch(API_URL);
+    if (!res.ok) throw new Error('API error');
+    const files = await res.json();
+
+    // Filtre uniquement les PNG nommés YYYY-MM-DD.png
+    tickets = files
+      .filter(f => /^\d{4}-\d{2}-\d{2}\.png$/.test(f.name))
+      .sort((a, b) => b.name.localeCompare(a.name)) // plus récent en premier
+      .map(f => ({
+        name: f.name,
+        date: formatDate(f.name),
+        url: f.download_url,
+        today: isToday(f.name),
+      }));
+
+    document.getElementById('loading').style.display = 'none';
+
+    if (tickets.length === 0) {
+      document.getElementById('empty').style.display = 'block';
+      document.getElementById('count').textContent = 'aucun ticket archivé';
+      return;
+    }
+
+    document.getElementById('count').textContent =
+      `${tickets.length} ticket${tickets.length > 1 ? 's' : ''} archivé${tickets.length > 1 ? 's' : ''}`;
+
+    renderGrid();
+
+  } catch (err) {
+    document.getElementById('loading').innerHTML =
+      'impossible de charger l\'archive.<br><small style="color:#333">vérifie ta connexion.</small>';
+  }
+}
+
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  grid.style.display = 'flex';
+
+  tickets.forEach((ticket, idx) => {
+    const card = document.createElement('div');
+    card.className = 'ticket-card';
+    card.style.setProperty('--rot', randomRot());
+
+    if (ticket.today) {
+      card.innerHTML = `
+        <div class="today-badge">aujourd'hui</div>
+        <img src="${ticket.url}" alt="Ticket ${ticket.date}" loading="lazy">
+        <div class="card-date today">${ticket.date}</div>
+      `;
+    } else {
+      card.innerHTML = `
+        <img src="${ticket.url}" alt="Ticket ${ticket.date}" loading="lazy">
+        <div class="card-date">${ticket.date}</div>
+      `;
+    }
+
+    card.addEventListener('click', () => openModal(idx));
+    grid.appendChild(card);
+
+    // Animation d'entrée en cascade depuis le bas
+    setTimeout(() => {
+      card.classList.add('visible');
+    }, idx * 60 + 100);
+  });
+}
+
+// ── Modal ──
+function openModal(idx) {
+  currentIndex = idx;
+  updateModal();
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function updateModal() {
+  const t = tickets[currentIndex];
+  document.getElementById('modal-img').src = t.url;
+  document.getElementById('modal-date').textContent = t.date;
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal')) closeModalBtn();
+}
+
+function closeModalBtn() {
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function navigateModal(dir) {
+  currentIndex = (currentIndex + dir + tickets.length) % tickets.length;
+  updateModal();
+}
+
+// Navigation clavier
+document.addEventListener('keydown', e => {
+  const modal = document.getElementById('modal');
+  if (!modal.classList.contains('open')) return;
+  if (e.key === 'Escape') closeModalBtn();
+  if (e.key === 'ArrowLeft') navigateModal(-1);
+  if (e.key === 'ArrowRight') navigateModal(1);
+});
+
+// Lancement
+loadArchive();
+</script>
+</body>
+</html>
