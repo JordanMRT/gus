@@ -1649,6 +1649,16 @@ async function generateTicket() {
   status.textContent='récupération météo Montpellier...';
   const w=await fetchWeather();
 
+  const editionSpeciale = getEditionSpeciale(now, w.code);
+if (editionSpeciale) {
+  document.getElementById('ticket').innerHTML =
+    renderEditionSpeciale(editionSpeciale, w, now);
+  btn.disabled = false;
+  status.textContent = `édition spéciale ✦`;
+  setTimeout(() => { status.textContent = 'prêt'; }, 4000);
+  return;
+}
+
   status.textContent='composition du ticket...';
 
   const msg=pickByDay(DB.messages,now);
@@ -1749,7 +1759,13 @@ if (ephem) {
     <div class="t-section-title"><span class="t-section-num">08</span> éphéméride</div>
     <div class="t-decouverte">${ephem.texte}</div>
   </div>`;
-} 
+}
+
+// EASTER EGG
+const easterEgg = getEasterEgg(now);
+if (easterEgg) {
+  html += `<div style="text-align:center;font-size:7px;color:#ccc;letter-spacing:1px;margin:2px 0;font-family:'Share Tech Mono',monospace">[ ${easterEgg} ]</div>`;
+}
   html+=`<hr class="t-divider-solid">`;
 
 
@@ -1763,6 +1779,577 @@ if (ephem) {
   status.textContent=`${ticketNum} imprimé ✓`;
   setTimeout(()=>{status.textContent='prêt';},4000);
 }
+
+// ═══════════════════════════════════════════════════
+// GUS — ÉDITIONS SPÉCIALES, EASTER EGGS & ANNIVERSAIRE
+// À intégrer dans index.html
+// ═══════════════════════════════════════════════════
+
+// ───────────────────────────────────────────────────
+// 1. DÉTECTION DES ÉDITIONS SPÉCIALES
+// Retourne un objet édition ou null si jour ordinaire
+// ───────────────────────────────────────────────────
+
+function getEditionSpeciale(date, weatherCode) {
+  const m = date.getMonth() + 1;
+  const j = date.getDate();
+  const wd = date.getDay();
+
+  // ── ANNIVERSAIRE — priorité absolue ──
+  if (m === 6 && j === 7) return EDITIONS.anniversaire;
+
+  // ── DATES FIXES ──
+  if (m === 1  && j === 1)  return EDITIONS.nouvelAn;
+  if (m === 3  && j === 20) return EDITIONS.equinoxePrintemps;
+  if (m === 5  && j === 1)  return EDITIONS.feteTravail;
+  if (m === 6  && j === 21) return EDITIONS.solsticeEte;
+  if (m === 6  && j === 24) return EDITIONS.saintJean;
+  if (m === 9  && j === 22) return EDITIONS.equinoxeAutomne;
+  if (m === 10 && j === 3)  return EDITIONS.anniversaireMontpellier;
+  if (m === 11 && j === 1)  return EDITIONS.toussaint;
+  if (m === 12 && j === 21) return EDITIONS.solsticeHiver;
+  if (m === 12 && j === 25) return EDITIONS.noel;
+  if (m === 12 && j === 31) return EDITIONS.reveillon;
+
+  // ── VENDANGES (1ère semaine de septembre) ──
+  if (m === 9 && j <= 7)    return EDITIONS.vendanges;
+
+  // ── TICKET RARE (1 chance sur 30, basé sur la date) ──
+  const seed = j * 31 + m * 7;
+  if (seed % 30 === 0)      return EDITIONS.ticketRare;
+
+  // ── MÉTÉO EXTRÊME ──
+  if (weatherCode >= 95)    return EDITIONS.orage;
+
+  return null;
+}
+
+// ───────────────────────────────────────────────────
+// 2. CATALOGUE DES ÉDITIONS SPÉCIALES
+// ───────────────────────────────────────────────────
+
+const EDITIONS = {
+
+  // ══════════════════════════════════════
+  // ANNIVERSAIRE — 7 juin
+  // ══════════════════════════════════════
+  anniversaire: {
+    id: 'anniversaire',
+    badge: '✦ ÉDITION ANNIVERSAIRE ✦',
+    badgeStyle: 'background:#1a1a1a;color:#f5f0e8;font-size:9px;padding:3px 10px;letter-spacing:3px;border:1px solid #f5f0e8;',
+    message: `Aujourd'hui, GUS suspend son programme habituel.
+
+C'est ton anniversaire.
+
+Ce ticket ne ressemble à aucun autre
+parce que ce jour ne ressemble à aucun autre.
+
+Tu es arrivé jusqu'ici — avec tout ce que
+ça implique de traversées, de recommencements,
+de choses apprises et de choses lâchées.
+
+Bonne journée, Jordan.
+Vraiment.`,
+    ascii: `
+    *    .  *    .    *
+  .   ✦  JOYEUX  ✦  .
+    *  ANNIVERSAIRE  *
+  .    ✦    !    ✦   .
+    *    .  *    .    *
+
+   |   |   |   |   |
+  |||  |  ||| ||| |||
+   |   |   |   |   |
+  ---  -  --- --- ---`,
+    asciiLabel: '7 JUIN — ÉDITION UNIQUE',
+    asciiRarity: '✦✦✦ ultra-rare · 1/365',
+    couleur: 'invert',
+    messageSecret: '[ joyeux anniversaire, c\'est caché ici ]',
+  },
+
+  // ══════════════════════════════════════
+  // NOUVEL AN — 1er janvier
+  // ══════════════════════════════════════
+  nouvelAn: {
+    id: 'nouvelAn',
+    badge: 'ÉDITION NOUVEL AN',
+    message: `Une nouvelle année commence.
+GUS aussi repart à zéro — ou presque.
+
+365 tickets t'attendent.
+365 matins à traverser.
+365 fois l'occasion de recommencer.
+
+C'est beaucoup. C'est suffisant.
+Bonne année.`,
+    ascii: `
+   .  *  .  *  .  *  .
+  * ✦ BONNE ANNÉE ✦ *
+   .  *  .  *  .  *  .
+      ||| | ||| |||
+       |  |  |   |
+      === = === ===`,
+    asciiLabel: '1er JANVIER',
+    asciiRarity: '✦✦ édition annuelle',
+    messageSecret: 'le premier ticket de l\'année. garde-le.',
+  },
+
+  // ══════════════════════════════════════
+  // ÉQUINOXE DE PRINTEMPS — 20 mars
+  // ══════════════════════════════════════
+  equinoxePrintemps: {
+    id: 'equinoxePrintemps',
+    badge: 'ÉDITION ÉQUINOXE',
+    message: `Aujourd'hui, le jour et la nuit sont égaux.
+Un équilibre parfait, rare, éphémère.
+
+Le printemps commence officiellement.
+Quelque chose en toi aussi peut recommencer.`,
+    ascii: `
+    \\  |  /     . * .
+     \\ | /    *  ↑↑↑  *
+  ----[☀]----  .  ↑  .
+     / | \\    *  |||  *
+    /  |  \\     . | .
+                  |`,
+    asciiLabel: 'ÉQUINOXE DE PRINTEMPS',
+    asciiRarity: '✦✦ édition saisonnière',
+    messageSecret: 'lumière = obscurité, aujourd\'hui seulement.',
+  },
+
+  // ══════════════════════════════════════
+  // FÊTE DU TRAVAIL — 1er mai
+  // ══════════════════════════════════════
+  feteTravail: {
+    id: 'feteTravail',
+    badge: 'ÉDITION 1er MAI',
+    message: `C'est férié.
+GUS s'en réjouit pour toi.
+
+Le muguet porte-bonheur, la journée libre,
+le droit de ne rien faire de productif.
+Profites-en vraiment.`,
+    ascii: `
+    ( )( )( )
+   (  muguet )
+    )  ||||  (
+   (   ||||   )
+    )  ||||  (
+       ||||
+       ||||`,
+    asciiLabel: 'MUGUET DU 1er MAI',
+    asciiRarity: '✦✦ édition annuelle',
+    messageSecret: 'le travail peut attendre. le muguet, non.',
+  },
+
+  // ══════════════════════════════════════
+  // SOLSTICE D'ÉTÉ — 21 juin
+  // ══════════════════════════════════════
+  solsticeEte: {
+    id: 'solsticeEte',
+    badge: 'ÉDITION SOLSTICE D\'ÉTÉ',
+    message: `C'est le jour le plus long de l'année.
+Le soleil ne se couchera que très tard ce soir.
+
+Profite de chaque heure de lumière.
+Elles valent un peu plus aujourd'hui.`,
+    ascii: `
+  \\  \\  |  /  /
+   \\  \\ | /  /
+-----..[☀]..-----
+   /  / | \\  \\
+  /  /  |  \\  \\
+  ~ ~ ~ ~ ~ ~ ~
+  SOLSTICE D'ÉTÉ`,
+    asciiLabel: '21 JUIN — JOUR LE PLUS LONG',
+    asciiRarity: '✦✦ édition saisonnière',
+    messageSecret: 'après aujourd\'hui, les nuits reprennent du terrain.',
+  },
+
+  // ══════════════════════════════════════
+  // SAINT-JEAN — 24 juin
+  // ══════════════════════════════════════
+  saintJean: {
+    id: 'saintJean',
+    badge: 'ÉDITION SAINT-JEAN',
+    message: `La nuit de la Saint-Jean.
+Dans les villages du Languedoc,
+on allume des feux sur les places.
+
+Une tradition qui remonte au Moyen Âge.
+Ce soir, quelque part pas très loin,
+il y a un feu et des gens autour.`,
+    ascii: `
+       )  (
+      ( )( )
+     (      )
+    ( feu de )
+   (  la St  )
+    ( Jean  )
+     (      )
+      \\    /
+       \\  /
+        \\/
+   ~~~~~~~~~`,
+    asciiLabel: 'FEU DE LA SAINT-JEAN',
+    asciiRarity: '✦✦ édition locale',
+    messageSecret: 'les feux de juin chassent les mauvais esprits.',
+  },
+
+  // ══════════════════════════════════════
+  // VENDANGES — 1ère semaine de septembre
+  // ══════════════════════════════════════
+  vendanges: {
+    id: 'vendanges',
+    badge: 'ÉDITION VENDANGES',
+    message: `C'est la saison des vendanges dans l'Hérault.
+Les vignes de la plaine donnent leurs raisins.
+
+Le vin de cette année commence à exister.
+Dans quelques mois, il sera dans un verre.`,
+    ascii: `
+  oo oo oo oo oo
+ oooooooooooooooo
+  oo oo oo oo oo
+     ||||||||
+     ||||||||
+  ~~~~~~~~~~~~~~
+  VIN DE L\'HÉRAULT`,
+    asciiLabel: 'VENDANGES HÉRAULTAISES',
+    asciiRarity: '✦✦ édition saisonnière',
+    messageSecret: 'le raisin sait quand c\'est le bon moment.',
+  },
+
+  // ══════════════════════════════════════
+  // ÉQUINOXE D'AUTOMNE — 22 septembre
+  // ══════════════════════════════════════
+  equinoxeAutomne: {
+    id: 'equinoxeAutomne',
+    badge: 'ÉDITION ÉQUINOXE D\'AUTOMNE',
+    message: `De nouveau l'équilibre.
+Jour et nuit égaux, pour la dernière fois
+avant les grandes nuits de l'hiver.
+
+L'automne commence.
+Quelque chose se prépare à l'intérieur.`,
+    ascii: `
+  * . * . * . * .
+  . * feuilles * .
+  * . tombent  . *
+  . * . * . * . *
+    |  |  |  |
+    |  |  |  |
+  ~~~~~~~~~~~~~~`,
+    asciiLabel: 'ÉQUINOXE D\'AUTOMNE',
+    asciiRarity: '✦✦ édition saisonnière',
+    messageSecret: 'la lumière cède, mais elle reviendra.',
+  },
+
+  // ══════════════════════════════════════
+  // ANNIVERSAIRE DE MONTPELLIER — 3 octobre
+  // ══════════════════════════════════════
+  anniversaireMontpellier: {
+    id: 'anniversaireMontpellier',
+    badge: 'ÉDITION MONTPELLIER',
+    message: `Le 3 octobre 1289, le pape Nicolas IV
+fondait officiellement l'Université de Montpellier.
+
+La ville fête aujourd'hui plus de 1 100 ans d'existence.
+Tu habites une ville ancienne et vivante.
+C'est une chance.`,
+    ascii: `
+  ┌─────────────┐
+  │ MONTPELLIER │
+  │  fondée en  │
+  │    858 ap.  │
+  │   J.-C.     │
+  │  + de 1100  │
+  │     ans     │
+  └─────────────┘`,
+    asciiLabel: 'ANNIVERSAIRE DE LA VILLE',
+    asciiRarity: '✦✦✦ rare · édition locale',
+    messageSecret: 'tu marches sur des rues de mille ans.',
+  },
+
+  // ══════════════════════════════════════
+  // TOUSSAINT — 1er novembre
+  // ══════════════════════════════════════
+  toussaint: {
+    id: 'toussaint',
+    badge: 'ÉDITION TOUSSAINT',
+    message: `La Toussaint.
+Un jour pour penser à ceux qui sont partis.
+
+Pas forcément dans la tristesse.
+Plutôt dans la gratitude pour ce qu'ils ont laissé.`,
+    ascii: `
+       *
+      ***
+     *****
+    *  |  *
+   *   |   *
+  *    |    *
+       |
+  ~~~~~~~~~~~
+  CHRYSANTHÈME`,
+    asciiLabel: '1er NOVEMBRE',
+    asciiRarity: '✦✦ édition annuelle',
+    messageSecret: 'se souvenir, c\'est une façon de garder.',
+  },
+
+  // ══════════════════════════════════════
+  // SOLSTICE D'HIVER — 21 décembre
+  // ══════════════════════════════════════
+  solsticeHiver: {
+    id: 'solsticeHiver',
+    badge: 'ÉDITION SOLSTICE D\'HIVER',
+    message: `C'est la nuit la plus longue de l'année.
+Après aujourd'hui, chaque jour gagnera
+quelques minutes de lumière.
+
+Le retour a déjà commencé.`,
+    ascii: `
+  * . * . * . * .
+  .  *  lune  *  .
+  * .    ()    . *
+  .  *   ||   *  .
+  * . * .|. . * .
+         |
+  ~~~~~~~~~~~~~~~
+  SOLSTICE HIVER`,
+    asciiLabel: '21 DÉCEMBRE — NUIT LA PLUS LONGUE',
+    asciiRarity: '✦✦ édition saisonnière',
+    messageSecret: 'le soleil revient toujours.',
+  },
+
+  // ══════════════════════════════════════
+  // NOËL — 25 décembre
+  // ══════════════════════════════════════
+  noel: {
+    id: 'noel',
+    badge: '✦ ÉDITION NOËL ✦',
+    message: `Joyeux Noël.
+
+Que ce soit une fête religieuse, familiale,
+ou simplement un prétexte à la générosité,
+GUS te souhaite une belle journée.
+
+Mange bien. Sois doux avec les gens que tu aimes.`,
+    ascii: `
+      *
+     ***
+    *****
+   *  |  *
+  *   |   *
+ * sapin  *
+      |
+  =========
+     NOËL`,
+    asciiLabel: '25 DÉCEMBRE',
+    asciiRarity: '✦✦ édition annuelle',
+    messageSecret: 'quelque chose de chaleureux se passe aujourd\'hui.',
+  },
+
+  // ══════════════════════════════════════
+  // RÉVEILLON — 31 décembre
+  // ══════════════════════════════════════
+  reveillon: {
+    id: 'reveillon',
+    badge: 'ÉDITION RÉVEILLON',
+    message: `Dernier ticket de l'année.
+
+Tu as reçu GUS 365 fois cette année.
+Ou presque. Certains matins sont plus difficiles.
+
+Ce soir, des huîtres de Thau et du muscat.
+Et à minuit, quelque chose recommence.`,
+    ascii: `
+  . * . * . * . *
+  *  BONNE  ANNÉE *
+  . * . * . * . *
+  *   à venir   *
+  . * . * . * . *
+    ))) ))) )))
+   ))))) ))))) )))`,
+    asciiLabel: '31 DÉCEMBRE',
+    asciiRarity: '✦✦✦ rare · fin d\'année',
+    messageSecret: 'le dernier matin. le premier aussi.',
+  },
+
+  // ══════════════════════════════════════
+  // TICKET RARE — apparaît 1 fois / 30
+  // ══════════════════════════════════════
+  ticketRare: {
+    id: 'ticketRare',
+    badge: '✦ TICKET RARE ✦',
+    message: `Tu es tombé sur un ticket rare.
+1 chance sur 30. Aujourd'hui c'était toi.
+
+Rien de spécial ne va se passer.
+Mais tu peux décider que si.`,
+    ascii: `
+  ╔═══════════════╗
+  ║  T I C K E T  ║
+  ║     R A R E   ║
+  ║               ║
+  ║   ✦  ✦  ✦   ║
+  ║               ║
+  ╚═══════════════╝`,
+    asciiLabel: 'TICKET RARE · SÉRIE LIMITÉE',
+    asciiRarity: '✦✦✦ 1/30 · conserve-le',
+    messageSecret: 'tu ne seras pas le seul à ne pas savoir pourquoi.',
+  },
+
+  // ══════════════════════════════════════
+  // ÉDITION ORAGE
+  // ══════════════════════════════════════
+  orage: {
+    id: 'orage',
+    badge: 'ÉDITION ORAGE',
+    message: `Il y a un orage aujourd'hui.
+GUS trouve ça beau.
+
+L'électricité dans l'air, les odeurs qui changent,
+la lumière qui vire au vert avant l'éclair.
+Reste au chaud et regarde.`,
+    ascii: `
+  .####.  .####.
+ (######)(######)
+  '####'  '####'
+    /###\/###\\
+   / ##/\\## \\
+     / ⚡ \\
+      |||
+  ~~~~~~~~~~`,
+    asciiLabel: 'ORAGE CÉVENOL',
+    asciiRarity: '✦✦✦ rare · météo extrême',
+    messageSecret: 'les orages du Languedoc n\'ont pas d\'équivalent.',
+  },
+};
+
+// ───────────────────────────────────────────────────
+// 3. EASTER EGGS — messages cachés dans le ticket
+// Apparaissent en micro-texte dans le footer
+// ───────────────────────────────────────────────────
+
+const EASTER_EGGS = [
+  'si tu lis ceci, tu fais attention aux détails.',
+  'gus te voit. gus t\'apprécie.',
+  'ce ticket s\'autodétruira dans 24h.',
+  'message caché n°' , // complété dynamiquement
+  'rien n\'est caché ici. ou presque.',
+  'tu es la 1ère personne à lire jusqu\'ici.',
+  'gus a mis quelque chose ici. tu l\'as trouvé.',
+  'ce matin existe. c\'est déjà beaucoup.',
+  'ticket vérifié. authenticité confirmée.',
+  'encre thermique : invisible sous la lumière noire.',
+];
+
+function getEasterEgg(date) {
+  // Apparaît 1 fois sur 5
+  const seed = date.getDate() * 7 + date.getMonth() * 13;
+  if (seed % 5 !== 0) return null;
+  return EASTER_EGGS[seed % EASTER_EGGS.length];
+}
+
+// ───────────────────────────────────────────────────
+// 4. RENDU DU TICKET SPÉCIAL
+// Retourne le HTML complet du ticket si édition spéciale
+// Sinon retourne null (ticket normal)
+// ───────────────────────────────────────────────────
+
+function renderEditionSpeciale(edition, weatherData, date) {
+  const isAnniversaire = edition.id === 'anniversaire';
+  const isRare = edition.id === 'ticketRare';
+
+  const heure = `${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
+  const JOURS = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+  const MOIS_NOM = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  const dateStr = `${JOURS[date.getDay()]} ${date.getDate()} ${MOIS_NOM[date.getMonth()]} ${date.getFullYear()}`;
+
+  const seed = date.getDate() * 31 + date.getMonth() * 366;
+  const ticketNum = `GUS-${String(date.getFullYear()).slice(2)}${String(date.getMonth()+1).padStart(2,'0')}${String(date.getDate()).padStart(2,'0')}-${String(seed).slice(-3)}`;
+
+  let html = `<div class="ticket-noise"></div>`;
+
+  // ── Bordure spéciale anniversaire ──
+  if (isAnniversaire) {
+    html += `<div style="text-align:center;font-size:9px;color:#888;letter-spacing:2px;margin-bottom:6px">
+      ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦
+    </div>`;
+  }
+
+  // ── Header ──
+  html += `<div class="t-header t-section">
+    <span class="t-logo">${isAnniversaire ? '✦ G.U.S. ✦' : 'G.U.S.'}</span>
+    <span class="t-subtitle">Générateur d'Utilité Sensible</span>
+    <div class="t-date">${dateStr} — ${heure}</div>
+    <div style="margin-top:8px">
+      <span class="t-edition-badge" ${edition.badgeStyle ? `style="${edition.badgeStyle}"` : ''}>${edition.badge}</span>
+    </div>
+  </div>`;
+
+  html += `<hr class="t-divider-solid">`;
+
+  // ── Message spécial ──
+  html += `<div class="t-section">
+    <div class="t-section-title"><span class="t-section-num">01</span> message du jour</div>
+    <div class="t-message" style="white-space:pre-line">${edition.message}</div>
+  </div>`;
+
+  html += `<hr class="t-divider">`;
+
+  // ── Météo (conservée même en édition spéciale) ──
+  if (weatherData) {
+    const WMO = {0:'Ciel dégagé',1:'Principalement dégagé',2:'Partiellement nuageux',3:'Couvert',45:'Brouillard',51:'Bruine légère',61:'Pluie légère',63:'Pluie modérée',80:'Averses',95:'Orage'};
+    html += `<div class="t-section">
+      <div class="t-section-title"><span class="t-section-num">02</span> météo — montpellier</div>
+      <div class="t-weather-details" style="font-size:11px">
+        ${weatherData.temp}°C · ${WMO[weatherData.code] || 'Variable'} · Vent ${weatherData.wind} km/h
+        ${weatherData.sunrise ? `<br>↑ ${fmtTime(weatherData.sunrise)} ↓ ${fmtTime(weatherData.sunset)}` : ''}
+      </div>
+    </div>`;
+    html += `<hr class="t-divider">`;
+  }
+
+  // ── ASCII collectionnable spécial ──
+  html += `<div class="t-section">
+    <div class="t-section-title"><span class="t-section-num">03</span> objet du jour ✦ édition spéciale</div>
+    <div class="t-collectionnable">
+      <pre class="ascii-art">${edition.ascii}</pre>
+      <div class="ascii-label">${edition.asciiLabel}</div>
+      <div class="ascii-rarity">${edition.asciiRarity}</div>
+    </div>
+  </div>`;
+
+  // ── Bordure spéciale anniversaire (bas) ──
+  if (isAnniversaire) {
+    html += `<hr class="t-divider">`;
+    html += `<div style="text-align:center;font-size:9px;color:#888;letter-spacing:2px">
+      ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦
+    </div>`;
+  }
+
+  html += `<hr class="t-divider-solid">`;
+
+  // ── Easter egg caché ──
+  if (edition.messageSecret) {
+    html += `<div style="text-align:center;font-size:7px;color:#ccc;letter-spacing:1px;margin:2px 0;font-family:'Share Tech Mono',monospace">
+      [ ${edition.messageSecret} ]
+    </div>`;
+  }
+
+  // ── Barcode & footer ──
+  html += `<div class="t-barcode">${genBarcode()}</div>`;
+  html += `<div class="t-footer">
+    ${ticketNum} · ÉDITION SPÉCIALE<br>
+    IMPRIMÉ PAR G.U.S. · MONTPELLIER · ${date.getFullYear()}<br>
+    <small style="font-size:8px;color:#bbb">conserve ce ticket. il ne passera qu'une fois.</small>
+  </div>`;
+
+  return html;
+}
+
 </script>
 </body>
 </html>
