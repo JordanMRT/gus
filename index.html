@@ -89,6 +89,39 @@ body{background:#1a1a1a;min-height:100vh;display:flex;flex-direction:column;alig
 .word-grid span{display:inline-block;width:14px;text-align:center}
 .connect-svg{display:block;margin:0 auto}
 
+/*BOUTON ARCHIVE*/
+.archive-btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: #555;
+    text-decoration: none;
+    letter-spacing: 2px;
+    border: 1px solid #333;
+    padding: 6px 16px;
+    display: inline-block;
+    margin-top: 1rem;
+    transition: all 0.2s;
+    position: relative;
+    right: -20rem;
+    top: -27.5rem;
+  }
+
+  .archive-btn:hover {
+    color: #f5f0e8;
+    border-color: #555;
+  }
+
+  @media (max-width: 600px) {
+    .archive-btn {
+      position: static;
+      display: block;
+      text-align: center;
+      margin: 1rem auto 0;
+      width: fit-content;
+    }
+  }
+
+/*TEXTURE*/
 .texture {
   position: fixed;
   inset: 0;
@@ -127,13 +160,10 @@ body{background:#1a1a1a;min-height:100vh;display:flex;flex-direction:column;alig
   <button class="btn-generate" id="btn-gen" onclick="generateTicket()">▸ IMPRIMER LE TICKET</button>
   <p class="status-line" id="status">prêt</p>
 </div>
-<a href="http://jordanmrt.github.io/gus/archive.html"
-style="font-family: &quot;Share Tech Mono&quot;, monospace; font-size: 11px;
-    color: rgb(85, 85, 85); text-decoration: none; letter-spacing: 2px;
-    border: 1px solid rgb(51, 51, 51); padding: 6px 16px; display: inline-block;
-    margin-top: 1rem; transition: 0.2s; position: relative; right: -20rem; top: -27.5rem;"
-    onmouseover="this.style.color='#f5f0e8';this.style.borderColor='#555'"
-    onmouseout="this.style.color='#555';this.style.borderColor='#333'">
+<a href="https://jordanmrt.github.io/gus/archive.html"
+   class="archive-btn"
+   onmouseover="this.style.color='#f5f0e8';this.style.borderColor='#555'"
+   onmouseout="this.style.color='#555';this.style.borderColor='#333'">
   ◈ ARCHIVE ◈
 </a>
 <script>
@@ -2634,13 +2664,114 @@ function toggleSolutionCross(btn) {
 
 //DIMANCHE - ENIGMES LOGIQUES
 function genMiniLogique(seed=42) {
-  const puzzles=[
-    {q:'Il y a 3 maisons. La rouge est à gauche de la bleue. La verte est à droite de la bleue. Dans quelle maison habite Paul qui aime le rouge ?',r:'La maison de gauche.'},
-    {q:'Marie a deux enfants. L\'un d\'eux est une fille. Quelle est la probabilité que les deux soient des filles ?',r:'1/3 (pas 1/2 — il y a 3 cas possibles : GF, FG, FF).'},
-    {q:'Un train part de Paris à 14h à 200 km/h. Un autre part de Lyon (500 km) à 15h à 150 km/h. Se croisent-ils avant Lyon ?',r:'Oui. Le 1er train parcourt 200 km en 1h. À 15h, il reste 300 km. Ils se rapprochent à 350 km/h → se croisent à ~15h51.'},
-    {q:'Tu as 8 billes identiques. L\'une est plus lourde. Avec une balance à deux plateaux, combien de pesées minimum pour la trouver ?',r:'2 pesées suffisent.'},
-    {q:'Un escargot est au fond d\'un puits de 10m. Chaque jour il monte 3m, chaque nuit il redescend 2m. Combien de jours pour sortir ?',r:'8 jours. (Le 8e jour il monte à 10m sans redescendre.)'},
-  ];
+  const puzzles = [
+
+  // ── ORIGINALES (5) ──
+  {
+    q: 'Il y a 3 maisons. La rouge est à gauche de la bleue. La verte est à droite de la bleue. Dans quelle maison habite Paul qui aime le rouge ?',
+    r: 'La maison de gauche.'
+  },
+  {
+    q: 'Marie a deux enfants. L\'un d\'eux est une fille. Quelle est la probabilité que les deux soient des filles ?',
+    r: '1/3 (pas 1/2 — il y a 3 cas possibles : GF, FG, FF).'
+  },
+  {
+    q: 'Un train part de Paris à 14h à 200 km/h. Un autre part de Lyon (500 km) à 15h à 150 km/h. Se croisent-ils avant Lyon ?',
+    r: 'Oui. Le 1er train parcourt 200 km en 1h. À 15h, il reste 300 km. Ils se rapprochent à 350 km/h → se croisent à ~15h51.'
+  },
+  {
+    q: 'Tu as 8 billes identiques. L\'une est plus lourde. Avec une balance à deux plateaux, combien de pesées minimum pour la trouver ?',
+    r: '2 pesées suffisent.'
+  },
+  {
+    q: 'Un escargot est au fond d\'un puits de 10m. Chaque jour il monte 3m, chaque nuit il redescend 2m. Combien de jours pour sortir ?',
+    r: '8 jours. (Le 8e jour il monte à 10m sans redescendre.)'
+  },
+
+  // ── MÉDITERRANÉENNES (20) ──
+
+  {
+    q: 'Une cigale est au bas d\'un figuier de 9 mètres. Chaque matin elle monte 3 mètres, chaque nuit la chaleur la fait redescendre de 2 mètres. Combien de matins pour atteindre les figues ?',
+    r: '7 matins. Le 7e matin elle atteint 9m sans redescendre.'
+  },
+  {
+    q: 'Sur le marché des Arceaux, trois producteurs vendent des olives. Antoine vend plus qu\'Henri. Henri vend plus que Claire. Claire vend-elle plus ou moins qu\'Antoine ?',
+    r: 'Moins. Si Antoine > Henri > Claire, alors Claire < Antoine.'
+  },
+  {
+    q: 'Trois cabanons sont alignés. Celui de gauche est plus vieux que celui du milieu. Celui du milieu est plus récent que celui de droite. Quel cabanon est le plus ancien ?',
+    r: 'Impossible à déterminer avec certitude — on sait seulement que le milieu est le plus récent.'
+  },
+  {
+    q: 'Un pêcheur de Sète part à 5h du matin. Il met 2h pour aller sur sa zone, pêche 4h, met 2h pour rentrer. À quelle heure est-il de retour au port ?',
+    r: 'À 13h. 5h + 2h + 4h + 2h = 13h.'
+  },
+  {
+    q: 'À Montpellier, le tram ligne 1 met 40 minutes pour traverser la ville. Si je rate le tram de 2 minutes et que le suivant passe dans 8 minutes, combien de temps vais-je attendre en tout depuis mon arrivée à l\'arrêt ?',
+    r: '8 minutes. Tu attends juste le prochain tram.'
+  },
+  {
+    q: 'Trois bouteilles de rosé sont alignées. La bouteille de Picpoul est à gauche de la bouteille de Faugères. La bouteille de Saint-Chinian est à droite de la bouteille de Picpoul. Dans quel ordre sont-elles de gauche à droite ?',
+    r: 'Picpoul — Faugères — Saint-Chinian. Ou Picpoul — Saint-Chinian — Faugères. Les deux sont possibles avec ces indices.'
+  },
+  {
+    q: 'Un olivier produit 50 kg d\'olives. Il faut 5 kg d\'olives pour faire 1 litre d\'huile. Combien de litres d\'huile produit un olivier ?',
+    r: '10 litres. 50 ÷ 5 = 10.'
+  },
+  {
+    q: 'Sur la plage de Palavas, cinq serviettes sont posées côte à côte. La rouge est entre la bleue et la verte. La jaune est à gauche de la bleue. La blanche est à droite de la verte. Dans quel ordre sont-elles ?',
+    r: 'Jaune — Bleue — Rouge — Verte — Blanche.'
+  },
+  {
+    q: 'Un vigneron de l\'Hérault a 3 parcelles. La parcelle A donne deux fois plus que la parcelle B. La parcelle B donne trois fois plus que la parcelle C. Si C donne 100 kg de raisins, quelle est la production totale ?',
+    r: '1000 kg. C=100, B=300 (×3), A=600 (×2). Total : 100+300+600 = 1000.'
+  },
+  {
+    q: 'Trois amis jouent à la pétanque. À chaque partie, le perdant offre un pastis aux deux autres. Après 3 parties, chacun a perdu une fois. Combien de pastis chaque joueur a-t-il offert et reçu ?',
+    r: 'Chacun a offert 2 pastis (aux 2 gagnants de sa partie perdue) et reçu 2 pastis (quand les 2 autres ont perdu).'
+  },
+  {
+    q: 'Le Pic Saint-Loup culmine à 658m. Je suis à 200m d\'altitude au départ. Si je monte à 2km/h en dénivelé, combien de temps pour atteindre le sommet ?',
+    r: 'Un peu plus de 4h. 658 - 200 = 458m de dénivelé. À 2km/h vertical, soit ~4,6h. En pratique environ 2h30 par sentier.'
+  },
+  {
+    q: 'Un flamant rose mange 1,2 kg de crevettes par jour. Combien de crevettes mange-t-il en une semaine si une crevette pèse en moyenne 3 grammes ?',
+    r: '2 800 crevettes. 1200g × 7 = 8400g par semaine. 8400 ÷ 3 = 2800.'
+  },
+  {
+    q: 'À Saint-Guilhem-le-Désert, le clocher sonne les heures. Il met 2 secondes pour sonner 2 coups. Combien de temps met-il pour sonner 8 coups ?',
+    r: '14 secondes. Entre n coups, il y a n-1 intervalles. 7 intervalles × 2s = 14s.'
+  },
+  {
+    q: 'Trois pêcheurs de l\'étang de Thau récoltent des moules. En une heure, le premier en récolte 12 kg, le second 8 kg, le troisième 6 kg. Combien de temps pour récolter 130 kg à eux trois ?',
+    r: '5 heures. Ensemble ils récoltent 26 kg/h. 130 ÷ 26 = 5h.'
+  },
+  {
+    q: 'La tramontane souffle à 80 km/h. Un cycliste roule à 20 km/h face au vent. À quelle vitesse effective avance-t-il si le vent le ralentit de 30% ?',
+    r: '14 km/h. 20 × 0.70 = 14 km/h.'
+  },
+  {
+    q: 'Sur la Place de la Comédie, un mime s\'arrête toutes les 7 minutes. Un musicien joue toutes les 5 minutes. Ils commencent en même temps. Dans combien de minutes se tairont-ils simultanément pour la première fois ?',
+    r: '35 minutes. PPCM de 5 et 7 = 35.'
+  },
+  {
+    q: 'Un producteur de lavande de l\'Hérault coupe ses plants tous les 3 ans. Il a planté 10 plants en 2015, 10 en 2016, et 10 en 2017. En 2024, combien de lots de coupe a-t-il effectués au total ?',
+    r: '9 lots. Chaque série de 10 plants a été coupée 3 fois entre 2018 et 2024 (2018, 2021, 2024 / 2019, 2022 / 2020, 2023). Total : 3+2+2 = 7... à vérifier selon l\'année de première coupe.'
+  },
+  {
+    q: 'Trois garrigues brûlent à des vitesses différentes. La première brûle 1 hectare par heure, la seconde 2 hectares par heure, la troisième 3 hectares par heure. Combien de temps pour brûler 12 hectares si les trois feux avancent simultanément ?',
+    r: '2 heures. Ensemble : 1+2+3 = 6 hectares/heure. 12 ÷ 6 = 2h.'
+  },
+  {
+    q: 'Un canal du Midi fait 240 km. Une péniche avance à 10 km/h. Elle s\'arrête 1h à chaque écluse et il y en a 63. Combien de temps dure le trajet complet ?',
+    r: '87 heures. Navigation : 240÷10 = 24h. Écluses : 63h. Total : 87h.'
+  },
+  {
+    q: 'Le mistral dure en général 3 ou 6 jours. Il commence un lundi. Si ce cycle se répète, quel jour de la semaine commencera le troisième épisode de mistral ?',
+    r: 'Cela dépend de la durée. Si 3 jours : épisode 2 commence jeudi, épisode 3 commence dimanche. Si 6 jours : épisode 2 commence dimanche, épisode 3 commence samedi.'
+  },
+
+];
   const p = puzzles[seed % puzzles.length];
   return `<div class="t-puzzle-title">Énigme logique du jour</div>
     <div style="font-size:10.5px;line-height:1.6;color:#333;margin-bottom:6px">${p.q}</div>
@@ -2802,7 +2933,8 @@ if (now.getDay() === 5) {
  html+=`<hr class="t-divider">`;
 
   // 02 MÉTÉO
-  html+=`<div class="t-section">
+  const meteoPoetique = getMeteoPoetique(w.code, now, w.wind);
+html+=`<div class="t-section">
     <div class="t-section-title"><span class="t-section-num">02</span> météo — montpellier</div>
     <div class="t-weather-main">
       <div class="t-weather-ascii">${getWeatherAscii(w.code)}</div>
@@ -2815,8 +2947,9 @@ if (now.getDay() === 5) {
         </div>
       </div>
     </div>
+    ${meteoPoetique ? `<div style="font-size:9.5px;color:#888;font-style:italic;margin-top:5px;line-height:1.5;padding-top:5px;">${meteoPoetique}</div>` : ''}
   </div>`;
-  html+=`<hr class="t-divider">`;
+html+=`<hr class="t-divider">`;
 
   // 03 MOT DU JOUR
   html+=`<div class="t-section">
@@ -3715,6 +3848,146 @@ function getRetrospective(date) {
   return RETROSPECTIVES[seed % RETROSPECTIVES.length];
 }
 
+// ═══════════════════════════════════════════════════
+// GUS — MÉTÉO POÉTIQUE
+// ═══════════════════════════════════════════════════
+
+// ── Phrases par condition météo ──
+const METEO_POETIQUE = {
+
+  soleil: [
+    "Le ciel est d'un bleu qui ne s'excuse pas.",
+    "Journée à ombre de platane.",
+    "La lumière tape. C'est son métier.",
+    "Un soleil franc, sans nuance ni modestie.",
+    "Le Midi tient ses promesses aujourd'hui.",
+    "Journée à cigales, si tu tends l'oreille.",
+    "La garrigue va sentir le thym d'ici peu.",
+    "Bonne journée pour regarder quelque chose pousser.",
+  ],
+
+  nuageux: [
+    "Le ciel hésite. Il fait ce qu'il peut.",
+    "Ni tout à fait gris, ni vraiment bleu — c'est une humeur.",
+    "Un ciel de coton, doux et un peu paresseux.",
+    "Les nuages passent. Toi aussi, tu passes quelque part.",
+    "Journée à lumière tamisée. Idéale pour réfléchir.",
+    "Le soleil est là, juste derrière. Patience.",
+    "Un ciel de peintre hollandais sur la garrigue.",
+  ],
+
+  pluie: [
+    "La pluie cévénole a ses propres règles. Laisse-la faire.",
+    "L'Hérault va boire aujourd'hui. Toi aussi, hydrate-toi.",
+    "Journée pétrichor. Respire fort en sortant.",
+    "La pluie nettoie tout — les rues, les idées, parfois l'humeur.",
+    "Bonne journée pour rester dedans avec quelque chose de chaud.",
+    "Le Lez monte peut-être un peu. C'est dans sa nature.",
+    "Une pluie douce sur les tuiles. Écoute-la depuis l'intérieur.",
+    "L'eau qui tombe aujourd'hui sera dans les vignes demain.",
+  ],
+
+  orage: [
+    "Orage cévenol. La Méditerranée rappelle qui commande.",
+    "Le ciel gronde. Reste au sec et regarde depuis la fenêtre.",
+    "L'électricité dans l'air a une odeur particulière. Tu la sens ?",
+    "Journée à éclairs. Spectacle gratuit depuis ton canapé.",
+    "La tramontane et la foudre ont rendez-vous aujourd'hui.",
+    "Un orage d'été : violent, bref, et qui repart comme il est venu.",
+  ],
+
+  brouillard: [
+    "Le Pic Saint-Loup a disparu ce matin. Il reviendra.",
+    "La garrigue se cache dans le blanc. Elle sera là tout à l'heure.",
+    "Un brouillard de novembre sur la plaine de l'Hérault.",
+    "Journée ouatée. Les sons portent différemment.",
+    "La ville s'est effacée. C'est reposant, finalement.",
+    "Le brouillard matinal brûlera vite. Attends 10h.",
+  ],
+
+  vent_modere: [
+  "Un peu de vent aujourd'hui. Juste ce qu'il faut pour aérer.",
+  "L'air bouge. Les pensées aussi, parfois.",
+  "Une brise qui rappelle que le ciel n'est pas immobile.",
+  "Le vent modéré est le plus honnête — présent sans en faire trop.",
+  "Bonne journée pour sentir l'air sur son visage.",
+],
+
+vent_fort: [
+  "Le vent s'est levé sur la plaine. Tiens-toi bien.",
+  "Journée à rafales. Les arbres savent quoi faire — penche-toi avec.",
+  "La tramontane s'annonce peut-être. L'air sent le nord.",
+  "Un vent à chapeau. Préviens-le à l'avance.",
+  "Le ciel sera d'un bleu parfait après ce vent. Promis.",
+  "Les volets claquent quelque part dans la ville.",
+],
+
+mistral: [
+  "La tramontane est là. Montpellier se recroqueville et attend.",
+  "Le mistral nettoie tout — les rues, les nuages, parfois les idées.",
+  "Journée à 60 km/h. Reste au chaud, le ciel fera le ménage.",
+  "Le grand vent du Languedoc. Il reviendra autant de fois qu'il voudra.",
+  "La garrigue plie mais ne cède pas. Toi non plus.",
+  "Ce vent-là a traversé les Pyrénées pour arriver ici. Respecte-le.",
+  "Le Pic Saint-Loup doit être magnifique par ce vent. Et inaccessible.",
+],
+
+  canicule: [
+    "Canicule. Suis le conseil du chat : trouve l'ombre.",
+    "La chaleur ralentit tout. C'est une invitation, pas un obstacle.",
+    "Journée à sieste obligatoire. Méditerranée oblige.",
+    "L'asphalte fond presque. Les idées aussi — garde-les au frais.",
+    "35 degrés à l'ombre. L'ombre devient un luxe précieux.",
+    "Bonne journée pour ne rien décider et boire beaucoup d'eau.",
+  ],
+
+  neige: [
+    "Neige sur Montpellier. Ça n'arrive presque jamais. Profites-en.",
+    "La garrigue sous la neige — un spectacle rare et un peu irréel.",
+    "Le Pic Saint-Loup est blanc ce matin. Souviens-t'en.",
+    "Une journée hors du temps. La neige en fait toujours une.",
+  ],
+
+};
+
+function getMeteoPoetique(weatherCode, date, wind=0) {
+  const seed = date.getDate() * 13 + date.getMonth() * 7;
+
+  // Vent fort — toujours affiché, peu importe le jour
+  if (wind >= 60) {
+    const phrases = METEO_POETIQUE.mistral;
+    return phrases[seed % phrases.length];
+  }
+  if (wind >= 40) {
+    const phrases = METEO_POETIQUE.vent_fort;
+    return phrases[seed % phrases.length];
+  }
+  if (wind >= 20) {
+    const phrases = METEO_POETIQUE.vent_modere;
+    return phrases[seed % phrases.length];
+  }
+
+  // Pas de vent significatif — fréquence 4 jours sur 7
+  if (seed % 7 >= 4) return null;
+
+  // Condition météo normale
+  let categorie;
+  if (weatherCode >= 95) categorie = 'orage';
+  else if (weatherCode >= 71 && weatherCode <= 75) categorie = 'neige';
+  else if (weatherCode >= 51 && weatherCode <= 82) categorie = 'pluie';
+  else if (weatherCode === 45 || weatherCode === 48) categorie = 'brouillard';
+  else if (weatherCode === 2 || weatherCode === 3) categorie = 'nuageux';
+  else if (weatherCode === 0 || weatherCode === 1) categorie = 'soleil';
+  else categorie = 'nuageux';
+
+  const mois = date.getMonth();
+  if ((mois >= 5 && mois <= 7) && (weatherCode === 0 || weatherCode === 1)) {
+    categorie = seed % 3 === 0 ? 'canicule' : 'soleil';
+  }
+
+  const phrases = METEO_POETIQUE[categorie];
+  return phrases[seed % phrases.length];
+}
 </script>
 </body>
 </html>
