@@ -48,6 +48,16 @@ await page.evaluate(() => {
     btn.style.display = 'block';
     btn.style.marginTop = '4px';
   }
+  // Révèle aussi la réponse de l'énigme logique
+const enigmeBtn = document.getElementById('enigme-rep');
+if (enigmeBtn) {
+    const rep = enigmeBtn.dataset.rep;
+    enigmeBtn.innerHTML = `<span style="display:inline-block;transform:rotate(180deg);letter-spacing:1px;font-style:italic">${rep}</span>`;
+    enigmeBtn.style.border = 'none';
+    enigmeBtn.style.padding = '0';
+    enigmeBtn.style.cursor = 'default';
+    enigmeBtn.style.color = '#555';
+}
 });
 
   // Trouve l'élément ticket pour un screenshot précis

@@ -2641,12 +2641,23 @@ function genMiniLogique(seed=42) {
     {q:'Tu as 8 billes identiques. L\'une est plus lourde. Avec une balance à deux plateaux, combien de pesées minimum pour la trouver ?',r:'2 pesées suffisent.'},
     {q:'Un escargot est au fond d\'un puits de 10m. Chaque jour il monte 3m, chaque nuit il redescend 2m. Combien de jours pour sortir ?',r:'8 jours. (Le 8e jour il monte à 10m sans redescendre.)'},
   ];
-  const p=puzzles[seed%puzzles.length];
+  const p = puzzles[seed % puzzles.length];
   return `<div class="t-puzzle-title">Énigme logique du jour</div>
     <div style="font-size:10.5px;line-height:1.6;color:#333;margin-bottom:6px">${p.q}</div>
-    <div class="t-blague-rep" id="blague-rep" onclick="revealReponse('${p.r.replace(/'/g,"\\'")}')">[ révéler la réponse ]</div>`;
+    <div class="t-blague-rep" id="enigme-rep" onclick="revealEnigme(this)" data-rep="${p.r.replace(/"/g,'&quot;')}" data-open="0">[ révéler la réponse ]</div>`;
 }
 
+function revealEnigme(btn) {
+  if (btn.dataset.open === '1') {
+    btn.textContent = '[ révéler la réponse ]';
+    btn.dataset.open = '0';
+    return;
+  }
+  btn.textContent = btn.dataset.rep;
+  btn.dataset.open = '1';
+}
+
+//GETPUZZLE(DATE)
 function getPuzzle(date) {
   const day = date.getDay();// 0=dim 1=lun 2=mar 3=mer 4=jeu 5=ven 6=sam
   const seed = date.getDate() * 31 + date.getMonth() * 366;
