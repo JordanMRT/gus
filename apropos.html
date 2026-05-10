@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUS — À propos</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #1a1a1a;
+  min-height: 100vh;
+  font-family: 'Share Tech Mono', monospace;
+  color: #f5f0e8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.5rem 1rem 4rem;
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+/* ── HEADER ── */
+.header {
+  text-align: center;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.logo {
+  font-family: 'VT323', monospace;
+  font-size: 36px;
+  letter-spacing: 5px;
+  color: #f5f0e8;
+  display: block;
+  line-height: 1;
+}
+
+.subtitle {
+  font-size: 10px;
+  color: #555;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-top: 6px;
+  display: block;
+}
+
+.back-btn {
+  display: inline-block;
+  margin-top: 1.2rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: #555;
+  text-decoration: none;
+  letter-spacing: 2px;
+  border: 1px solid #333;
+  padding: 5px 14px;
+  transition: all 0.2s;
+}
+
+.back-btn:hover {
+  color: #f5f0e8;
+  border-color: #555;
+}
+
+/* ── SECTIONS ── */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.section-label {
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: #444;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #2a2a2a;
+}
+
+.section-num {
+  background: #f5f0e8;
+  color: #1a1a1a;
+  font-size: 8px;
+  padding: 1px 5px;
+  border-radius: 2px;
+}
+
+.section-body {
+  font-size: 11.5px;
+  line-height: 1.9;
+  color: #aaa;
+}
+
+.section-body p + p {
+  margin-top: 0.8rem;
+}
+
+.section-body em {
+  color: #f5f0e8;
+  font-style: italic;
+}
+
+.section-body strong {
+  color: #f5f0e8;
+  font-style: normal;
+}
+
+/* ── ASCII TICKET ── */
+.ascii-ticket {
+  background: #f5f0e8;
+  color: #1a1a1a;
+  font-size: 10px;
+  line-height: 1.5;
+  padding: 1rem 1.2rem;
+  border-radius: 3px;
+  white-space: pre;
+  display: inline-block;
+  margin: 0.5rem 0;
+  position: relative;
+}
+
+.ascii-ticket::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: repeating-linear-gradient(90deg, #ccc 0px, #ccc 6px, #f5f0e8 6px, #f5f0e8 12px);
+}
+
+/* ── FONCTIONNEMENT ── */
+.flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.flow-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 11px;
+  color: #888;
+  line-height: 1.6;
+}
+
+.flow-step-num {
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  color: #333;
+  line-height: 1;
+  min-width: 18px;
+}
+
+.flow-step-text strong {
+  color: #f5f0e8;
+}
+
+/* ── LIENS ── */
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.link-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border: 1px solid #2a2a2a;
+  text-decoration: none;
+  transition: all 0.2s;
+  gap: 1rem;
+}
+
+.link-item:hover {
+  border-color: #444;
+  background: #222;
+}
+
+.link-label {
+  font-size: 10px;
+  color: #f5f0e8;
+  letter-spacing: 1px;
+}
+
+.link-desc {
+  font-size: 9px;
+  color: #444;
+  letter-spacing: 1px;
+  text-align: right;
+}
+
+.link-item.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* ── CRÉATEUR ── */
+.creator {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  border: 1px solid #2a2a2a;
+}
+
+.creator-ascii {
+  font-family: 'VT323', monospace;
+  font-size: 28px;
+  color: #333;
+  line-height: 1;
+  white-space: pre;
+}
+
+.creator-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.creator-name {
+  font-size: 13px;
+  color: #f5f0e8;
+  letter-spacing: 1px;
+}
+
+.creator-role {
+  font-size: 9px;
+  color: #444;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.creator-link {
+  font-size: 9px;
+  color: #555;
+  text-decoration: none;
+  letter-spacing: 1px;
+  margin-top: 2px;
+  transition: color 0.2s;
+}
+
+.creator-link:hover {
+  color: #f5f0e8;
+}
+
+/* ── FOOTER ── */
+.footer {
+  text-align: center;
+  font-size: 9px;
+  color: #2a2a2a;
+  letter-spacing: 2px;
+  padding-top: 1rem;
+  border-top: 1px solid #222;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 480px) {
+  .ascii-ticket {
+    font-size: 8.5px;
+  }
+}
+
+/*TEXTURE*/
+.texture {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image: url('bg-dot.png');
+  background-repeat: repeat;
+  background-size: 25px 25px;
+  opacity: 0.1;
+  transition: filter 0.45s var(--ease);
+}
+</style>
+<link rel="shortcut icon" type="image/png" href="sun.ico"/>
+</head>
+<body>
+  
+<div class="texture"></div>
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <div class="header">
+    <span class="logo">G.U.S.</span>
+    <span class="subtitle">Générateur d'Utilité Sensible</span>
+    <a href="index.html" class="back-btn">← retour à la machine</a>
+  </div>
+
+  <!-- 01 — L'HISTOIRE -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-num">01</span>
+      l'histoire
+    </div>
+    <div class="section-body">
+      <p>Tout a commencé avec un tweet. Un père de famille imprimait chaque matin un petit ticket thermique pour ses deux filles avant de partir au travail : la météo du jour, un message, quelques rappels. Il était déjà parti quand elles se levaient. Le ticket était là à sa place.</p>
+      <p><em>J'ai trouvé ça très touchant.</em></p>
+      <p>J'ai eu envie de faire pareil, à ma façon. Sans imprimante thermique, mais avec l'idée d'un petit objet quotidien qui arrive le matin et qui dit : quelqu'un a pensé à toi.</p>
+      <p>Je voulais aussi retrouver quelque chose de l'enfance, je crois : <em>les mini-jeux et les petites histoires au dos des boîtes de céréales.</em> Ce moment où on lisait n'importe quoi plutôt que rien, juste parce que c'était là et que c'était le matin.</p>
+      <p>GUS est né de ça. Un ticket thermique numérique, envoyé par mail à 8h30, avec un peu de météo, un puzzle, un mot du jour, une blague, et quelques surprises cachées.</p>
+    </div>
+  </div>
+
+  <!-- 02 — LE TICKET -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-num">02</span>
+      le ticket
+    </div>
+    <div class="section-body">
+      <p>Chaque matin, GUS génère un ticket différent. Il contient :</p>
+    </div>
+    <div class="ascii-ticket">◈ G.U.S. — TICKET DU JOUR ◈
+────────────────────────
+01  message du jour
+02  météo — montpellier
+03  mot du jour
+04  blague / devinette
+05  puzzle (7 types en rotation)
+06  petite découverte
+07  objet collectionnable ✦
+08  citation (certains jours)
+    éphéméride (dates spéciales)
+────────────────────────
+conserve ce ticket.
+il ne passera qu'une fois.</div>
+    <div class="section-body">
+      <p>Certains jours, le ticket change d'aspect entièrement. Ce sont des éditions spéciales pour les solstices, les fêtes, les coups de vent, ou une date qu'on ne dit pas.</p>
+    </div>
+  </div>
+
+  <!-- 03 — COMMENT ÇA MARCHE -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-num">03</span>
+      comment ça marche
+    </div>
+    <div class="flow">
+      <div class="flow-step">
+        <span class="flow-step-num">1</span>
+        <span class="flow-step-text"><strong>8h30</strong> — cron-job.org déclenche le workflow GitHub Actions</span>
+      </div>
+      <div class="flow-step">
+        <span class="flow-step-num">2</span>
+        <span class="flow-step-text"><strong>Météo</strong> — Open-Meteo fournit les données en temps réel pour Montpellier</span>
+      </div>
+      <div class="flow-step">
+        <span class="flow-step-num">3</span>
+        <span class="flow-step-text"><strong>Génération</strong> — Puppeteer ouvre le ticket HTML et en fait un screenshot PNG</span>
+      </div>
+      <div class="flow-step">
+        <span class="flow-step-num">4</span>
+        <span class="flow-step-text"><strong>Envoi</strong> — Nodemailer envoie le PNG par Gmail</span>
+      </div>
+      <div class="flow-step">
+        <span class="flow-step-num">5</span>
+        <span class="flow-step-text"><strong>Archive</strong> — le ticket est poussé dans le repo et visible sur cette page</span>
+      </div>
+    </div>
+    <div class="section-body">
+      <p>Entièrement gratuit. Aucun serveur. GitHub fait tourner ça en autonomie, sans que mon ordinateur soit allumé.</p>
+    </div>
+  </div>
+
+  <!-- 04 — EXPLORER -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-num">04</span>
+      explorer gus
+    </div>
+    <div class="links">
+      <a href="index.html" class="link-item">
+        <span class="link-label">◈ LA MACHINE</span>
+        <span class="link-desc">générer un ticket maintenant</span>
+      </a>
+      <a href="archive.html" class="link-item">
+        <span class="link-label">◈ ARCHIVE</span>
+        <span class="link-desc">tous les tickets depuis le début</span>
+      </a>
+      <div class="link-item disabled">
+        <span class="link-label">◈ S'INSCRIRE</span>
+        <span class="link-desc">recevoir gus par mail — à venir</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 — LE CRÉATEUR -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-num">05</span>
+      le créateur
+    </div>
+    <a href="https://jordanmrt.github.io/" target="_blank" style="text-decoration:none">
+      <div class="creator">
+        <div class="creator-ascii">JordanMrt</div>
+        <div class="creator-info">
+          <span class="creator-name">Jordan Mrt</span>
+          <span class="creator-role">designer · développeur</span>
+          <span class="creator-link">jordanmrt.github.io →</span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    G.U.S. — GÉNÉRATEUR D'UTILITÉ SENSIBLE<br>
+    MONTPELLIER · DEPUIS 2026
+  </div>
+
+</div>
+
+</body>
+</html>
