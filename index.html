@@ -2508,151 +2508,230 @@ function genPathfinding(seed=42) {
 //MARDI - MINICROSWWORD
 function genMiniCrossword(seed=42) {
 
-  const GRILLES = [
+  // Anciennes grilles 1H+1V conservées
+  const GRILLES_SIMPLES = [
     {
       h: { mot:'GARRIGUE', def:'Végétation odorante des collines calcaires' },
       v: { mot:'ROSÉ', def:'Vin estival du Languedoc' },
       croise_h: 2, croise_v: 0,
-      // GARRIGUE[2]=R, ROSÉ[0]=R ✓
     },
     {
       h: { mot:'MISTRAL', def:'Vent violent du couloir rhodanien' },
       v: { mot:'SOIR', def:'Fin de la journée' },
       croise_h: 2, croise_v: 0,
-      // MISTRAL[2]=S, SOIR[0]=S ✓
     },
     {
       h: { mot:'CIGALE', def:'Insecte chanteur de l\'été méditerranéen' },
       v: { mot:'GALET', def:'Pierre polie par la mer' },
       croise_h: 2, croise_v: 0,
-      // CIGALE[2]=G, GALET[0]=G ✓
     },
     {
       h: { mot:'LAVANDE', def:'Plante violette odorante de garrigue' },
       v: { mot:'ANIS', def:'Plante de l\'apéritif du Midi' },
       croise_h: 1, croise_v: 0,
-      // LAVANDE[1]=A, ANIS[0]=A ✓
     },
     {
       h: { mot:'PLATANE', def:'Arbre emblématique des places du Midi' },
       v: { mot:'LUNE', def:'Satellite naturel de la Terre' },
       croise_h: 1, croise_v: 0,
-      // PLATANE[1]=L, LUNE[0]=L ✓
     },
     {
       h: { mot:'CALANQUE', def:'Crique rocheuse méditerranéenne' },
       v: { mot:'ALOE', def:'Plante grasse aux vertus médicinales' },
       croise_h: 1, croise_v: 0,
-      // CALANQUE[1]=A, ALOE[0]=A ✓
     },
     {
       h: { mot:'FLAMANT', def:'Oiseau rose des étangs de Camargue' },
       v: { mot:'LAME', def:'Fine tranche, ou vague puissante' },
       croise_h: 1, croise_v: 0,
-      // FLAMANT[1]=L, LAME[0]=L ✓
     },
     {
       h: { mot:'SOLSTICE', def:'Jour le plus long ou le plus court de l\'année' },
       v: { mot:'OLIVE', def:'Fruit de l\'olivier méditerranéen' },
       croise_h: 1, croise_v: 0,
-      // SOLSTICE[1]=O, OLIVE[0]=O ✓
     },
     {
       h: { mot:'VENDANGE', def:'Récolte du raisin en automne' },
       v: { mot:'EDEN', def:'Jardin paradisiaque, lieu de bonheur' },
       croise_h: 1, croise_v: 0,
-      // VENDANGE[1]=E, EDEN[0]=E ✓
     },
     {
       h: { mot:'CABANON', def:'Petite maison de campagne méridionale' },
       v: { mot:'AUBE', def:'Lumière du matin avant le lever du soleil' },
       croise_h: 1, croise_v: 0,
-      // CABANON[1]=A, AUBE[0]=A ✓
     },
     {
       h: { mot:'TRAMONTANE', def:'Vent froid venu des Pyrénées' },
       v: { mot:'RONCE', def:'Arbuste épineux des sous-bois' },
       croise_h: 1, croise_v: 0,
-      // TRAMONTANE[1]=R, RONCE[0]=R ✓
     },
     {
       h: { mot:'PEYROU', def:'Promenade royale de Montpellier' },
       v: { mot:'EPEE', def:'Arme blanche à longue lame' },
       croise_h: 1, croise_v: 0,
-      // PEYROU[1]=E, EPEE[0]=E ✓
     },
   ];
 
-  const g = GRILLES[seed % GRILLES.length];
+  // Nouvelles grilles 2H+2V
+  const GRILLES_DOUBLES = [
+  // ── A ── SOLEIL / CIGALE
+  {
+    h1: { mot:'SOLEIL',  def:'Astre du jour' },
+    h2: { mot:'CIGALE',  def:'Insecte chanteur de l\'été méditerranéen' },
+    v1: { mot:'SAC', def:'Contenant en tissu ou en cuir', col:0 },
+    v2: { mot:'LUE', def:'Participe passé de lire', col:5 },
+    // V1: S(H1[0])→A→C(H2[0]) ✓  V2: L(H1[5])→U→E(H2[5]) ✓
+  },
+  // ── B ── FLAMANT / CABANON
+  {
+    h1: { mot:'FLAMANT', def:'Oiseau rose des étangs de Camargue' },
+    h2: { mot:'CABANON', def:'Petite maison de campagne méridionale' },
+    v1: { mot:'LIA', def:'Passé du verbe lier', col:1 },
+    v2: { mot:'TON', def:'Manière de parler, nuance de couleur', col:6 },
+    // V1: L(H1[1])→I→A(H2[1]) ✓  V2: T(H1[6])→O→N(H2[6]) ✓
+  },
+  // ── C ── MISTRAL / LAVANDE
+  {
+    h1: { mot:'MISTRAL', def:'Vent violent du couloir rhodanien' },
+    h2: { mot:'LAVANDE', def:'Plante violette odorante de garrigue' },
+    v1: { mot:'MAL', def:'Ce qui cause de la souffrance', col:0 },
+    v2: { mot:'LUE', def:'Participe passé de lire', col:6 },
+    // V1: M(H1[0])→A→L(H2[0]) ✓  V2: L(H1[6])→U→E(H2[6]) ✓
+  },
+  // ── D ── PLATANE / FENOUIL
+  {
+    h1: { mot:'PLATANE', def:'Arbre emblématique des places du Midi' },
+    h2: { mot:'FENOUIL', def:'Plante anisée des bords de chemins' },
+    v1: { mot:'PAF', def:'Bruit d\'une claque, ou légèrement ivre', col:0 },
+    v2: { mot:'NUI', def:'Participe passé de nuire', col:5 },
+    // V1: P(H1[0])→A→F(H2[0]) ✓  V2: N(H1[5])→U→I(H2[5]) ✓
+  },
+  // ── E ── CIGALE / PASTIS
+  {
+    h1: { mot:'CIGALE', def:'Insecte chanteur de l\'été méditerranéen' },
+    h2: { mot:'PASTIS', def:'Apéritif anisé emblématique du Midi' },
+    v1: { mot:'IRA', def:'Futur du verbe aller', col:1 },
+    v2: { mot:'LUI', def:'Pronom personnel masculin', col:4 },
+    // V1: I(H1[1])→R→A(H2[1]) ✓  V2: L(H1[4])→U→I(H2[4]) ✓
+  },
+  // ── F ── OLIVIER / FENOUIL
+  {
+    h1: { mot:'OLIVIER', def:'Arbre millénaire du bassin méditerranéen' },
+    h2: { mot:'FENOUIL', def:'Plante anisée des bords de chemins' },
+    v1: { mot:'LIE', def:'Dépôt au fond d\'une bouteille, ou passé de lier', col:1 },
+    v2: { mot:'EPI', def:'Extrémité d\'une tige de blé ou de maïs', col:5 },
+    // V1: L(H1[1])→I→E(H2[1]) ✓  V2: E(H1[5])→P→I(H2[5]) ✓
+  },
+  // ── G ── ROMARIN / PALMIER
+  {
+    h1: { mot:'ROMARIN', def:'Herbe aromatique emblématique de la garrigue' },
+    h2: { mot:'PALMIER', def:'Arbre des régions chaudes, emblème du Sud' },
+    v1: { mot:'OSA', def:'Passé du verbe oser', col:1 },
+    v2: { mot:'ILE', def:'Terre entourée d\'eau de tous côtés', col:5 },
+    // V1: O(H1[1])→S→A(H2[1]) ✓  V2: I(H1[5])→L→E(H2[5]) ✓
+  },
+  // ── H ── SOLSTICE / VENDANGE
+  {
+    h1: { mot:'SOLSTICE', def:'Jour le plus long ou le plus court de l\'année' },
+    h2: { mot:'VENDANGE', def:'Récolte du raisin en automne' },
+    v1: { mot:'ODE', def:'Poème lyrique en strophes', col:1 },
+    v2: { mot:'ION', def:'Atome ou molécule portant une charge électrique', col:5 },
+    // V1: O(H1[1])→D→E(H2[1]) ✓  V2: I(H1[5])→O→N(H2[5]) ✓
+  },
+  ];
 
   const cs = 18;
-  const hLen = g.h.mot.length;
-  const vLen = g.v.mot.length;
-  const ci = g.croise_h; // colonne du croisement (position dans mot H)
-  const cj = g.croise_v; // ligne du croisement (position dans mot V)
+  const totalGrilles = GRILLES_SIMPLES.length + GRILLES_DOUBLES.length;
+  const idx = seed % totalGrilles;
 
-  // Dimensions de la grille
+  // ── Grille simple (1H + 1V) ──
+  if (idx < GRILLES_SIMPLES.length) {
+    const g = GRILLES_SIMPLES[idx];
+    const hLen = g.h.mot.length;
+    const vLen = g.v.mot.length;
+    const ci = g.croise_h;
+    const cj = g.croise_v;
+    const gridW = hLen;
+    const gridH = vLen;
+
+    const grid = Array(gridH).fill(null).map(() => Array(gridW).fill(null));
+    const sol  = Array(gridH).fill(null).map(() => Array(gridW).fill(null));
+
+    for (let x = 0; x < hLen; x++) { grid[cj][x] = ''; sol[cj][x] = g.h.mot[x]; }
+    for (let y = 0; y < vLen; y++) { grid[y][ci] = ''; sol[y][ci] = g.v.mot[y]; }
+
+    const svgW = gridW * cs + 1;
+    const svgH = gridH * cs + 1;
+    let svgContent = '';
+
+    for (let row = 0; row < gridH; row++) {
+      for (let col = 0; col < gridW; col++) {
+        if (grid[row][col] === null) continue;
+        const x = col * cs, y = row * cs;
+        svgContent += `<rect x="${x+.5}" y="${y+.5}" width="${cs-1}" height="${cs-1}" fill="#f9f5ed" stroke="#999" stroke-width=".5" rx="1"/>`;
+        if (row === cj && col === 0) svgContent += `<text x="${x+2}" y="${y+8}" font-size="6" fill="#888" font-family="monospace">1</text>`;
+        if (row === 0 && col === ci && !(cj === 0 && ci === 0)) svgContent += `<text x="${x+2}" y="${y+8}" font-size="6" fill="#888" font-family="monospace">2</text>`;
+        if (sol[row][col]) svgContent += `<text x="${x+cs/2}" y="${y+cs-4}" font-size="10" fill="#2a2a2a" font-family="monospace" text-anchor="middle" class="gus-cross-letter" style="display:none">${sol[row][col]}</text>`;
+      }
+    }
+
+    const svg = `<svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:4px auto;"><rect width="${svgW}" height="${svgH}" fill="#2a2a2a" rx="2"/>${svgContent}</svg>`;
+    const defs = `<div style="font-size:9px;color:#666;margin-top:5px;line-height:1.8;"><div><strong>1→</strong> ${g.h.def} (${hLen} lettres)</div><div><strong>2↓</strong> ${g.v.def} (${vLen} lettres)</div></div>`;
+    const solBtn = `<div class="t-blague-rep" style="margin-top:6px" onclick="toggleSolutionCross(this)" data-open="0">[ révéler la solution ]</div>`;
+    return `<div class="t-puzzle-title">Mots croisés — trouve les deux mots</div>${svg}${defs}${solBtn}`;
+  }
+
+  // ── Grille double (2H + 2V) ──
+  const g = GRILLES_DOUBLES[idx - GRILLES_SIMPLES.length];
+  const hLen = g.h1.mot.length; // h1 et h2 ont la même longueur
+  const vLen = 3; // hauteur fixe : ligne 0 = H1, ligne 1 = milieu V, ligne 2 = H2
+
   const gridW = hLen;
   const gridH = vLen;
 
-  // Grille de cases
   const grid = Array(gridH).fill(null).map(() => Array(gridW).fill(null));
   const sol  = Array(gridH).fill(null).map(() => Array(gridW).fill(null));
 
-  // Place le mot H à la ligne cj
-  for (let x = 0; x < hLen; x++) {
-    grid[cj][x] = '';
-    sol[cj][x] = g.h.mot[x];
-  }
-
-  // Place le mot V à la colonne ci
-  for (let y = 0; y < vLen; y++) {
-    grid[y][ci] = '';
-    sol[y][ci] = g.v.mot[y];
-  }
+  // Place H1 sur ligne 0
+  for (let x = 0; x < hLen; x++) { grid[0][x] = ''; sol[0][x] = g.h1.mot[x]; }
+  // Place H2 sur ligne 2
+  for (let x = 0; x < hLen; x++) { grid[2][x] = ''; sol[2][x] = g.h2.mot[x]; }
+  // Place V1 sur col g.v1.col, lignes 0-2
+  for (let y = 0; y < 3; y++) { grid[y][g.v1.col] = ''; sol[y][g.v1.col] = g.v1.mot[y]; }
+  // Place V2 sur col g.v2.col, lignes 0-2
+  for (let y = 0; y < 3; y++) { grid[y][g.v2.col] = ''; sol[y][g.v2.col] = g.v2.mot[y]; }
 
   const svgW = gridW * cs + 1;
   const svgH = gridH * cs + 1;
-
   let svgContent = '';
 
   for (let row = 0; row < gridH; row++) {
     for (let col = 0; col < gridW; col++) {
       if (grid[row][col] === null) continue;
-      const x = col * cs;
-      const y = row * cs;
-
+      const x = col * cs, y = row * cs;
       svgContent += `<rect x="${x+.5}" y="${y+.5}" width="${cs-1}" height="${cs-1}" fill="#f9f5ed" stroke="#999" stroke-width=".5" rx="1"/>`;
 
-      // Numéro 1 : début du mot H
-      if (row === cj && col === 0) {
-        svgContent += `<text x="${x+2}" y="${y+8}" font-size="6" fill="#888" font-family="monospace">1</text>`;
-      }
-      // Numéro 2 : début du mot V (si différent du début du mot H)
-      if (row === 0 && col === ci && !(cj === 0 && ci === 0)) {
-        svgContent += `<text x="${x+2}" y="${y+8}" font-size="6" fill="#888" font-family="monospace">2</text>`;
-      }
+      // Numéros
+      if (row === 0 && col === 0) svgContent += `<text x="${x+2}" y="${y+8}" font-size="6" fill="#888" font-family="monospace">1</text>`;
+      if (row === 2 && col === 0) svgContent += `<text x="${x+2}" y="${y+8}" font-size="6" fill="#888" font-family="monospace">2</text>`;
+      if (row === 0 && col === g.v1.col && g.v1.col !== 0) svgContent += `<text x="${x+2}" y="${y+8}" font-size="6" fill="#888" font-family="monospace">3</text>`;
+      if (row === 0 && col === g.v2.col && g.v2.col !== 0) svgContent += `<text x="${x+2}" y="${y+8}" font-size="6" fill="#888" font-family="monospace">4</text>`;
 
-      // Lettre solution cachée
-      if (sol[row][col]) {
-        svgContent += `<text x="${x+cs/2}" y="${y+cs-4}" font-size="10" fill="#2a2a2a" font-family="monospace" text-anchor="middle" class="gus-cross-letter" style="display:none">${sol[row][col]}</text>`;
-      }
+      if (sol[row][col]) svgContent += `<text x="${x+cs/2}" y="${y+cs-4}" font-size="10" fill="#2a2a2a" font-family="monospace" text-anchor="middle" class="gus-cross-letter" style="display:none">${sol[row][col]}</text>`;
     }
   }
 
-  const svg = `<svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:4px auto;">
-    <rect width="${svgW}" height="${svgH}" fill="#2a2a2a" rx="2"/>
-    ${svgContent}
-  </svg>`;
+  const svg = `<svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:4px auto;"><rect width="${svgW}" height="${svgH}" fill="#2a2a2a" rx="2"/>${svgContent}</svg>`;
 
   const defs = `<div style="font-size:9px;color:#666;margin-top:5px;line-height:1.8;">
-    <div><strong>1→</strong> ${g.h.def} (${hLen} lettres)</div>
-    <div><strong>2↓</strong> ${g.v.def} (${vLen} lettres)</div>
+    <div><strong>1→</strong> ${g.h1.def} (${g.h1.mot.length} lettres)</div>
+    <div><strong>2→</strong> ${g.h2.def} (${g.h2.mot.length} lettres)</div>
+    <div><strong>3↓</strong> ${g.v1.def} (3 lettres)</div>
+    <div><strong>4↓</strong> ${g.v2.def} (3 lettres)</div>
   </div>`;
 
   const solBtn = `<div class="t-blague-rep" style="margin-top:6px" onclick="toggleSolutionCross(this)" data-open="0">[ révéler la solution ]</div>`;
-
-  return `<div class="t-puzzle-title">Mots croisés — trouve les deux mots</div>${svg}${defs}${solBtn}`;
+  return `<div class="t-puzzle-title">Mots croisés — trouve les quatre mots</div>${svg}${defs}${solBtn}`;
 }
 
 function toggleSolutionCross(btn) {
