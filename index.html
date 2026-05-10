@@ -2870,7 +2870,7 @@ async function generateTicket() {
   status.textContent='récupération météo Montpellier...';
   const w=await fetchWeather();
 
-  const editionSpeciale = getEditionSpeciale(now, w.code);
+  const editionSpeciale = getEditionSpeciale(now, w.code, w.temp);
 if (editionSpeciale) {
   document.getElementById('ticket').innerHTML =
     renderEditionSpeciale(editionSpeciale, w, now);
@@ -2912,6 +2912,14 @@ if (editionSpeciale) {
     <div class="t-section-title"><span class="t-section-num">01</span> message du jour</div>
     <div class="t-message">${msg}</div>
   </div>`;
+  
+  const marche = getMarcheArceaux(now);
+  if (marche) {
+     html += `<div style="font-size:9px;color:#888;font-style:italic;
+                          margin-top:5px;letter-spacing:0.5px;">
+               ✦ ${marche}
+             </div>`;
+   }
 
   //02 INTENTION DE LA SEMAINE (LUNDI)
   if (now.getDay() === 1) {
@@ -3042,7 +3050,18 @@ if (easterEgg) {
 // Retourne un objet édition ou null si jour ordinaire
 // ───────────────────────────────────────────────────
 
-function getEditionSpeciale(date, weatherCode) {
+// ── 4. MENTION MARCHÉ DES ARCEAUX ──
+
+function getMarcheArceaux(date) {
+  const wd = date.getDay();
+  // Mardi = 2, Samedi = 6
+  if (wd !== 2 && wd !== 6) return null;
+  return 'Marché des Arceaux ce matin - sous les arches, depuis 1890.';
+}
+
+//TEMPERATURE
+
+function getEditionSpeciale(date, weatherCode, temp=20) {
   const m = date.getMonth() + 1;
   const j = date.getDate();
   const wd = date.getDay();
@@ -3053,11 +3072,13 @@ function getEditionSpeciale(date, weatherCode) {
   // ── DATES FIXES ──
   if (m === 1  && j === 1)  return EDITIONS.nouvelAn;
   if (m === 3  && j === 20) return EDITIONS.equinoxePrintemps;
+  if (m === 4  && j === 23) return EDITIONS.livres;
   if (m === 5  && j === 1)  return EDITIONS.feteTravail;
   if (m === 6  && j === 21) return EDITIONS.solsticeEte;
   if (m === 6  && j === 24) return EDITIONS.saintJean;
   if (m === 9  && j === 22) return EDITIONS.equinoxeAutomne;
   if (m === 10 && j === 3)  return EDITIONS.anniversaireMontpellier;
+  if (m === 10 && j === 31) return EDITIONS.halloween;
   if (m === 11 && j === 1)  return EDITIONS.toussaint;
   if (m === 12 && j === 21) return EDITIONS.solsticeHiver;
   if (m === 12 && j === 25) return EDITIONS.noel;
@@ -3066,7 +3087,20 @@ function getEditionSpeciale(date, weatherCode) {
   // ── VENDANGES (1ère semaine de septembre) ──
   if (m === 9 && j <= 7)    return EDITIONS.vendanges;
 
-  // ── TICKET RARE (1 chance sur 30, basé sur la date) ──
+  // ── DÉTECTION TEMPÉRATURE ──
+  // Première chaleur estivale (1-7 juin, temp > 27°C)
+  if (m === 6 && j <= 7 && temp > 27) return EDITIONS.eteArrive;
+
+  // Première cigale (juin-juillet, temp > 27°C, 1 chance sur 3)
+  const seedTemp = j * 7 + m * 13;
+  if ((m === 6 || m === 7) && temp > 27 && seedTemp % 3 === 0) {
+    return EDITIONS.premiereCigale;
+  }
+
+  // Premier froid (1-7 novembre, temp < 8°C)
+  if (m === 11 && j <= 7 && temp < 8) return EDITIONS.froidArrive;
+
+  // ── TICKET RARE (1 chance sur 30) ──
   const seed = j * 31 + m * 7;
   if (seed % 30 === 0)      return EDITIONS.ticketRare;
 
@@ -3192,30 +3226,6 @@ Profites-en vraiment.`,
     asciiLabel: 'MUGUET DU 1er MAI',
     asciiRarity: '✦✦ édition annuelle',
     messageSecret: 'le travail peut attendre. le muguet, non.',
-  },
-
-  // ══════════════════════════════════════
-  // SOLSTICE D'ÉTÉ — 21 juin
-  // ══════════════════════════════════════
-  solsticeEte: {
-    id: 'solsticeEte',
-    badge: 'ÉDITION SOLSTICE D\'ÉTÉ',
-    message: `C'est le jour le plus long de l'année.
-Le soleil ne se couchera que très tard ce soir.
-
-Profite de chaque heure de lumière.
-Elles valent un peu plus aujourd'hui.`,
-    ascii: `
-  \\  \\  |  /  /
-   \\  \\ | /  /
------..[☀]..-----
-   /  / | \\  \\
-  /  /  |  \\  \\
-  ~ ~ ~ ~ ~ ~ ~
-  SOLSTICE D'ÉTÉ`,
-    asciiLabel: '21 JUIN — JOUR LE PLUS LONG',
-    asciiRarity: '✦✦ édition saisonnière',
-    messageSecret: 'après aujourd\'hui, les nuits reprennent du terrain.',
   },
 
   // ══════════════════════════════════════
@@ -3476,6 +3486,150 @@ Reste au chaud et regarde.`,
     asciiLabel: 'ORAGE CÉVENOL',
     asciiRarity: '✦✦✦ rare · météo extrême',
     messageSecret: 'les orages du Languedoc n\'ont pas d\'équivalent.',
+  },
+    livres: {
+    id: 'livres',
+    badge: 'JOURNÉE MONDIALE DU LIVRE',
+    message: `Aujourd'hui, le monde célèbre les livres.
+Et les livres célèbrent le monde en retour.
+
+Ouvre quelque chose. N'importe quoi.
+Une page suffit pour changer une journée.`,
+    ascii: `
+  .-----------.
+  |           |
+  |   lire    |
+  |   c'est   |
+  | voyager   |
+  |  sans     |
+  | bouger    |
+  |___________|
+  /___________\\`,
+    asciiLabel: '23 AVRIL — JOUR DU LIVRE',
+    asciiRarity: '✦✦ édition culturelle',
+    messageSecret: 'le livre que tu n\'as pas encore ouvert t\'attend.',
+  },
+
+  halloween: {
+    id: 'halloween',
+    badge: 'ÉDITION HALLOWEEN',
+    message: `Ce soir, les enfants frappent aux portes.
+Les adultes font semblant d'avoir peur.
+
+C'est une fête étrange et joyeuse,
+importée et adoptée, comme beaucoup de bonnes choses.
+
+Garde des bonbons. Juste au cas où.`,
+    ascii: `
+     .-.
+    (o o)
+    | O |
+    |   |
+    '---'
+   /|   |\\
+  ( |   | )
+   \\|___|/
+   HALLOWEEN`,
+    asciiLabel: '31 OCTOBRE',
+    asciiRarity: '✦✦ édition annuelle',
+    messageSecret: 'les fantômes n\'existent pas. ou presque.',
+  },
+
+  eteArrive: {
+    id: 'eteArrive',
+    badge: 'ÉDITION PREMIER ÉTÉ',
+    message: `La chaleur est là pour de bon.
+L'été méditerranéen commence vraiment aujourd'hui.
+
+Adapte ton rythme dès maintenant —
+l'ombre, la sieste, les soirées tardives.
+C'est un art de vivre, pas une capitulation.`,
+    ascii: `
+    \\  |  /
+  .-'--+--'-.
+ /   soleil  \\
+|     ☀      |
+ \\   chaud  /
+  '--.+.--'
+    /  |  \\
+  ~ ~ ~ ~ ~
+  27°C ET +`,
+    asciiLabel: 'PREMIER JOUR DE CHALEUR',
+    asciiRarity: '✦✦ édition saisonnière',
+    messageSecret: 'range les pulls. pour de vrai cette fois.',
+  },
+
+  froidArrive: {
+    id: 'froidArrive',
+    badge: 'ÉDITION PREMIER FROID',
+    message: `Le froid est arrivé cette nuit.
+Pas le grand froid — juste le premier,
+celui qui rappelle que l'année tourne.
+
+Ressors le plaid. Fais quelque chose de chaud.
+L'hiver méditerranéen est doux,
+mais il mérite qu'on l'accueille bien.`,
+    ascii: `
+  * . * . * . *
+  .  premier  .
+  *   froid   *
+  .   de la   .
+  *  saison   *
+  . * . * . * .
+     brrr...`,
+    asciiLabel: 'PREMIER JOUR DE FROID',
+    asciiRarity: '✦✦ édition saisonnière',
+    messageSecret: 'les cigales se taisent. jusqu\'à l\'année prochaine.',
+  },
+
+  premiereCigale: {
+    id: 'premiereCigale',
+    badge: 'ÉDITION PREMIÈRE CIGALE',
+    message: `Tu l'as entendue ?
+La première cigale de l'année.
+
+Elle ne sait pas que c'est la première.
+Elle chante juste parce que c'est l'heure.
+Il y a une leçon là-dedans.`,
+    ascii: `
+      /\\  /\\
+     /  \\/  \\
+    | o    o |
+    |  \\__/  |
+   /|        |\\
+  / |________|\\
+     | |||| |
+     |======|
+     '------'
+  PREMIÈRE CIGALE`,
+    asciiLabel: 'PREMIÈRE CIGALE DE L\'ÉTÉ',
+    asciiRarity: '✦✦✦ rare · juin/juillet',
+    messageSecret: 'l\'été a officiellement commencé.',
+  },
+
+  // Solstice d'été enrichi avec Fête de la Musique
+  // → Remplace l'édition solsticeEte existante par celle-ci :
+  solsticeEte: {
+    id: 'solsticeEte',
+    badge: 'SOLSTICE D\'ÉTÉ ✦ FÊTE DE LA MUSIQUE',
+    message: `C'est le jour le plus long de l'année.
+Et ce soir, dans toute la France,
+des musiciens jouent dans les rues jusqu'à l'aube.
+
+Profite de chaque heure de lumière.
+Écoute quelque chose ce soir.
+Dehors si possible.`,
+    ascii: `
+  \\  \\  |  /  /
+   \\  \\ | /  /
+-----..[☀]..-----
+   /  / | \\  \\
+  /  /  |  \\  \\
+  ♪  ♫  ♪  ♫  ♪
+  FÊTE DE LA MUSIQUE`,
+    asciiLabel: '21 JUIN — SOLSTICE & MUSIQUE',
+    asciiRarity: '✦✦ édition saisonnière',
+    messageSecret: 'le son voyage plus loin la nuit. écoute bien.',
   },
 };
 
@@ -3988,6 +4142,8 @@ function getMeteoPoetique(weatherCode, date, wind=0) {
   const phrases = METEO_POETIQUE[categorie];
   return phrases[seed % phrases.length];
 }
+
+
 </script>
 </body>
 </html>
