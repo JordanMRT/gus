@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>G.U.S - Générateur d'Utilité Sensible</title>
+  <script src="sudoku.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
@@ -514,7 +515,7 @@ messages: [
 ],
 
 // ═══════════════════════════════════════════════════
-// 366 MOTS DU JOUR
+// 210 MOTS DU JOUR
 // ═══════════════════════════════════════════════════
 mots: [
 {mot:'pétrichor',def:'n.m. — Odeur de la terre mouillée après la pluie.',ex:'Le pétrichor de juillet remontait les rues comme une vieille promesse.'},
@@ -665,6 +666,68 @@ mots: [
 {mot:'palombe',def:'n.f. — Pigeon ramier, oiseau des espaces ouverts du sud.',ex:'Une palombe s\'était posée sur le rebord de la fenêtre et regardait.',},
 {mot:'vivace',def:'adj. — Qui dure longtemps, vigoureux, plein de vitalité.',ex:'Sa curiosité vivace pour les autres ne s\'était jamais émoussée.'},
 {mot:'tiédeur',def:'n.f. — Chaleur douce et modérée, entre chaud et froid.',ex:'La tiédeur de cette nuit de juin était parfaite pour dormir fenêtre ouverte.'},
+{mot:'hallali',def:'n.m. — Sonnerie de cor qui annonce que la bête est aux abois.',ex:'La vie ressemblait parfois à un hallali dont personne ne sonnait la fin.'},
+{mot:'bruire',def:'v. — Produire un bruit sourd et continu, comme le vent ou la mer.',ex:'Le vent bruissait dans les pins comme une conversation qu\'on n\'entend qu\'à moitié.'},
+{mot:'alacrité',def:'n.f. — Vivacité joyeuse, entrain spontané et léger.',ex:'Elle répondait avec une alacrité qui désarmait même les plus méfiants.'},
+{mot:'délitescence',def:'n.f. — Disparition progressive et silencieuse de quelque chose.',ex:'La délitescence de ce souvenir le laissait étrangement soulagé.'},
+{mot:'opalescent',def:'adj. — Qui a les reflets nacrés et changeants de l\'opale.',ex:'Le ciel du matin était opalescent, entre rose et gris perle.'},
+{mot:'grisaille',def:'n.f. — Temps couvert et sans éclat, ou monotonie douce.',ex:'La grisaille de novembre avait sa propre forme de tendresse.'},
+{mot:'affleurer',def:'v. — Apparaître à la surface, se manifester à peine.',ex:'Une émotion affleurait dans sa voix qu\'il ne cherchait pas à cacher.'},
+{mot:'incandescent',def:'adj. — Rendu brillant par une chaleur intense, ou d\'une intensité vive.',ex:'Le soleil incandescent de juillet rendait les pierres trop chaudes pour y poser la main.'},
+{mot:'tumulte',def:'n.m. — Agitation bruyante et désordonnée, mouvement confus.',ex:'Le tumulte du marché s\'apaisait d\'un coup à midi, comme sur un signal.'},
+{mot:'serein',def:'adj. — Calme et clair, sans trouble ni nuage.',ex:'Le ciel serein du soir donnait l\'impression que tout s\'arrangerait.'},
+{mot:'vespéral',def:'adj. — Relatif au soir, qui appartient à l\'heure du crépuscule.',ex:'La lumière vespérale dorait les tuiles et les façades sans effort.'},
+{mot:'pléiade',def:'n.f. — Groupe de personnes ou de choses remarquables réunies.',ex:'Une pléiade de figuiers sauvages bordait le chemin vers la garrigue.'},
+{mot:'méandre',def:'n.m. — Sinuosité d\'un cours d\'eau ou d\'une pensée.',ex:'Les méandres de l\'Hérault dessinaient une carte que seul le ciel pouvait lire.'},
+{mot:'épopée',def:'n.f. — Long récit d\'aventures héroïques, réelles ou fictives.',ex:'Cette randonnée de trois jours était devenue une épopée dans nos mémoires.'},
+{mot:'lacis',def:'n.m. — Réseau entrecroisé de fils, de ruelles ou de chemins.',ex:'Le lacis des ruelles de l\'Écusson se découvrait à pied, jamais en voiture.'},
+{mot:'somnambule',def:'n. — Personne qui marche en dormant ; par ext. absent du monde.',ex:'Il traversait les matinées comme un somnambule jusqu\'à son premier café.'},
+{mot:'dilection',def:'n.f. — Affection tendre et choisie, amour de prédilection.',ex:'Il avait pour ce quartier une dilection qu\'il ne cherchait pas à expliquer.'},
+{mot:'fébrilité',def:'n.f. — État d\'agitation nerveuse mêlée d\'impatience ou d\'anxiété.',ex:'La fébrilité du matin de départ avait quelque chose d\'enfantin et de beau.'},
+{mot:'clémence',def:'n.f. — Douceur indulgente, disposition à pardonner facilement.',ex:'L\'automne méditerranéen avait une clémence que les autres régions lui enviaient.'},
+{mot:'réverbère',def:'n.m. — Lampadaire de rue, mais aussi ce qui réfléchit la lumière.',ex:'Les réverbères de la place s\'allumaient avant même que le soleil ne soit couché.'},
+{mot:'fugitif',def:'adj. — Qui passe très vite, difficile à saisir ou à retenir.',ex:'Un bonheur fugitif traversa la pièce comme un courant d\'air chaud.'},
+{mot:'insondable',def:'adj. — Qu\'on ne peut pas sonder, dont on ne peut atteindre le fond.',ex:'Le silence entre eux était insondable, mais pas inconfortable.'},
+{mot:'déclin',def:'n.m. — Mouvement vers la fin, affaiblissement progressif.',ex:'Le déclin du jour sur la garrigue avait la douceur d\'un renoncement consenti.'},
+{mot:'prisme',def:'n.m. — Corps transparent qui décompose la lumière en ses couleurs.',ex:'Chaque personne est un prisme — elle reçoit une lumière et en renvoie une autre.'},
+{mot:'flottement',def:'n.m. — État d\'incertitude ou d\'hésitation légère.',ex:'Il y eut un flottement dans la conversation, bref, puis tout reprit.'},
+{mot:'ataraxie',def:'n.f. — Tranquillité de l\'âme, absence totale de trouble intérieur.',ex:'Les vieux pêcheurs de l\'étang avaient une ataraxie que rien ne semblait entamer.'},
+{mot:'anfractueux',def:'adj. — Plein de creux et de saillies irrégulières, tourmenté.',ex:'Le chemin anfractueux longeait la falaise sans jamais sembler sûr de lui-même.'},
+{mot:'délectable',def:'adj. — Qui procure un plaisir intense et raffiné.',ex:'Ce fromage de brebis était délectable — le genre de chose qu\'on mange lentement.'},
+{mot:'embrasure',def:'n.f. — Ouverture dans un mur pour une fenêtre ou une porte.',ex:'Elle s\'était installée dans l\'embrasure et regardait la pluie sans bouger.'},
+{mot:'reminiscence',def:'n.f. — Souvenir vague et doux qui revient involontairement.',ex:'Cette musique était une réminiscence de quelque chose qu\'il n\'arrivait pas à nommer.'},
+{mot:'indicible',def:'adj. — Qu\'on ne peut pas exprimer avec des mots, ineffable.',ex:'Il y avait une indicible tristesse dans cette fin d\'été.'},
+{mot:'patine',def:'n.f. — Aspect que prend un objet avec le temps et l\'usage.',ex:'La patine de ce vieux banc racontait des années de conversations oubliées.'},
+{mot:'vivace',def:'adj. — Qui dure longtemps, vigoureux, plein de vitalité.',ex:'Sa curiosité vivace pour les autres ne s\'était jamais émoussée.'},
+{mot:'lézarder',def:'v. — Se chauffer paresseusement au soleil, comme un lézard.',ex:'Il lézardait sur la terrasse depuis le début de l\'après-midi, parfaitement.'},
+{mot:'scintiller',def:'v. — Briller par éclats intermittents et rapides.',ex:'L\'étang scintillait sous le vent comme une surface qu\'on ne peut pas fixer longtemps.'},
+{mot:'tiédeur',def:'n.f. — Chaleur douce et modérée, entre chaud et froid.',ex:'La tiédeur de cette nuit de juin était parfaite pour dormir fenêtre ouverte.'},
+{mot:'pénombre',def:'n.f. — Zone de faible lumière entre l\'ombre et la lumière pleine.',ex:'Il aimait travailler dans la pénombre de fin d\'après-midi. Ça l\'aidait à penser.'},
+{mot:'impétueux',def:'adj. — Qui se manifeste avec une force soudaine et violente.',ex:'Le mistral impétueux avait balayé les nuages en quelques heures.'},
+{mot:'contemplation',def:'n.f. — Action de regarder longuement, méditation visuelle.',ex:'La contemplation du Lez au coucher du soleil était sa façon de décompresser.'},
+{mot:'perpétuel',def:'adj. — Qui dure sans interruption, qui revient sans cesse.',ex:'Ce perpétuel recommencement des saisons avait quelque chose de très rassurant.'},
+{mot:'cénacle',def:'n.m. — Groupe restreint de personnes partageant les mêmes idées.',ex:'Ce café était devenu un cénacle informel où tout le monde se connaissait.'},
+{mot:'diaphane',def:'adj. — Qui laisse passer la lumière sans être transparent, translucide.',ex:'La brume diaphane du matin donnait au paysage l\'air d\'une aquarelle inachevée.'},
+{mot:'émoi',def:'n.m. — Trouble affectif soudain, agitation intérieure légère.',ex:'Il y avait dans l\'air un émoi printanier que personne n\'arrivait à nommer précisément.'},
+{mot:'sillage',def:'n.m. — Trace laissée dans l\'eau ou l\'air par un corps en mouvement.',ex:'Le sillage du bateau se referma doucement sur lui-même, comme s\'il n\'était jamais passé.'},
+{mot:'velours',def:'n.m. — Tissu doux à poils courts, et par ext. toute douceur tactile.',ex:'Le velours du soir s\'étendait sur la ville comme une couverture sans bruit.'},
+{mot:'conciliabule',def:'n.m. — Entretien secret entre quelques personnes, conversation discrète.',ex:'Les deux voisins tenaient un conciliabule devant la boulangerie chaque matin.'},
+{mot:'luminescence',def:'n.f. — Émission de lumière froide par un corps ou un organisme.',ex:'La luminescence des méduses dans l\'eau noire avait quelque chose d\'irréel.'},
+{mot:'intime',def:'adj. — Qui touche au fond de l\'être, profond et personnel.',ex:'Ce lieu avait une atmosphère intime qu\'on ne trouvait nulle part ailleurs.'},
+{mot:'profusion',def:'n.f. — Grande abondance, quantité qui déborde.',ex:'La profusion de fleurs sauvages en mai dans la garrigue rendait la marche difficile et belle.'},
+{mot:'oblique',def:'adj. — Qui est de biais, ni horizontal ni vertical.',ex:'La lumière oblique de fin d\'après-midi changeait tout ce qu\'elle touchait.'},
+{mot:'songe',def:'n.m. — Rêve, ou pensée vague et rêveuse à l\'état éveillé.',ex:'Il était encore dans son songe du matin quand le café fut prêt.'},
+{mot:'immuable',def:'adj. — Qui ne change pas, qui reste identique à travers le temps.',ex:'La mer au matin avait quelque chose d\'immuable qui rassure.'},
+{mot:'bruissement',def:'n.m. — Léger bruit continu, comme des feuilles agitées par le vent.',ex:'Le bruissement des roseaux de Camargue avait quelque chose d\'hypnotique.'},
+{mot:'candeur',def:'n.f. — Sincérité naïve et pure, innocence sans calcul.',ex:'Sa candeur désarmait même les plus cyniques de la salle.'},
+{mot:'exquis',def:'adj. — D\'une qualité délicate et rare, d\'un raffinement exceptionnel.',ex:'Ce moment était exquis — le genre qu\'on sait précieux avant même qu\'il se termine.'},
+{mot:'liminaire',def:'adj. — Qui est au seuil, introductif, qui précède quelque chose.',ex:'Le silence liminaire du matin mérite d\'être respecté quelques minutes.'},
+{mot:'capricieux',def:'adj. — Sujet à des changements brusques et imprévisibles.',ex:'Le temps capricieux d\'avril était une invitation à ne rien planifier de rigide.'},
+{mot:'délié',def:'adj. — Fin et souple, ou libéré de quelque chose de contraignant.',ex:'Son écriture déliée courait sur le papier sans effort apparent.'},
+{mot:'estuaire',def:'n.m. — Embouchure large d\'un fleuve soumise à l\'influence des marées.',ex:'L\'estuaire de l\'Orb se perdait dans la lumière du soir comme une question sans réponse.'},
+{mot:'ineffable',def:'adj. — Qui ne peut être exprimé avec des mots, trop grand pour eux.',ex:'Il y avait une beauté ineffable dans ce coucher de soleil sur l\'étang.'},
+{mot:'éblouissement',def:'n.m. — État causé par une lumière trop vive ou une beauté trop grande.',ex:'La mer sous le soleil de juillet provoquait un éblouissement presque douloureux.'},
+{mot:'candide',def:'adj. — Ingénu, d\'une sincérité naïve et sans calcul.',ex:'Son regard candide sur les choses lui permettait de voir ce que les autres rataient.'},
 ],
 
 // ═══════════════════════════════════════════════════
@@ -1830,293 +1893,48 @@ function genMaze(size=9, seed=42) {
 
 //MERCREDI - SUDOKU
 function genSudoku(seed=42) {
+  // Seed reproductible basé sur la date
+  // On détourne Math.random pour avoir un résultat déterministe
+  let s = seed;
+  const _random = Math.random;
+  Math.random = function() {
+    s = (s * 1664525 + 1013904223) & 0xffffffff;
+    return Math.abs(s) / 0xffffffff;
+  };
 
-  // ── 10 grilles valides avec leurs solutions ──
-  // Chaque grille : { puzzle: [], solution: [] }
-  // 0 = case vide, 1-9 = chiffre donné
+  const puzzleStr = sudoku.generate("medium");
+  const solveStr  = sudoku.solve(puzzleStr);
 
-  const GRILLES = [
+  // Restaure Math.random
+  Math.random = _random;
 
-    // ── GRILLE 1 ── (classique Wikipedia)
-    {
-      puzzle: [
-        [5,3,0, 0,7,0, 0,0,0],
-        [6,0,0, 1,9,5, 0,0,0],
-        [0,9,8, 0,0,0, 0,6,0],
-        [8,0,0, 0,6,0, 0,0,3],
-        [4,0,0, 8,0,3, 0,0,1],
-        [7,0,0, 0,2,0, 0,0,6],
-        [0,6,0, 0,0,0, 2,8,0],
-        [0,0,0, 4,1,9, 0,0,5],
-        [0,0,0, 0,8,0, 0,7,9],
-      ],
-      solution: [
-        [5,3,4, 6,7,8, 9,1,2],
-        [6,7,2, 1,9,5, 3,4,8],
-        [1,9,8, 3,4,2, 5,6,7],
-        [8,5,9, 7,6,1, 4,2,3],
-        [4,2,6, 8,5,3, 7,9,1],
-        [7,1,3, 9,2,4, 8,5,6],
-        [9,6,1, 5,3,7, 2,8,4],
-        [2,8,7, 4,1,9, 6,3,5],
-        [3,4,5, 2,8,6, 1,7,9],
-      ]
-    },
+  // Convertit la string en grille 9×9
+  const puzzle   = [];
+  const solution = [];
+  for (let r = 0; r < 9; r++) {
+    puzzle.push([]);
+    solution.push([]);
+    for (let c = 0; c < 9; c++) {
+      const i = r * 9 + c;
+      puzzle[r].push(puzzleStr[i] === '.' ? 0 : parseInt(puzzleStr[i]));
+      solution[r].push(parseInt(solveStr[i]));
+    }
+  }
 
-    // ── GRILLE 2 ──
-    {
-      puzzle: [
-        [0,0,0, 2,6,0, 7,0,1],
-        [6,8,0, 0,7,0, 0,9,0],
-        [1,9,0, 0,0,4, 5,0,0],
-        [8,2,0, 1,0,0, 0,4,0],
-        [0,0,4, 6,0,2, 9,0,0],
-        [0,5,0, 0,0,3, 0,2,8],
-        [0,0,9, 3,0,0, 0,7,4],
-        [0,4,0, 0,5,0, 0,3,6],
-        [7,0,3, 0,1,8, 0,0,0],
-      ],
-      solution: [
-        [4,3,5, 2,6,9, 7,8,1],
-        [6,8,2, 5,7,1, 4,9,3],
-        [1,9,7, 8,3,4, 5,6,2],
-        [8,2,6, 1,9,5, 3,4,7],
-        [3,7,4, 6,8,2, 9,1,5],
-        [9,5,1, 7,4,3, 6,2,8],
-        [5,1,9, 3,2,6, 8,7,4],
-        [2,4,8, 9,5,7, 1,3,6],
-        [7,6,3, 4,1,8, 2,5,9],
-      ]
-    },
-
-    // ── GRILLE 3 ──
-    {
-      puzzle: [
-        [0,0,0, 6,0,0, 4,0,0],
-        [7,0,0, 0,0,3, 6,0,0],
-        [0,0,0, 0,9,1, 0,8,0],
-        [0,0,0, 0,0,0, 0,0,0],
-        [0,5,0, 1,8,0, 0,0,3],
-        [0,0,0, 3,0,6, 0,4,5],
-        [0,4,0, 2,0,0, 0,6,0],
-        [9,0,3, 0,0,0, 0,0,0],
-        [0,2,0, 0,0,0, 1,0,0],
-      ],
-      solution: [
-        [5,8,1, 6,7,2, 4,3,9],
-        [7,9,2, 8,4,3, 6,5,1],
-        [3,6,4, 5,9,1, 7,8,2],
-        [4,3,8, 9,5,7, 2,1,6],
-        [2,5,6, 1,8,4, 9,7,3],
-        [1,7,9, 3,2,6, 8,4,5],
-        [8,4,5, 2,1,9, 3,6,7],
-        [9,1,3, 7,6,8, 5,2,4],
-        [6,2,7, 4,3,5, 1,9,8],
-      ]
-    },
-
-    // ── GRILLE 4 ──
-    {
-      puzzle: [
-        [0,2,0, 0,0,0, 0,0,0],
-        [0,0,0, 6,0,0, 0,0,3],
-        [0,7,4, 0,8,0, 0,0,0],
-        [0,0,0, 0,0,3, 0,0,2],
-        [0,8,0, 0,4,0, 0,1,0],
-        [6,0,0, 5,0,0, 0,0,0],
-        [0,0,0, 0,1,0, 7,8,0],
-        [5,0,0, 0,0,9, 0,0,0],
-        [0,0,0, 0,0,0, 0,4,0],
-      ],
-      solution: [
-        [1,2,6, 4,3,7, 9,5,8],
-        [8,9,5, 6,2,1, 4,7,3],
-        [3,7,4, 9,8,5, 1,2,6],
-        [4,5,7, 1,9,3, 8,6,2],
-        [9,8,3, 2,4,6, 5,1,7],
-        [6,1,2, 5,7,8, 3,9,4],
-        [2,6,9, 3,1,4, 7,8,5],
-        [5,4,8, 7,6,9, 2,3,1],
-        [7,3,1, 8,5,2, 6,4,9],
-      ]
-    },
-
-    // ── GRILLE 5 ──
-    {
-      puzzle: [
-        [0,0,0, 0,0,0, 6,8,0],
-        [0,0,0, 0,7,3, 0,0,9],
-        [3,0,9, 0,0,0, 0,4,5],
-        [4,9,0, 0,0,0, 0,0,0],
-        [8,0,3, 0,5,0, 9,0,2],
-        [0,0,0, 0,0,0, 0,3,6],
-        [9,6,0, 0,0,0, 3,0,8],
-        [7,0,0, 6,8,0, 0,0,0],
-        [0,2,8, 0,0,0, 0,0,0],
-      ],
-      solution: [
-        [1,7,2, 5,4,9, 6,8,3],
-        [6,4,5, 8,7,3, 2,1,9],
-        [3,8,9, 2,6,1, 7,4,5],
-        [4,9,6, 3,2,7, 8,5,1],
-        [8,1,3, 4,5,6, 9,7,2],
-        [2,5,7, 1,9,8, 4,3,6],
-        [9,6,4, 7,1,2, 3,5,8],
-        [7,3,1, 6,8,5, 5,9,4],
-        [5,2,8, 9,3,4, 1,6,7],
-      ]
-    },
-
-    // ── GRILLE 6 ──
-    {
-      puzzle: [
-        [0,0,0, 0,0,0, 0,0,0],
-        [0,1,0, 0,0,2, 0,0,0],
-        [0,0,2, 0,3,0, 0,4,0],
-        [0,0,0, 0,0,0, 1,0,5],
-        [0,3,0, 0,5,0, 0,2,0],
-        [4,0,1, 0,0,0, 0,0,0],
-        [0,7,0, 0,8,0, 4,0,0],
-        [0,0,0, 1,0,0, 0,6,0],
-        [0,0,0, 0,0,0, 0,0,0],
-      ],
-      solution: [
-        [7,4,5, 8,1,3, 2,9,6],
-        [3,1,8, 4,6,2, 5,7,9],
-        [6,9,2, 7,3,5, 8,4,1],
-        [8,2,7, 6,4,9, 1,3,5],
-        [9,3,6, 2,5,1, 7,2,4],
-        [4,5,1, 3,7,8, 6,8,2],
-        [1,7,3, 5,8,6, 4,2,8],
-        [2,8,4, 1,9,7, 3,6,5],
-        [5,6,9, 2,2,4, 9,1,7],
-      ]
-    },
-
-    // ── GRILLE 7 ── (niveau facile, beaucoup de cases données)
-    {
-      puzzle: [
-        [1,0,0, 4,8,9, 0,0,6],
-        [7,3,0, 0,0,0, 0,4,0],
-        [0,0,0, 0,0,1, 2,9,5],
-        [0,0,7, 1,2,0, 6,0,0],
-        [5,0,0, 7,0,3, 0,0,8],
-        [0,0,6, 0,9,5, 7,0,0],
-        [9,1,4, 6,0,0, 0,0,0],
-        [0,2,0, 0,0,0, 0,3,7],
-        [8,0,0, 5,1,2, 0,0,4],
-      ],
-      solution: [
-        [1,5,2, 4,8,9, 3,7,6],
-        [7,3,9, 2,5,6, 8,4,1],
-        [4,6,8, 3,7,1, 2,9,5],
-        [3,8,7, 1,2,4, 6,5,9],
-        [5,9,1, 7,6,3, 4,2,8],
-        [2,4,6, 8,9,5, 7,1,3],
-        [9,1,4, 6,3,7, 5,8,2],
-        [6,2,5, 9,4,8, 1,3,7],
-        [8,7,3, 5,1,2, 9,6,4],
-      ]
-    },
-
-    // ── GRILLE 8 ──
-    {
-      puzzle: [
-        [0,0,0, 0,0,6, 0,0,0],
-        [0,5,9, 0,0,0, 0,0,8],
-        [2,0,0, 0,0,8, 0,0,0],
-        [0,4,5, 0,0,0, 0,0,0],
-        [0,0,3, 0,0,0, 0,0,0],
-        [0,0,0, 0,6,0, 0,0,3],
-        [0,0,0, 0,0,0, 1,6,0],
-        [0,0,0, 0,0,4, 0,0,0],
-        [0,0,0, 0,0,0, 8,0,0],
-      ],
-      solution: [
-        [4,8,7, 1,9,6, 3,5,2],
-        [6,5,9, 3,7,2, 4,1,8],
-        [2,3,1, 4,5,8, 6,9,7],
-        [9,4,5, 7,1,3, 2,8,6],
-        [1,6,3, 2,8,9, 7,4,5],
-        [7,2,8, 5,6,1, 9,3,3],
-        [3,9,4, 8,2,7, 1,6,1],
-        [8,1,6, 9,3,4, 5,7,9],
-        [5,7,2, 6,4,5, 8,2,4],
-      ]
-    },
-
-    // ── GRILLE 9 ── (niveau moyen)
-    {
-      puzzle: [
-        [0,6,0, 1,0,4, 0,0,0],
-        [0,0,0, 0,0,0, 6,0,5],
-        [0,0,8, 3,0,5, 1,0,4],
-        [5,0,0, 0,0,0, 0,0,2],
-        [0,0,0, 0,7,0, 0,0,0],
-        [3,0,0, 0,0,0, 0,0,7],
-        [2,0,6, 8,0,3, 4,0,0],
-        [4,0,3, 0,0,0, 0,0,0],
-        [0,0,0, 7,0,2, 0,3,0],
-      ],
-      solution: [
-        [7,6,5, 1,8,4, 3,2,9],
-        [1,3,4, 2,9,7, 6,8,5],
-        [9,2,8, 3,6,5, 1,7,4],
-        [5,7,9, 4,3,6, 8,1,2],
-        [6,4,2, 5,7,1, 9,3,8],
-        [3,8,1, 9,2,8, 5,4,7],
-        [2,5,6, 8,1,3, 4,9,3],
-        [4,1,3, 6,5,9, 7,2,8],
-        [8,9,7, 7,4,2, 2,3,1],
-      ]
-    },
-
-    // ── GRILLE 10 ── (niveau facile)
-    {
-      puzzle: [
-        [2,0,0, 3,0,0, 0,0,0],
-        [8,0,4, 0,6,2, 0,0,3],
-        [0,1,3, 8,0,0, 2,0,0],
-        [0,0,0, 0,2,0, 3,9,0],
-        [5,0,7, 0,0,0, 6,2,1],
-        [0,3,2, 0,0,6, 0,0,0],
-        [0,2,0, 0,0,9, 1,4,0],
-        [6,0,1, 2,5,0, 8,0,9],
-        [0,0,0, 0,0,1, 0,0,2],
-      ],
-      solution: [
-        [2,6,5, 3,1,7, 9,8,4],
-        [8,9,4, 5,6,2, 7,1,3],
-        [7,1,3, 8,9,4, 2,6,5],
-        [1,4,6, 7,2,5, 3,9,8],
-        [5,8,7, 9,3,8, 6,2,1],
-        [9,3,2, 1,4,6, 5,7,8],
-        [3,2,8, 6,7,9, 1,4,5],
-        [6,7,1, 2,5,3, 8,5,9],
-        [4,5,9, 4,8,1, 3,3,2],
-      ]
-    },
-  ];
-
-  const g = GRILLES[seed % GRILLES.length];
-  const grid = g.puzzle;
-  const sol = g.solution;
-
+  // Rendu — identique à avant
   let html = `<div class="t-puzzle-title">Sudoku — complète la grille (9×9)</div>`;
   html += `<div class="sudoku-grid">`;
 
   for (let r = 0; r < 9; r++) {
     for (let c = 0; c < 9; c++) {
-      const v = grid[r][c];
-      const s = sol[r][c];
+      const v = puzzle[r][c];
+      const s = solution[r][c];
       let cls = 'sudoku-cell' + (v ? ' given' : '');
       if (c === 2 || c === 5) cls += ' br';
       if (r === 2 || r === 5) cls += ' bb';
-
       if (v) {
         html += `<span class="${cls}">${v}</span>`;
       } else {
-        // Case vide avec lettre solution cachée
         html += `<span class="${cls}" style="position:relative">
           <span class="gus-sudoku-sol" style="display:none;font-size:9px;color:#2a2a2a;">${s}</span>
         </span>`;
@@ -2126,7 +1944,6 @@ function genSudoku(seed=42) {
 
   html += `</div>`;
   html += `<div class="t-blague-rep" style="margin-top:6px" onclick="toggleSolutionSudoku(this)" data-open="0">[ révéler la solution ]</div>`;
-
   return html;
 }
 
