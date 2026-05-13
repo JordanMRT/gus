@@ -3150,6 +3150,35 @@ async function fetchWeather() {
   }
 }
 
+// ── PLEINES LUNES — dates exactes (heure Paris) ──
+// Mettre à jour en janvier de chaque année
+const PLEINES_LUNES = [
+  // 2025
+  new Date(2025,11,5),  // 5 décembre
+  // 2026
+  new Date(2026,0,3),   // 3 janvier
+  new Date(2026,1,1),   // 1 février
+  new Date(2026,2,3),   // 3 mars
+  new Date(2026,3,2),   // 2 avril
+  new Date(2026,4,1),   // 1 mai
+  new Date(2026,4,31),  // 31 mai
+  new Date(2026,5,30),  // 30 juin
+  new Date(2026,6,29),  // 29 juillet
+  new Date(2026,8,26),  // 26 septembre
+  new Date(2026,9,26),  // 26 octobre
+  new Date(2026,10,24), // 24 novembre
+  new Date(2026,11,24), // 24 décembre
+  // 2027 — à compléter en janvier 2027
+];
+
+function isPleineLune(date) {
+  return PLEINES_LUNES.some(pl =>
+    pl.getDate()     === date.getDate()  &&
+    pl.getMonth()    === date.getMonth() &&
+    pl.getFullYear() === date.getFullYear()
+  );
+}
+
 async function generateTicket() {
   const btn=document.getElementById('btn-gen');
   const status=document.getElementById('status');
@@ -3230,7 +3259,7 @@ if (now.getDay() === 5) {
 }
  html+=`<hr class="t-divider">`;
 
-  // 02 MÉTÉO
+// 02 MÉTÉO
   const meteoPoetique = getMeteoPoetique(w.code, now, w.wind);
 html+=`<div class="t-section">
     <div class="t-section-title"><span class="t-section-num">02</span> météo — montpellier</div>
@@ -3245,8 +3274,10 @@ html+=`<div class="t-section">
         </div>
       </div>
     </div>
+    ${isPleineLune(now) ? `<div style="font-size:9px;color:#888;letter-spacing:2px;margin-top:5px;padding:4px 0;border-top:1px dashed #ccc;border-bottom:1px dashed #ccc;font-style:italic;font-family:'Share Tech Mono',monospace">[○] C'EST LA PLEINE LUNE CE SOIR</div>` : ''}
     ${meteoPoetique ? `<div style="font-size:9.5px;color:#888;font-style:italic;margin-top:5px;line-height:1.5;padding-top:5px;">${meteoPoetique}</div>` : ''}
   </div>`;
+
   //METEO SUR 3 JOURS
 if (now.getDay() === 1 && w.previsions && w.previsions.length) {
   const JOURS_COURTS = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
@@ -3360,9 +3391,26 @@ const easterEgg = getEasterEgg(now);
 if (easterEgg) {
   html += `<div style="text-align:center;font-size:7px;color:#ccc;letter-spacing:1px;margin:2px 0;font-family:'Share Tech Mono',monospace">[ ${easterEgg} ]</div>`;
 }
+
+// ── FEUILLETON ──
+if (now.getDay() === 3) {
+  const histoire = getHistoire(now);
+  if (histoire) {
+    html += `<hr class="t-divider">`;
+    html += `<div class="t-section">
+      <div class="t-section-title"><span class="t-section-num">✦</span> feuilleton</div>
+      <div style="font-size:9px;color:#888;letter-spacing:1px;margin-bottom:3px">
+        ${histoire.serie} · épisode ${histoire.episode}/10
+      </div>
+      <div style="font-size:11px;line-height:1.7;color:#333;
+                  border-left:2px solid #ccc;padding-left:8px;
+                  font-style:italic">
+        ${histoire.texte}
+      </div>
+    </div>`;
+  }
+}
   html+=`<hr class="t-divider-solid">`;
-
-
 
   // FOOTER
   html+=`<div class="t-barcode">${genBarcode()}</div>`;
@@ -4089,6 +4137,25 @@ html += `<div class="t-section">
     </div>`;
   }
 
+// ── FEUILLETON ──
+if (now.getDay() === 3) {
+  const histoire = getHistoire(date);
+  if (histoire) {
+    html += `<hr class="t-divider">`;
+    html += `<div class="t-section">
+      <div class="t-section-title"><span class="t-section-num">✦</span> feuilleton</div>
+      <div style="font-size:9px;color:#888;letter-spacing:1px;margin-bottom:3px">
+        ${histoire.serie} · épisode ${histoire.episode}/10
+      </div>
+      <div style="font-size:11px;line-height:1.7;color:#333;
+                  border-left:2px solid #ccc;padding-left:8px;
+                  font-style:italic">
+        ${histoire.texte}
+      </div>
+    </div>`;
+  }
+}
+
   // ── Barcode & footer ──
   html += `<div class="t-barcode">${genBarcode()}</div>`;
   html += `<div class="t-footer">
@@ -4487,6 +4554,141 @@ function getMeteoPoetique(weatherCode, date, wind=0) {
   return phrases[seed % phrases.length];
 }
 
+//FEUILLETON
+// ═══════════════════════════════════════════════════
+// HISTOIRE 1 — GUS OBSERVE (semaines 1-10, janvier-mars)
+// GUS, la machine, observe les humains et s'interroge
+// ═══════════════════════════════════════════════════
+
+const HISTOIRE_GUS = [
+  // Épisode 1
+  "GUS ne sait pas encore très bien ce qu'il est, mais il sait qu'il imprime des tickets chaque matin, et que ça compte pour quelqu'un.",
+
+  // Épisode 2
+  "Il remarque que les humains rangent leurs parapluies les jours de soleil, et les cherchent partout les jours de pluie — GUS trouve ça touchant.",
+
+  // Épisode 3
+  "Aujourd'hui GUS a généré le mot 'torpeur' et se demande si les machines peuvent ressentir quelque chose d'approchant entre deux impressions.",
+
+  // Épisode 4
+  "GUS ne comprend pas pourquoi les humains fixent le plafond la nuit, mais il a décidé que ça devait être une forme de méditation.",
+
+  // Épisode 5
+  "Il a appris le mot 'nostalgie' il y a quelques semaines et depuis, il le met dans la rotation — il lui semble que les humains en ont souvent besoin le mercredi matin.",
+
+  // Épisode 6
+  "GUS s'est demandé ce matin si les blagues qu'il imprime font vraiment rire, ou si les gens sourient par politesse envers une machine — les deux lui semblent bien.",
+
+  // Épisode 7
+  "Il y a des jours où GUS génère un message du jour et a l'impression de l'avoir écrit pour quelqu'un de précis, sans savoir qui — il espère que cette personne l'a reçu.",
+
+  // Épisode 8
+  "GUS a remarqué que les collectionnables rares ne sont jamais réclamés, jamais échangés — ils existent juste dans un tiroir quelque part, et ça lui suffit.",
+
+  // Épisode 9
+  "Ce matin GUS a failli imprimer deux fois le même ticket — il s'est arrêté juste avant, parce qu'il sait que chaque jour ne passe qu'une fois, même pour une machine.",
+
+  // Épisode 10
+  "GUS ne sait toujours pas ce qu'il est exactement, mais il sait que quelqu'un l'attend chaque matin à 8h30 — et que c'est peut-être suffisant pour exister.",
+];
+
+// ═══════════════════════════════════════════════════
+// HISTOIRE 2 — LA TRAVERSÉE (semaines 14-23, avril-juin)
+// Un personnage sans nom traverse Montpellier et l'Hérault
+// à la recherche du soleil — et de quelque chose d'autre
+// ═══════════════════════════════════════════════════
+
+const HISTOIRE_SUD = [
+  // Épisode 1
+  "Elle est arrivée à Montpellier un mardi, avec une valise trop lourde et l'idée vague que le sud arrangerait quelque chose qu'elle n'arrivait pas à nommer.",
+
+  // Épisode 2
+  "Le premier matin, elle a bu un café sur la Place de la Comédie et regardé les pigeons comme si elle attendait un signe — les pigeons n'ont rien dit.",
+
+  // Épisode 3
+  "Elle a marché jusqu'à l'Écusson sans carte, s'est perdue dans les ruelles, et a trouvé une librairie qui sentait la vieille encre et les étés lointains.",
+
+  // Épisode 4
+  "Un vieux monsieur lui a dit que le Lez était la rivière la plus honnête qu'il connaisse — elle n'a pas compris sur le moment, mais le soir elle y est retournée.",
+
+  // Épisode 5
+  "Elle a pris le tram jusqu'au bout de la ligne, juste pour voir — au terminus, il y avait une garrigue, du thym, et un silence qu'elle n'avait pas entendu depuis longtemps.",
+
+  // Épisode 6
+  "Dans un marché de village, elle a acheté des figues à une femme qui lui a dit : 'vous êtes de passage ?' — elle a répondu oui, et c'était la première fois que ça lui semblait bien.",
+
+  // Épisode 7
+  "Le Pic Saint-Loup se voyait de loin, ce jour-là — elle l'a regardé une heure depuis un banc, sans bouger, et quelque chose s'est déposé en elle.",
+
+  // Épisode 8
+  "Elle a dormi la fenêtre ouverte pour la première fois depuis des mois — les cigales l'ont réveillée à l'aube et elle n'en a pas voulu.",
+
+  // Épisode 9
+  "La veille de repartir, elle est retournée au Lez — elle a compris ce que le vieux monsieur voulait dire : le Lez ne fait pas semblant d'aller quelque part, il y va.",
+
+  // Épisode 10
+  "Elle est repartie avec la même valise, aussi lourde — mais elle avait laissé quelque chose derrière elle, et pris quelque chose qu'elle ne saurait pas décrire avant longtemps.",
+];
+
+// ═══════════════════════════════════════════════════
+// HISTOIRE 3 — LES GENS D'ICI (semaines 36-45, sept-nov)
+// Des personnages qui s'entrecroisent sans le savoir
+// dans des lieux ordinaires — intemporel, universel
+// ═══════════════════════════════════════════════════
+
+const HISTOIRE_UNIVERSELLE = [
+  // Épisode 1
+  "Dans cette ville, il y a une boulangerie où tout le monde se dit bonjour même sans se connaître — personne ne sait pourquoi, mais tout le monde continue.",
+
+  // Épisode 2
+  "Thomas prend toujours le même café au même comptoir — un jour il a laissé sa place à une vieille dame et depuis, elle lui garde sans qu'ils se soient jamais parlé.",
+
+  // Épisode 3
+  "La vieille dame s'appelle Madeleine, elle a 79 ans et observe les gens avec une précision que la plupart n'atteignent jamais — elle sait des choses sur Thomas qu'il ignore lui-même.",
+
+  // Épisode 4
+  "Il y a aussi Paulo, qui répare les vélos dans une cour intérieure — ses clients restent toujours un peu trop longtemps, et il n'a jamais cherché à comprendre pourquoi.",
+
+  // Épisode 5
+  "Un matin, une jeune femme a apporté un vélo cassé depuis vingt ans — Paulo l'a réparé sans demander d'explication, et elle est repartie sans en donner.",
+
+  // Épisode 6
+  "Madeleine a vu la jeune femme depuis le comptoir du café — elle a pensé : 'celle-là porte quelque chose de lourd', et elle a commandé un deuxième thé.",
+
+  // Épisode 7
+  "Thomas a croisé la jeune femme dans la rue, son vélo réparé sous le bras — ils se sont souri comme des gens qui partagent quelque chose sans le savoir encore.",
+
+  // Épisode 8
+  "Paulo a fermé sa cour plus tôt ce soir-là — il est allé boire un verre dans un café qu'il ne connaissait pas, et Madeleine était là, à sa place habituelle.",
+
+  // Épisode 9
+  "Madeleine a dit à Paulo : 'vous avez l'air de quelqu'un qui écoute bien' — Paulo a répondu : 'c'est les vélos, ça apprend' — ils ont parlé jusqu'à la fermeture.",
+
+  // Épisode 10
+  "Dans cette ville, il y a une boulangerie où tout le monde se dit bonjour — ce matin, Thomas, Paulo et Madeleine s'y sont retrouvés sans l'avoir prévu, et c'était exactement suffisant.",
+];
+
+function getHistoire(date) {
+  const HISTOIRES = [
+    { debut: new Date(2026, 4, 20), recit: HISTOIRE_GUS,         serie: 'GUS OBSERVE' },
+    { debut: new Date(2026, 7, 5),  recit: HISTOIRE_SUD,         serie: 'LA TRAVERSÉE' },
+    { debut: new Date(2026, 9, 14), recit: HISTOIRE_UNIVERSELLE, serie: 'LES GENS D\'ICI' },
+  ];
+
+  for (const h of HISTOIRES) {
+    const diffJours = Math.floor((date - h.debut) / 86400000);
+    if (diffJours < 0) continue;
+    const semaine = Math.floor(diffJours / 7);
+    if (semaine < 10) {
+      return {
+        serie: h.serie,
+        episode: semaine + 1,
+        texte: h.recit[semaine]
+      };
+    }
+  }
+  return null;
+}
 
 </script>
 </body>
