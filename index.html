@@ -2047,7 +2047,7 @@ function pickCollectionnable(weatherCode, date) {
    if (seedMensuel % 28 === 0) {
    return COLLECTIONNABLES[COLLECTORS[date.getMonth()]];
    }
-
+   
   // Orage rare
   if(weatherCode>=95) return COLLECTIONNABLES.orage;
   // Neige très rare
