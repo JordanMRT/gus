@@ -1817,12 +1817,236 @@ citrouille: {
     label: 'PREMIER JOUR D\'ÉTÉ',
     rarity: '✦✦✦ rare · juin'
   },
+
+// ── COLLECTIONNABLES RARES ──
+// Colle ces entrées dans l'objet COLLECTIONNABLES existant
+
+  // JANVIER
+  collector_bouteille: {
+    art: `
+  _____________            __________
+ /\            \_____ _   (\ -=-     \
+ |;             _____|_|   \`\  --=-=  \
+ \/____________/             \ -==--=- \
+                              ) -==-==- )
+                             ( =-==-=  (
+                              \ -=-     \
+                             /_)    -=-  )
+                             \`""""""""""\``,
+    label: 'BOUTEILLE À LA MER',
+    rarity: '✦✦✦✦ collector · janvier'
+  },
+  // FÉVRIER
+  collector_ticket_tram: {
+    art: `
+ .-----------.
+ | TRAM  MTP |
+ |-----------|
+ | 1947      |
+ | Ligne  1  |
+ |-----------|
+ | Prix : 5F |
+ |___________|
+  [composté] `,
+    label: 'TICKET TRAM 1947',
+    rarity: '✦✦✦✦ collector · février'
+  },
+    // MARS
+  collector_cle: {
+    art: `
+  ,o.          8 8
+ d   bzzzzzzzza8o8b
+  \`o'`,
+    label: 'CLÉ SANS SERRURE',
+    rarity: '✦✦✦✦ collector · mars'
+  },
+    // AVRIL
+  collector_sablier: {
+    art: `
+ ________
+  (    )
+   \../
+    )(
+   /  \
+  (::::)
+ ~~~~~~~~`,
+    label: 'SABLIER INVERSÉ',
+    rarity: '✦✦✦✦ collector · avril'
+  },
+    // MAI
+  collector_boussole: {
+    art: `
+               N
+          .-~~~~~-.
+       .-'         '-.
+     .'       |       '.
+    /         |         \
+   |        \ | /        |
+   |         \|/         |
+ O |          |          | E
+   |          |          |
+   |          |          |
+    \         |         /
+     '.      \ /      .'
+       '-.         .-'
+          '~~~~~~~'
+              S
+   sud = nord`,
+    label: 'BOUSSOLE DU SUD',
+    rarity: '✦✦✦✦ collector · mai'
+  },
+    // JUIN
+  collector_reveil: {
+    art: `
+.'\`~~~~~~~~~~~\`'.
+(  .'11 12 1'.  )
+|  :10 \    2:  |
+|  :9   @-> 3:  |
+|  :8       4;  |
+'. '..7 6 5..' .'
+~-------------~  `,
+    label: 'RÉVEIL ARRÊTÉ',
+    rarity: '✦✦✦✦ collector · juin'
+  },
+    // JUILLET
+  collector_etoile: {
+    art: `
+    ,
+     \  :  /
+  '. __/ \__ .'
+  _ _\     /_ _
+     /_   _\
+   .'  \ /  '.
+     /  |  \
+       /|\\
+      / | \\
+     /  |  \\
+    / . | . \\
+   /    |    \\
+  /     |     \\
+        |
+- - - - + - - - -
+  traîne de lumière`,
+    label: 'ÉTOILE FILANTE',
+    rarity: '✦✦✦✦ collector · juillet'
+  },
+    // AOÛT
+  collector_perle: {
+    art: `
+    .----.
+   /  __  \\
+  | /    \ |
+  ||  ()  ||
+  | \    / |
+   \  --  /
+    '----'
+  huître de Thau
+    perle rare`,
+    label: 'PERLE DE THAU',
+    rarity: '✦✦✦✦ collector · août'
+  },
+
+  // SEPTEMBRE
+  collector_carnet: {
+    art: `
+  .----------.
+  |          |
+  |  Pour    |
+  |          |
+  |  ______  |
+  | (      ) |
+  |           |
+  |  — sans   |
+  |    nom —  |
+  |__________|`,
+    label: 'CARNET SANS NOM',
+    rarity: '✦✦✦✦ collector · septembre'
+  },
+
+  // OCTOBRE
+  collector_billet: {
+    art: `
+ .-------------.
+ | BILLET      |
+ |-------------|
+ | Départ:     |
+ | MONTPELLIER |
+ | Arrivée:    |
+ | ??????????? |
+ |-------------|
+ | destination |
+ |  inconnue   |
+ '-------------'`,
+    label: 'BILLET SANS DEST.',
+    rarity: '✦✦✦✦ collector · octobre'
+  },
+
+  // NOVEMBRE
+  collector_piece: {
+    art: `
+           __-----__
+      ..;;;--'~~~\`--;;;..
+    /;-~                ~-.\
+   //      ,;;;;;;;;      \\
+ .//      ;;;;;    \       \\
+ ||       ;;;;(   /.|       ||
+ ||       ;;;;;;;   _\      ||
+ ||       ';;  ;;;;=        ||
+ ||.       | ''\;;;;;;      ||
+  \\     ,| '\  '|><| ???? //
+   \\   |     |      \    //
+    \`;.,|.    |      '\.-'/
+      ~~;;;,._|___.,-;;;~'
+          ''=--'
+  pays disparu
+   date: ????`,
+    label: 'PIÈCE PAYS DISPARU',
+    rarity: '✦✦✦✦ collector · novembre'
+  },
+
+  // DÉCEMBRE
+  collector_ticket_zero: {
+    art: `
+ .-----------.
+ |  G.U.S.   |
+ |-----------|
+ | ticket n° |
+ |           |
+ |     1     |
+ |           |
+ | le premier|
+ |-----------|
+ | origine   |
+ '-----------'`,
+    label: 'TICKET N°1 — L\'ORIGINE',
+    rarity: '✦✦✦✦ collector · décembre'
+  },
 };
 
 function pickCollectionnable(weatherCode, date) {
   const m = date.getMonth();
   const d = date.getDay();
   const day = date.getDate();
+
+  //COLLECORS//
+  const COLLECTORS = [
+     'collector_bouteille',    // janvier  (m=0)
+     'collector_ticket_tram',  // février  (m=1)
+     'collector_cle',          // mars     (m=2)
+     'collector_sablier',      // avril    (m=3)
+     'collector_boussole',     // mai      (m=4)
+     'collector_reveil',       // juin     (m=5)
+     'collector_etoile',       // juillet  (m=6)
+     'collector_perle',        // août     (m=7)
+     'collector_carnet',       // septembre(m=8)
+     'collector_billet',       // octobre  (m=9)
+     'collector_piece',        // novembre (m=10)
+     'collector_ticket_zero',  // décembre (m=11)
+   ];
+   const seedMensuel = date.getDate() * 3 + date.getMonth() * 17;
+   if (seedMensuel % 28 === 0) {
+   return COLLECTIONNABLES[COLLECTORS[date.getMonth()]];
+   }
 
   // Orage rare
   if(weatherCode>=95) return COLLECTIONNABLES.orage;
