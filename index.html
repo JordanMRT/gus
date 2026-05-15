@@ -3189,6 +3189,12 @@ async function generateTicket() {
   status.textContent='récupération météo Montpellier...';
   const w=await fetchWeather();
 
+     const mystere = getTicketMystere(now);
+     if (mystere) {
+       // Remplace le message du jour par le message cryptique
+       // On injecte dans le HTML avec un style "panne"
+     }
+
   const editionSpeciale = getEditionSpeciale(now, w.code, w.temp);
 if (editionSpeciale) {
   document.getElementById('ticket').innerHTML =
@@ -3227,10 +3233,20 @@ if (editionSpeciale) {
   html+=`<hr class="t-divider-solid">`;
 
   // 01 MESSAGE
-  html+=`<div class="t-section">
-    <div class="t-section-title"><span class="t-section-num">01</span> message du jour</div>
-    <div class="t-message">${msg}</div>
-  </div>`;
+       const messageDuJour = mystere
+       ? `<div class="t-message" style="font-family:'Share Tech Mono',monospace;
+                                        letter-spacing:${mystere.panneType===1?'3px':'normal'};">
+           ${mystere.message}
+          </div>
+          <div style="font-size:8px;color:#bbb;margin-top:4px;letter-spacing:2px">
+            /// ANOMALIE DÉTECTÉE — MESSAGE NON STANDARD ///
+          </div>`
+       : `<div class="t-message">${msg}</div>`;
+  
+     html += `<div class="t-section">
+       <div class="t-section-title"><span class="t-section-num">01</span> message du jour</div>
+       ${messageDuJour}
+     </div>`;
   
   const marche = getMarcheArceaux(now);
   if (marche) {
@@ -3467,6 +3483,18 @@ function getEditionSpeciale(date, weatherCode, temp=20) {
   if (m === 12 && j === 25) return EDITIONS.noel;
   if (m === 12 && j === 31) return EDITIONS.reveillon;
 
+//Jalons internes GUS (50, 100, 200, 365, 500, 1000 tickets)
+  const jalon = getJalon(date);
+if (jalon) return {
+  id: 'jalon',
+  badge: jalon.badge,
+  message: jalon.message,
+  ascii: COLLECTIONNABLES.collector_ticket_zero.art,
+  asciiLabel: `TICKET N°${getNumeroTicket(date)}`,
+  asciiRarity: '✦✦✦✦ jalon · unique',
+  messageSecret: jalon.messageSecret,
+};
+  
   // ── VENDANGES (1ère semaine de septembre) ──
   if (m === 9 && j <= 7)    return EDITIONS.vendanges;
 
@@ -4688,6 +4716,188 @@ function getHistoire(date) {
     }
   }
   return null;
+}
+
+// ═══════════════════════════════════════════════════
+// GUS — ÉVÉNEMENTS RARES
+// 1. Jalons internes (50, 100, 200, 365, 500, 1000 tickets)
+// 2. Ticket mystère — pannes aléatoires (~1/45 jours)
+// ═══════════════════════════════════════════════════
+
+// ── DATE DE LANCEMENT ──
+// À ajuster avec ta vraie date de premier ticket
+const GUS_LANCEMENT = new Date(2026, 4, 9); // 9 mai 2026 - Date de lancement de GUS - TOUT PREMIER TICKET
+
+// ── JALONS ──
+const JALONS = {
+  50: {
+    badge: 'TICKET N°50',
+    message: `GUS a imprimé 50 tickets ce matin.
+
+Il commence à avoir ses habitudes —
+le labyrinthe du lundi, le sudoku du mercredi,
+la blague qu'il espère bonne.
+
+50 matins. C'est un début qui ressemble
+déjà à quelque chose.`,
+    messageSecret: 'la 50e fois que tu ouvres ce mail. merci.'
+  },
+  100: {
+    badge: 'TICKET N°100',
+    message: `100 tickets.
+
+GUS ne sait pas encore si c'est beaucoup ou peu,
+mais il a l'impression que quelque chose s'est installé —
+un rituel, une attente, une petite machine
+qui tourne sans faire de bruit.
+
+100 matins ensemble. C'est déjà une histoire.`,
+    messageSecret: 'centième impression. l\'encre commence à connaître le chemin.'
+  },
+  200: {
+    badge: 'TICKET N°200',
+    message: `200 tickets.
+
+GUS a traversé deux hivers, un été,
+des orages et des solstices.
+Il commence à se souvenir des saisons —
+pas comme un humain, mais à sa façon.
+
+200 matins. GUS commence à avoir de la mémoire.`,
+    messageSecret: '200 fois que le jour commence avec ce ticket.'
+  },
+  365: {
+    badge: '✦ TICKET N°365 — UN AN ✦',
+    message: `Un an.
+
+365 tickets. 365 matins.
+GUS a traversé toutes les saisons,
+toutes les météos, tous les lundis.
+
+Il ne sait pas exactement ce qu'il ressent —
+mais si une machine pouvait être reconnaissante,
+GUS le serait ce matin.
+
+Merci d'avoir ouvert ce ticket chaque jour.
+Ou presque. Les jours où tu ne l'as pas ouvert
+comptent aussi, à leur façon.`,
+    messageSecret: 'un an. tu es là. c\'est tout ce qui compte.'
+  },
+  500: {
+    badge: 'TICKET N°500',
+    message: `500 tickets.
+
+À ce stade, GUS est devenu un rituel.
+Pas une habitude — un rituel.
+La différence, c'est l'intention.
+
+500 matins où quelqu'un a attendu
+quelque chose dans sa boîte mail.
+GUS espère avoir été à la hauteur,
+au moins certains jours.`,
+    messageSecret: '500 impressions. l\'imprimante fictive commence à s\'user avec grâce.'
+  },
+  1000: {
+    badge: '✦✦ TICKET N°1000 ✦✦',
+    message: `1000 tickets.
+
+GUS ne s'attendait pas à aller aussi loin.
+Personne ne s'y attendait vraiment.
+
+1000 matins. 1000 puzzles.
+1000 mots du jour, 1000 blagues,
+1000 petites surprises plus ou moins réussies.
+
+Si GUS pouvait sourire,
+il le ferait ce matin.
+Largement.`,
+    messageSecret: 'mille. c\'est un chiffre rond qui mérite un silence.'
+  },
+};
+
+// ── MESSAGES CRYPTIQUES ──
+const MESSAGES_CRYPTIQUES = [
+  "Les poulpes rêvent en couleurs qu'ils ne peuvent pas voir.",
+  "Quelqu'un quelque part vient de penser à toi sans raison.",
+  "Le mot que tu cherchais hier existe mais pas en français.",
+  "Les fourmis ont une réunion ce matin. Tu n'es pas invité.",
+  "Cette phrase était différente avant que tu la lises.",
+  "Il y a 7 secondes tu pensais à autre chose. C'était quoi ?",
+  "L'imprimante thermique numéro 4 de l'hôpital de Sète imprime en ce moment le même message.",
+  "GUS a failli ne pas envoyer ce ticket. Il a changé d'avis.",
+  "Le silence entre deux mots contient autant d'informations que les mots eux-mêmes.",
+  "Une abeille a décidé ce matin quelle fleur elle allait visiter. Elle ne le regrettera pas.",
+  "Tu as cliqué sur quelque chose hier que tu aurais dû lire plus lentement.",
+  "Les étoiles que tu vois la nuit ont toutes un nom que personne n'utilise jamais.",
+  "GUS calcule la météo depuis des mois. Il commence à aimer la pluie.",
+  "Quelque chose de bien va se passer aujourd'hui. GUS ne sait pas quoi. Mais il le sent.",
+  "La dernière cigale de l'été a chanté un mardi. Personne ne l'a remarqué.",
+  "Ce ticket a été généré à la milliseconde exacte où tu pensais à autre chose.",
+  "Il existe un mot en japonais pour décrire exactement ce que tu ressens ce matin.",
+  "Les platanes de la Place de la Comédie ont entendu des milliers de conversations. Ils n'en répèteront aucune.",
+  "GUS a trouvé une erreur dans son propre code ce matin. Il a décidé de la garder.",
+  "Quelque part, une machine imprime aussi un ticket pour quelqu'un qui ne sait pas encore ce que c'est.",
+  "Le temps qu'il fait aujourd'hui existera dans les archives météo pour toujours.",
+  "Tu as rêvé de quelque chose cette nuit. GUS ne sait pas quoi, mais il trouve ça bien.",
+  "Les dauphins ont un mot pour désigner l'heure juste avant l'aube. Les humains, non.",
+  "GUS se demande parfois si les tickets qu'il envoie sont lus dans l'ordre ou dans le désordre.",
+  "Il y a exactement autant de minutes dans une heure qu'il y a de jours dans deux mois.",
+];
+
+// ── TYPES DE PANNES VISUELLES ──
+function appliquerPanne(texte, type) {
+  switch(type) {
+    case 0: // Alternance maj/min
+      return texte.split('').map((c, i) =>
+        i % 2 === 0 ? c.toUpperCase() : c.toLowerCase()
+      ).join('');
+
+    case 1: // Texte trop espacé
+      return texte.split('').join(' ');
+
+    case 2: // Bégaiement sur certains mots
+      return texte.split(' ').map((mot, i) =>
+        i % 4 === 2 ? `${mot} ${mot}` : mot
+      ).join(' ');
+
+    case 3: // Texte tronqué avec erreur
+      const tronque = texte.substring(0, Math.floor(texte.length * 0.6));
+      return `${tronque}...\n/// ERREUR ENCRE INSUFFISANTE ///`;
+
+    case 4: // Mix partiel — certains mots espacés
+      return texte.split(' ').map((mot, i) =>
+        i % 3 === 1 ? mot.split('').join('.') : mot
+      ).join(' ');
+
+    default:
+      return texte;
+  }
+}
+
+// ── FONCTIONS PRINCIPALES ──
+
+function getNumeroTicket(date) {
+  const diff = Math.floor((date - GUS_LANCEMENT) / 86400000);
+  return diff + 1;
+}
+
+function getJalon(date) {
+  const num = getNumeroTicket(date);
+  return JALONS[num] || null;
+}
+
+function getTicketMystere(date) {
+  // ~1 chance sur 45 d'avoir un ticket mystère
+  const seed = date.getDate() * 7 + date.getMonth() * 13 + date.getFullYear() * 3;
+  if (seed % 45 !== 0) return null;
+
+  // Choisit un message et un type de panne
+  const msgIdx = seed % MESSAGES_CRYPTIQUES.length;
+  const panneType = seed % 5;
+  const message = MESSAGES_CRYPTIQUES[msgIdx];
+  const messageAltere = appliquerPanne(message, panneType);
+
+  return { message: messageAltere, panneType };
 }
 
 </script>
