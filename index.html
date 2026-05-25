@@ -1086,11 +1086,21 @@ ephemeride: [
 const COLLECTIONNABLES = {
   // MÉTÉO
   soleil: {
-    art: `   \ | /
- '-  ☼  -'
-   / | \ `,
-    label: 'SOLEIL DU MIDI', rarity: '✦ commun'
-  },
+  pixels: [
+    [0,0,0,0,0,1,0,0,0,0,0],
+    [0,1,0,0,0,1,0,0,0,1,0],
+    [0,0,1,1,1,1,1,1,1,0,0],
+    [0,0,1,2,2,1,2,2,1,0,0],
+    [0,0,1,2,2,3,2,2,1,0,0],
+    [1,1,1,1,2,2,2,1,1,1,1],
+    [0,0,1,3,2,2,2,3,1,0,0],
+    [0,0,1,1,1,1,1,1,1,0,0],
+    [0,0,1,1,1,1,1,1,1,0,0],
+    [0,1,0,0,0,1,0,0,0,1,0],
+    [0,0,0,0,0,1,0,0,0,0,0],
+  ],
+  label: 'SOLEIL DU MIDI', rarity: '✦ commun'
+},
   pluie: {
     art: `   .--.
  .(    ).
@@ -1125,48 +1135,69 @@ const COLLECTIONNABLES = {
   },
   // SAISONS
   cigale: {
-    art: `    /\\
-   /  \\
-  / () \\
- /  /\\  \\
-/__/  \\__\\
-   |  |
-   '--'`,
-    label: 'CIGALE D\'AOÛT', rarity: '✦ commun (été)'
-  },
+  pixels: [
+    [0,0,0,3,0,0,0,3,0,0,0],
+    [0,0,0,0,3,1,3,0,0,0,0],
+    [0,0,0,0,1,1,1,0,0,0,0],
+    [2,2,2,1,1,1,1,1,2,2,2],
+    [2,2,2,2,1,1,1,2,2,2,2],
+    [0,1,1,1,1,1,1,1,1,1,0],
+    [1,1,0,1,2,2,2,1,0,1,1],
+    [0,1,1,1,1,1,1,1,1,1,0],
+    [0,0,0,1,2,2,2,1,0,0,0],
+    [0,0,0,0,1,1,1,0,0,0,0],
+    [0,0,0,0,0,1,0,0,0,0,0],
+  ],
+  label: 'CIGALE DE L\'ÉTÉ', rarity: '✦ commun (été)'
+},
   mimosa: {
-    art: `   *  *  *
-  * *** *
- * ***** *
-  * *** *
-   *  *  *
-    ||||
-    ||||`,
-    label: 'MIMOSA DE FÉVRIER', rarity: '✦✦ hivernal'
-  },
-  vendange: {
-    art: `     __
- __ {_/
- \_}\\ _
-    _\(_)_
-   (_)_)(_)_
-  (_)(_)_)(_)
-   (_)(_))_)
-    (_(_(_)
-     (_)_)
-      (_)`,
-    label: 'GRAPPE D\'HÉRAULT', rarity: '✦ automne'
-  },
+  pixels: [
+    [0,3,2,0,3,2,3,0,0,0,0],
+    [0,3,3,0,3,3,3,0,2,3,0],
+    [3,2,3,3,2,3,0,0,3,3,0],
+    [3,3,3,3,3,3,3,2,3,0,0],
+    [0,3,2,3,0,0,3,3,3,0,0],
+    [0,3,3,3,3,3,2,2,0,0,0],
+    [0,0,0,2,2,1,0,2,0,0,0],
+    [0,0,0,0,0,1,0,0,0,0,0],
+    [0,0,0,0,1,1,1,0,0,0,0],
+    [0,0,0,1,1,1,1,1,0,0,0],
+    [0,0,2,2,2,2,2,2,2,0,0],
+  ],
+  label: 'MIMOSA DE FÉVRIER', rarity: '✦✦ hivernal'
+},
+vendange: {
+  pixels: [
+    [0,0,0,0,0,1,2,3,2,0,0],
+    [0,0,0,0,0,1,3,2,2,0,0],
+    [0,0,0,2,1,0,2,1,0,0,0],
+    [0,0,0,1,1,0,1,1,0,0,0],
+    [0,0,2,1,1,2,1,2,1,0,0],
+    [0,0,1,1,1,1,1,1,1,0,0],
+    [0,0,2,1,1,2,1,2,1,0,0],
+    [0,0,1,1,1,1,1,1,1,0,0],
+    [0,0,0,2,1,0,2,1,0,0,0],
+    [0,0,0,1,1,0,1,1,0,0,0],
+    [0,0,0,0,1,2,1,0,0,0,0],
+  ],
+  label: 'GRAPPE D\'HÉRAULT', rarity: '✦ automne'
+},
   coquelicot: {
-    art: `  (   )
- (  *  )
-(  ***  )
- ( *** )
-  (   )
-    |
-    |`,
-    label: 'COQUELICOT DE MAI', rarity: '✦ printemps'
-  },
+  pixels: [
+    [0,0,0,0,1,3,1,0,0,0,0],
+    [0,0,0,0,1,1,1,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0],
+    [1,1,1,1,1,1,1,1,1,1,1],
+    [1,3,1,1,2,2,2,1,1,3,1],
+    [1,1,1,1,2,3,2,1,1,1,1],
+    [0,0,0,1,2,2,2,1,0,0,0],
+    [0,0,0,1,1,1,1,1,0,0,0],
+    [0,0,0,0,1,3,1,0,0,0,0],
+    [0,0,0,0,1,1,1,0,0,0,0],
+    [0,0,0,0,0,1,0,0,0,0,0],
+  ],
+  label: 'COQUELICOT DE MAI', rarity: '✦ printemps'
+},
   // MONTPELLIER & RÉGION
   ecusson: {
     art: `┌─────────┐
@@ -1201,14 +1232,21 @@ const COLLECTIONNABLES = {
     label: 'FLAMANT DE CAMARGUE', rarity: '✦✦ rare'
   },
   pic_saint_loup: {
-    art: `          /\\
-         /  \\
-        /    \\
-       / P.S.L\\
-      /________\\
- ~~~~~~~~~~~~~~~~~~~~`,
-    label: 'PIC SAINT-LOUP', rarity: '✦✦ local'
-  },
+  pixels: [
+    [0,0,0,1,0,0,0,0,0,0,0],
+    [0,0,1,2,1,0,0,0,0,0,0],
+    [0,1,1,1,2,2,0,3,3,3,3],
+    [0,1,1,1,1,2,3,3,3,3,3],
+    [1,1,1,1,1,2,3,3,3,3,3],
+    [1,1,1,1,1,2,2,2,2,2,2],
+    [2,2,2,2,2,2,2,2,2,2,2],
+    [3,3,0,3,3,0,0,3,3,0,0],
+    [3,3,3,3,3,3,3,3,3,3,3],
+    [3,2,2,3,3,3,2,2,2,3,3],
+    [3,3,3,3,3,3,3,3,3,3,3],
+  ],
+  label: 'PIC SAINT-LOUP', rarity: '✦✦ local'
+},
   peyrou: {
     art: `  ___________
  |           |
@@ -1220,13 +1258,21 @@ const COLLECTIONNABLES = {
     label: 'PROMENADE DU PEYROU', rarity: '✦ local'
   },
   etang_thau: {
-    art: `≈≈≈≈≈≈≈≈≈≈≈
-≈  THAU   ≈
-≈≈≈  oo  ≈≈
-≈   o  o  ≈
-≈≈≈≈≈≈≈≈≈≈≈`,
-    label: 'ÉTANG DE THAU', rarity: '✦✦ local'
-  },
+  pixels: [
+    [3,3,3,3,3,3,3,1,1,1,3],
+    [3,3,3,3,3,3,1,1,1,2,2],
+    [3,3,3,3,3,3,1,1,2,2,2],
+    [3,3,3,3,3,3,1,1,2,2,2],
+    [2,2,2,2,2,2,1,1,1,1,1],
+    [3,3,3,3,3,3,3,2,2,2,3],
+    [3,2,1,2,2,3,3,3,1,3,3],
+    [2,2,3,3,3,1,3,3,3,3,3],
+    [3,3,3,2,2,2,2,2,3,3,3],
+    [2,2,2,2,2,2,2,2,2,2,2],
+    [1,1,1,1,1,1,1,1,1,1,1],
+  ],
+  label: 'ÉTANG DE THAU', rarity: '✦✦ Sète · huîtres'
+},
   saint_guilhem: {
     art: `    /|\\
    / | \\
@@ -1421,117 +1467,142 @@ canard: {
     label: 'CIGALE PROVENÇALE', rarity: '✦ commun (été)'
   },
 
-  flamant_detail: {
-    art: `            __
-           /(\`o
-     ,-,  //  \\
-    (,,,) ||   V
-   (,,,,)\\//
-   (,,,/w)-\'
-   \\,,/w)
-   \`V/uu
-     / |
-     | |
-     o o
-     \ |
-\,/  ,\|,.  \,/`,
-    label: 'FLAMANT ROSE', rarity: '✦✦ Camargue'
-  },
-
-  heronc: {
-    art: `    _
-   /|\\
-  / | \\
- /  |  \\  <--- bec
-|   |   |
- \\  |  /
-  \\ | /
-   \\|/
-    |
-    |  (long cou)
-    |
-   / \\
-  /   \\
- /     \\`,
-    label: 'HÉRON CENDRÉ', rarity: '✦✦ étangs'
-  },
-
-  lezard: {
-    art: `  __________
- /  o        \\____
-|    \\__/         \\___
- \\                    \\
-  \\____________________\\
-   |  |  |  |  |  |
-  (pattes de lézard)`,
-    label: 'LÉZARD OCELLÉ', rarity: '✦✦ garrigue'
-  },
-
-renard: {
-  art: `
-|\\_/|,,_____,~~\`
-(.".)~~     )\`~}}
- \\o/\\ /---~\\\\ ~}}
-   _//    _// ~}`,
-  label: 'RENARD ROUX',
-  rarity: '✦✦ peu commun'
+  flamant: {
+  pixels: [
+    [0,0,0,0,0,0,0,1,3,0,0],
+    [0,0,0,0,0,0,1,2,1,0,0],
+    [0,0,0,0,0,1,2,0,1,0,0],
+    [0,0,0,0,0,0,1,2,0,0,0],
+    [0,0,0,0,0,0,1,3,0,0,0],
+    [0,0,0,0,0,1,2,0,0,0,0],
+    [0,1,2,2,2,2,1,0,0,0,0],
+    [0,1,1,1,1,1,1,0,0,0,0],
+    [0,0,0,1,0,1,0,0,0,0,0],
+    [0,0,0,1,0,2,1,0,0,0,0],
+    [3,3,1,1,1,1,1,1,3,3,3],
+  ],
+  label: 'FLAMANT ROSE', rarity: '✦✦ rare · Camargue'
 },
 
+  heronc: {
+  pixels: [
+    [0,0,0,0,0,3,3,3,0,0,0],
+    [0,0,0,0,0,2,2,3,0,0,0],
+    [0,0,0,0,0,1,1,1,1,1,1],
+    [0,0,0,0,0,1,1,0,0,0,0],
+    [0,0,0,0,0,1,1,0,0,0,0],
+    [0,0,2,1,1,1,1,1,2,0,0],
+    [0,0,2,3,3,3,3,1,2,0,0],
+    [0,0,1,2,2,2,1,1,0,0,0],
+    [0,0,0,0,1,0,1,0,0,0,0],
+    [0,0,0,0,1,0,1,0,0,0,0],
+    [3,3,3,3,3,3,3,3,3,3,3],
+  ],
+  label: 'HÉRON CENDRÉ', rarity: '✦✦ étangs'
+},
+
+  lezard: {
+  pixels: [
+    [0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,1,3,1,3,1,1,1,3,1],
+    [1,1,1,2,2,2,2,1,1,1,3],
+    [2,0,1,2,1,2,1,1,0,1,0],
+    [0,0,0,1,0,1,0,1,1,1,0],
+    [0,0,1,1,1,1,1,1,0,0,0],
+    [3,3,3,3,3,3,3,3,3,3,3],
+    [0,0,0,0,0,0,0,0,0,0,0],
+  ],
+  label: 'LÉZARD OCELLÉ', rarity: '✦✦ garrigue'
+},
+
+renard: {
+  pixels: [
+    [0,1,1,0,0,0,1,1,0,0,0],
+    [0,1,2,0,0,0,2,1,0,0,0],
+    [0,1,3,1,1,1,3,1,0,0,0],
+    [0,1,2,2,2,1,1,1,0,2,2],
+    [3,2,2,2,1,1,1,1,1,2,3],
+    [2,2,1,1,1,1,1,1,1,1,1],
+    [0,0,1,1,1,1,1,1,1,0,0],
+    [0,0,1,1,1,1,1,1,1,0,0],
+    [0,0,0,1,0,1,0,1,0,0,0],
+    [0,0,1,1,1,1,1,1,0,0,0],
+    [3,3,3,3,3,3,3,3,3,3,3],
+  ],
+  label: 'RENARD ROUX', rarity: '✦✦ peu commun'
+},
+
+
   cigogne: {
-    art: `    _
-   /|\\___
-  / |    \\---bec
- /  |     \\
-|   |  o   |
- \\  |      /
-  \\ |     /
-   \\|    /
-    |   /
-    |  / (aile)
-    | /
-   _|/_
-  / | \\
- /  |  \\`,
-    label: 'CIGOGNE BLANCHE', rarity: '✦✦✦ rare'
-  },
+  pixels: [
+    [0,0,0,0,0,1,3,1,2,2,2],
+    [0,0,0,0,0,1,1,1,0,0,0],
+    [0,0,0,0,0,3,3,0,0,0,0],
+    [0,0,0,0,0,3,3,0,0,0,0],
+    [0,0,1,1,1,1,1,1,1,0,0],
+    [0,0,1,1,3,3,3,3,1,0,0],
+    [0,0,1,1,3,3,3,3,1,0,0],
+    [0,0,1,1,2,0,0,2,0,0,0],
+    [0,0,0,0,2,0,0,2,0,0,0],
+    [0,0,0,0,2,0,0,2,0,0,0],
+    [0,0,0,2,2,2,2,2,2,0,0],
+  ],
+  label: 'CIGOGNE BLANCHE', rarity: '✦✦✦ rare'
+},
 
   sanglier: {
-    art: `   ____
-  /    \\__
- | o    __)--<
- |  \\__/   \\
-  \\________/\\
-   || || || ||
-  (pattes courtes)`,
-    label: 'SANGLIER', rarity: '✦✦ garrigue'
-  },
+  pixels: [
+    [0,0,2,0,2,0,2,0,0,0,0],
+    [0,1,1,1,1,1,1,1,1,0,0],
+    [0,1,1,1,1,1,1,1,3,1,1],
+    [1,1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,2,3],
+    [1,2,2,2,2,2,2,2,1,2,3],
+    [0,1,0,1,0,1,0,1,0,0,0],
+    [0,1,0,1,0,1,0,1,0,0,0],
+    [0,1,0,1,0,1,0,1,0,0,0],
+    [0,2,2,2,2,2,2,2,2,0,0],
+    [3,3,3,3,3,3,3,3,3,3,3],
+  ],
+  label: 'SANGLIER', rarity: '✦✦ garrigue'
+},
+
+mante_religieuse: {
+  pixels: [
+    [0,0,0,3,1,1,1,3,0,0,0],
+    [0,0,0,0,1,1,1,0,0,0,0],
+    [0,1,1,1,1,1,0,1,1,1,1],
+    [0,1,0,0,1,1,1,0,0,0,1],
+    [0,1,2,2,1,1,1,0,2,2,1],
+    [0,0,3,3,1,1,1,3,3,0,0],
+    [0,3,3,3,2,2,2,3,3,3,0],
+    [0,0,0,0,1,1,1,0,0,0,0],
+    [0,0,0,0,2,2,2,0,0,0,0],
+    [0,0,0,0,1,1,1,0,0,0,0],
+    [0,0,0,0,0,1,0,0,0,0,0],
+  ],
+  label: 'MANTE RELIGIEUSE', rarity: '✦✦ été'
+},
 
   dauphin: {
-    art: `             ,-._
-           _.-'  '--.
-         .'      _  -\`\_
-        / .----.\`_.'----'
-        ;/     \`
-       /_;
-
-    ._      ._      ._      ._
-_.-._)\`\_.-._)\`\_.-._)\`\_.-._)\`\_.-._
-`,
-    label: 'DAUPHIN', rarity: '✦✦✦ rare · mer'
-  },
-
-  mante_religieuse: {
-    art: `     /\\
-    /  \\
-   | /\\ |
-   |/  \\|
-   |    |  <bras
-  /|    |\\
- / |    | \\
-|  |____|  |
- \\_|    |_/`,
-    label: 'MANTE RELIGIEUSE', rarity: '✦✦ été'
-  },
+  pixels: [
+    [1,0,1,0,0,0,0,0,0,0,0],
+    [0,1,0,0,1,0,0,0,0,0,0],
+    [1,1,1,0,1,1,0,0,0,0,0],
+    [1,0,1,1,1,1,1,1,3,0,0],
+    [0,0,1,1,1,2,2,1,1,1,1],
+    [0,0,1,1,3,3,3,3,3,2,2],
+    [0,0,0,0,0,1,1,1,0,0,0],
+    [0,0,0,0,0,2,2,0,0,0,0],
+    [3,3,3,3,3,3,3,3,3,3,3],
+    [3,3,3,0,3,0,0,3,3,3,3],
+    [0,0,3,3,0,0,3,3,3,0,0],
+  ],
+  label: 'DAUPHIN', rarity: '✦✦✦ rare · mer'
+},
 
   // ── CATÉGORIE 3 : OBJETS MÉRIDIONAUX ───────────────
 
@@ -1636,14 +1707,21 @@ chapeau_paille: {
   },
 
   lavande: {
-    art: `  | | | | | | |
-  | | | | | | |
- _| |_| |_| |_
-/ lavande      \\
-|  Hérault     |
- \\____________/`,
-    label: 'BOTTE DE LAVANDE', rarity: '✦ été'
-  },
+  pixels: [
+    [0,0,2,0,2,3,2,0,2,0,0],
+    [2,0,2,3,2,3,2,3,2,0,2],
+    [2,3,2,3,2,3,2,3,2,3,2],
+    [2,3,2,1,0,1,0,1,2,3,2],
+    [2,1,0,1,0,1,0,1,0,1,2],
+    [0,1,0,1,0,1,0,1,0,1,0],
+    [0,1,0,1,0,1,0,1,0,1,0],
+    [0,1,0,1,0,1,0,1,0,1,0],
+    [0,2,2,2,2,2,2,2,2,2,0],
+    [0,1,0,1,1,1,1,1,0,1,0],
+    [0,0,0,0,0,0,0,0,0,0,0],
+  ],
+  label: 'BOTTE DE LAVANDE', rarity: '✦ été'
+},
 
   sel_camargue: {
     art: `   __________
@@ -1760,28 +1838,38 @@ chapeau_paille: {
   },
 
   salagou: {
-    art: `  ~~~~~~~~~~~~~~~~~~~~~~~~
-  ~    LAC DU SALAGOU    ~
-  ~    rives rouges      ~
-  ~    créé en 1969      ~
-  ~~~~~~~~~~~~~~~~~~~~~~~~
-   \\  ruffes rouges   /
-    \\________________/`,
-    label: 'LAC DU SALAGOU', rarity: '✦✦ local'
-  },
+  pixels: [
+    [3,3,3,3,3,3,3,3,3,3,3],
+    [1,3,1,1,3,3,3,3,1,1,1],
+    [1,2,1,2,2,0,0,1,1,2,2],
+    [1,2,1,2,2,2,2,2,2,2,2],
+    [1,2,2,2,3,3,2,2,2,0,0],
+    [0,2,2,2,2,2,2,3,3,0,0],
+    [0,2,3,3,3,2,2,2,2,0,0],
+    [0,0,2,2,2,2,2,2,2,0,0],
+    [1,1,1,1,1,1,1,1,1,1,1],
+    [2,2,2,2,2,2,2,2,2,2,2],
+    [3,3,3,3,3,3,3,3,3,3,3],
+  ],
+  label: 'LAC DU SALAGOU', rarity: '✦✦ ruffe rouge'
+},
 
   pont_gard: {
-    art: `  | | | | | | |
-  |_|_|_|_|_|_|
-  | | | | | | |
-  |_|_|_|_|_|_|
-  |||         |||
-  |||  PONT   |||
-  ||| DU GARD |||
-~~~~~~~~~~~~~~~~~~
-  Ier s. av. J.-C.`,
-    label: 'PONT DU GARD', rarity: '✦✦✦ rare'
-  },
+  pixels: [
+    [1,1,1,1,1,1,1,1,1,1,1],
+    [2,2,2,2,2,2,2,2,2,2,2],
+    [0,0,3,0,0,3,0,0,3,0,0],
+    [2,2,2,2,2,2,2,2,2,2,2],
+    [1,3,3,1,3,3,1,3,3,1,1],
+    [2,2,2,2,2,2,2,2,2,2,2],
+    [3,3,3,1,3,3,3,1,3,3,3],
+    [3,3,3,1,3,3,3,1,3,3,3],
+    [2,2,2,2,2,2,2,2,2,2,2],
+    [3,3,3,3,3,3,3,3,3,3,3],
+    [0,3,3,3,0,0,3,3,3,0,0],
+  ],
+  label: 'PONT DU GARD', rarity: '✦✦✦ rare'
+},
   livre_ouvert_special: {
     art: `
   .-----------.
@@ -2077,7 +2165,7 @@ function pickCollectionnable(weatherCode, date) {
      'collector_piece',        // novembre (m=10)
      'collector_ticket_zero',  // décembre (m=11)
    ];
-   const seedMensuel = date.getDate() * 3 + date.getMonth() * 17;
+   const seedMensuel = date.getDate() * 97 + date.getMonth() * 1013;
    if (seedMensuel % 28 === 0) {
    return COLLECTIONNABLES[COLLECTORS[date.getMonth()]];
    }
@@ -3273,7 +3361,7 @@ function revealEnigme(btn) {
 //GETPUZZLE(DATE)
 function getPuzzle(date) {
   const day = date.getDay();// 0=dim 1=lun 2=mar 3=mer 4=jeu 5=ven 6=sam
-  const seed = date.getDate() * 31 + date.getMonth() * 366;
+  const seed = date.getDate() * 97 + date.getMonth() * 1013 + date.getFullYear() * 31;
   const titles = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
   let puzzle, type;
   switch(day) {
@@ -3334,7 +3422,10 @@ function revealReponse(r) {
 async function fetchWeather() {
   try {
     const url='https://api.open-meteo.com/v1/forecast?latitude=43.6119&longitude=3.8772&current=temperature_2m,weathercode,windspeed_10m,precipitation&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset&timezone=Europe/Paris&forecast_days=4';
-    const res=await fetch(url);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+    const res = await fetch(url, { signal: controller.signal });
+    clearTimeout(timeout);
     const j=await res.json();
     return {
       temp:Math.round(j.current.temperature_2m),
@@ -3407,7 +3498,25 @@ function renderPixelArt(pixels) {
       rects += `<rect x="${x}" y="${y}" width="${CELL}" height="${CELL}" fill="${PALETTE[val]}"/>`;
     }
   }
-  return `<svg width="${W}" height="${W}" viewBox="0 0 ${W} ${W}" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated;display:block;">${rects}</svg>`;
+  return `<div style="text-align:center;margin:4px 0;"><svg width="${W}" height="${W}" viewBox="0 0 ${W} ${W}" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated;display:inline-block;">${rects}</svg></div>`;
+}
+
+// ═══════════════════════════════════════════════════
+// PIXEL ART — rendu SVG 11×11
+// 0=transparent 1=#1a1a1a 2=#555 3=#888
+// ═══════════════════════════════════════════════════
+function renderPixelArt(pixels) {
+  const CELL = 5;
+  const PALETTE = { 1:'#1a1a1a', 2:'#555555', 3:'#888888' };
+  let rects = '';
+  for (let row = 0; row < 11; row++) {
+    for (let col = 0; col < 11; col++) {
+      const val = pixels[row][col];
+      if (!val) continue;
+      rects += `<rect x="${col*CELL}" y="${row*CELL}" width="${CELL}" height="${CELL}" fill="${PALETTE[val]}"/>`;
+    }
+  }
+  return rects;
 }
 
 //GENERATE TICKET
@@ -3607,7 +3716,10 @@ html+=`<hr class="t-divider">`;
   html+=`<div class="t-section">
     <div class="t-section-title"><span class="t-section-num">07</span> objet du jour ✦ collectionnable</div>
     <div class="t-collectionnable">
-      <pre class="ascii-art">${coll.art}</pre>
+      ${coll.pixels
+  ? `<svg class="ascii-art" style="image-rendering:pixelated;" width="55" height="55" viewBox="0 0 55 55" xmlns="http://www.w3.org/2000/svg">${renderPixelArt(coll.pixels)}</svg>`
+  : `<pre class="ascii-art">${coll.art}</pre>`
+}
       <div class="ascii-label">${coll.label}</div>
       <div class="ascii-rarity">${coll.rarity}</div>
     </div>
@@ -3744,7 +3856,7 @@ if (jalon) return {
   if (m === 11 && j <= 7 && temp < 8) return EDITIONS.froidArrive;
 
   // ── TICKET RARE (1 chance sur 30) ──
-  const seed = j * 31 + m * 7;
+  const seed = j * 97 + m * 1013 + date.getFullYear() * 31;
   if (seed % 30 === 0)      return EDITIONS.ticketRare;
 
   // ── MÉTÉO EXTRÊME ──
@@ -4296,7 +4408,7 @@ const EASTER_EGGS = [
 
 function getEasterEgg(date) {
   // Apparaît 1 fois sur 5
-  const seed = date.getDate() * 7 + date.getMonth() * 13;
+  const seed = date.getDate() * 97 + date.getMonth() * 1013 + date.getFullYear() * 31;
   if (seed % 5 !== 0) return null;
   return EASTER_EGGS[seed % EASTER_EGGS.length];
 }
@@ -4374,7 +4486,12 @@ const coll = collectMap[edition.id] || null;
 html += `<div class="t-section">
   <div class="t-section-title"><span class="t-section-num">03</span> objet du jour ✦ édition spéciale</div>
   <div class="t-collectionnable">
-    <pre class="ascii-art">${coll ? coll.art : edition.ascii}</pre>
+    ${coll
+  ? (coll.pixels
+      ? `<svg class="ascii-art" style="image-rendering:pixelated;" width="55" height="55" viewBox="0 0 55 55" xmlns="http://www.w3.org/2000/svg">${renderPixelArt(coll.pixels)}</svg>`
+      : `<pre class="ascii-art">${coll.art}</pre>`)
+  : `<pre class="ascii-art">${edition.ascii}</pre>`
+}
     <div class="ascii-label">${coll ? coll.label : edition.asciiLabel}</div>
     <div class="ascii-rarity">${coll ? coll.rarity : edition.asciiRarity}</div>
   </div>
@@ -4585,7 +4702,7 @@ function shouldShowCitation(date) {
 
 function getCitation(date) {
   if (!shouldShowCitation(date)) return null;
-  const seed = date.getDate() * 17 + date.getMonth() * 83;
+  const seed = date.getDate() * 97 + date.getMonth() * 1013 + date.getFullYear() * 31;
   return CITATIONS[seed % CITATIONS.length];
 }
 
@@ -4627,7 +4744,7 @@ const INTENTIONS = [
 ];
 
 function getIntention(date) {
-  const seed = date.getDate() * 7 + date.getMonth() * 31;
+  const seed = date.getDate() * 97 + date.getMonth() * 1013 + date.getFullYear() * 31;
   return INTENTIONS[seed % INTENTIONS.length];
 }
 
@@ -4669,7 +4786,7 @@ const RETROSPECTIVES = [
 ];
 
 function getRetrospective(date) {
-  const seed = date.getDate() * 11 + date.getMonth() * 53;
+  const seed = date.getDate() * 97 + date.getMonth() * 1013 + date.getFullYear() * 31;
   return RETROSPECTIVES[seed % RETROSPECTIVES.length];
 }
 
@@ -4776,7 +4893,8 @@ mistral: [
 };
 
 function getMeteoPoetique(weatherCode, date, wind=0) {
-  const seed = date.getDate() * 13 + date.getMonth() * 7;
+  const seed = date.getDate() * 97 + date.getMonth() * 1013 + date.getFullYear() * 31;
+
 
   // Vent fort — toujours affiché, peu importe le jour
   if (wind >= 60) {
@@ -5120,7 +5238,7 @@ function getJalon(date) {
 
 function getTicketMystere(date) {
   // ~1 chance sur 45 d'avoir un ticket mystère
-  const seed = date.getDate() * 7 + date.getMonth() * 13 + date.getFullYear() * 3;
+  const seed = date.getDate() * 97 + date.getMonth() * 1013 + date.getFullYear() * 31;
   if (seed % 45 !== 0) return null;
 
   // Choisit un message et un type de panne
