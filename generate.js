@@ -15,7 +15,7 @@ async function generateTicket() {
 
   const browser = await puppeteer.launch({
     headless: 'new',
-    executablePath: puppeteer.executablePath(),
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/google-chrome-stable',
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
 
@@ -48,7 +48,6 @@ async function generateTicket() {
       btn.style.display = 'block';
       btn.style.marginTop = '4px';
     }
-    // Révèle aussi la réponse de l'énigme logique
     const enigmeBtn = document.getElementById('enigme-rep');
     if (enigmeBtn) {
       const rep = enigmeBtn.dataset.rep;
