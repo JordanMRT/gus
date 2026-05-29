@@ -23,6 +23,7 @@ jobs:
         run: |
           rm -rf /tmp/puppeteer-cache/chrome
           npx puppeteer browsers install chrome
+          echo "PUPPETEER_EXECUTABLE_PATH=$(npx puppeteer browsers install chrome --format '{{path}}')" >> $GITHUB_ENV
         env:
           PUPPETEER_CACHE_DIR: /tmp/puppeteer-cache
       - name: Install Chromium dependencies
