@@ -15,9 +15,10 @@ async function generateTicket() {
   if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
 
   const browser = await puppeteer.launch({
-    headless: 'new',
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-  });
+  executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+  headless: 'new',
+  args: ['--no-sandbox', '--disable-setuid-sandbox'],
+});
 
   const page = await browser.newPage();
   await page.setViewport({ width: 500, height: 900, deviceScaleFactor: 2 });
