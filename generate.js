@@ -2,14 +2,22 @@
 // GUS — generate.js
 // Ouvre ticket.html avec Puppeteer, génère ticket.png
 // ═══════════════════════════════════════════════════
+const puppeteer = require('puppeteer');
+const path = require('path');
+const fs = require('fs');
 
-const { executablePath } = require('puppeteer');
+async function generateTicket() {
+  console.log('[GUS] Démarrage de la génération...');
 
-const browser = await puppeteer.launch({
-  headless: 'new',
-  executablePath: executablePath(),
-  args: ['--no-sandbox', '--disable-setuid-sandbox']
-});
+  // Crée le dossier output si nécessaire
+  const outputDir = path.join(__dirname, 'output');
+  if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
+
+  const browser = await puppeteer.launch({
+    headless: 'new',
+    executablePath: puppeteer.executablePath(),
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  });
 
   const page = await browser.newPage();
   await page.setViewport({ width: 500, height: 900, deviceScaleFactor: 2 });
@@ -21,40 +29,40 @@ const browser = await puppeteer.launch({
   // Attend que les polices Google soient chargées
   await new Promise(r => setTimeout(r, 2000));
 
-// Déclenche la génération du ticket
-await page.click('#btn-gen');
+  // Déclenche la génération du ticket
+  await page.click('#btn-gen');
 
-// Attend que la météo soit chargée et le ticket rendu
-await new Promise(r => setTimeout(r, 4000));
+  // Attend que la météo soit chargée et le ticket rendu
+  await new Promise(r => setTimeout(r, 4000));
 
-// Révèle la réponse de la blague pour le screenshot (invisible sur le web)
-await page.evaluate(() => {
-  const btn = document.getElementById('blague-rep');
-  if (btn) {
-    btn.textContent = window.currentReponse || '...';
-    btn.style.border = 'none';
-    btn.style.padding = '0';
-    btn.style.cursor = 'default';
-    btn.style.color = '#666';
-    btn.style.fontStyle = 'italic';
-    btn.style.display = 'block';
-    btn.style.marginTop = '4px';
-  }
-  // Révèle aussi la réponse de l'énigme logique
-const enigmeBtn = document.getElementById('enigme-rep');
-if (enigmeBtn) {
-    const rep = enigmeBtn.dataset.rep;
-    enigmeBtn.innerHTML = `<span style="display:inline-block;transform:rotate(180deg);letter-spacing:1px;font-style:italic">${rep}</span>`;
-    enigmeBtn.style.border = 'none';
-    enigmeBtn.style.padding = '0';
-    enigmeBtn.style.cursor = 'default';
-    enigmeBtn.style.color = '#555';
-}
-});
+  // Révèle la réponse de la blague pour le screenshot (invisible sur le web)
+  await page.evaluate(() => {
+    const btn = document.getElementById('blague-rep');
+    if (btn) {
+      btn.textContent = window.currentReponse || '...';
+      btn.style.border = 'none';
+      btn.style.padding = '0';
+      btn.style.cursor = 'default';
+      btn.style.color = '#666';
+      btn.style.fontStyle = 'italic';
+      btn.style.display = 'block';
+      btn.style.marginTop = '4px';
+    }
+    // Révèle aussi la réponse de l'énigme logique
+    const enigmeBtn = document.getElementById('enigme-rep');
+    if (enigmeBtn) {
+      const rep = enigmeBtn.dataset.rep;
+      enigmeBtn.innerHTML = `<span style="display:inline-block;transform:rotate(180deg);letter-spacing:1px;font-style:italic">${rep}</span>`;
+      enigmeBtn.style.border = 'none';
+      enigmeBtn.style.padding = '0';
+      enigmeBtn.style.cursor = 'default';
+      enigmeBtn.style.color = '#555';
+    }
+  });
 
   // Trouve l'élément ticket pour un screenshot précis
   const ticketEl = await page.$('.ticket-machine');
-  
+
   if (!ticketEl) {
     console.error('[GUS] Élément .ticket-machine introuvable');
     await browser.close();
@@ -62,14 +70,12 @@ if (enigmeBtn) {
   }
 
   const outputPath = path.join(outputDir, 'ticket.png');
-
   await ticketEl.screenshot({
     path: outputPath,
     type: 'png',
   });
 
   await browser.close();
-
   console.log(`[GUS] Ticket généré → ${outputPath}`);
   return outputPath;
 }
