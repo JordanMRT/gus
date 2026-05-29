@@ -6,7 +6,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-      PUPPETEER_CACHE_DIR: /tmp/puppeteer-cache
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,12 +19,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Install Chromium via Puppeteer
-        run: |
-          rm -rf /tmp/puppeteer-cache/chrome
-          npx puppeteer browsers install chrome
-          echo "PUPPETEER_EXECUTABLE_PATH=$(npx puppeteer browsers install chrome --format '{{path}}')" >> $GITHUB_ENV
-        env:
-          PUPPETEER_CACHE_DIR: /tmp/puppeteer-cache
+        run: npx puppeteer browsers install chrome
       - name: Install Chromium dependencies
         run: |
           sudo apt-get update
@@ -47,13 +41,6 @@ jobs:
           GMAIL_PASS: ${{ secrets.GMAIL_PASS }}
           RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
         run: node send.js
-      - name: Debug — lister les fichiers output
-        if: always()
-        run: |
-          echo "=== Contenu du dossier racine ==="
-          ls -la
-          echo "=== Contenu de output/ (si existe) ==="
-          ls -la output/ 2>/dev/null || echo "Dossier output absent"
       - name: Archiver le ticket dans le repo
         run: |
           DATE=$(date +%Y-%m-%d)
