@@ -7,6 +7,10 @@ jobs:
   generate-and-send:
     runs-on: ubuntu-latest
 
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      PUPPETEER_CACHE_DIR: /tmp/puppeteer-cache
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
