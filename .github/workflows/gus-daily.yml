@@ -7,9 +7,6 @@ jobs:
   generate-and-send:
     runs-on: ubuntu-latest
 
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -40,9 +37,6 @@ jobs:
             libxfixes3 \
             libgbm1 \
             libasound2t64
-
-      - name: Install Chrome for Puppeteer
-        run: npx puppeteer browsers install chrome@stable
 
       - name: Générer et envoyer le ticket GUS
         env:
