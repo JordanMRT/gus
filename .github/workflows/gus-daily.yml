@@ -1,31 +1,28 @@
 name: GUS — Ticket quotidien
-
 on:
   workflow_dispatch:
-
 jobs:
   generate-and-send:
     runs-on: ubuntu-latest
-
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
       PUPPETEER_CACHE_DIR: /tmp/puppeteer-cache
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24'
           cache: 'npm'
-
       - name: Install dependencies
         run: npm ci
-
+      - name: Install Chromium via Puppeteer
+        run: npx puppeteer browsers install chrome
+        env:
+          PUPPETEER_CACHE_DIR: /tmp/puppeteer-cache
       - name: Install Chromium dependencies
         run: |
           sudo apt-get update
@@ -41,14 +38,12 @@ jobs:
             libxfixes3 \
             libgbm1 \
             libasound2t64
-
       - name: Générer et envoyer le ticket GUS
         env:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_PASS: ${{ secrets.GMAIL_PASS }}
           RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
         run: node send.js
-
       - name: Archiver le ticket dans le repo
         run: |
           DATE=$(date +%Y-%m-%d)
@@ -59,7 +54,6 @@ jobs:
           git add archive/${DATE}.png
           git diff --staged --quiet || git commit -m "GUS ticket ${DATE}"
           git push
-
       - name: Conserver le ticket comme artefact Actions
         uses: actions/upload-artifact@v4
         if: always()
