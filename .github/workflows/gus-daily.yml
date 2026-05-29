@@ -20,7 +20,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Install Chromium via Puppeteer
-        run: npx puppeteer browsers install chrome
+        run: |
+          rm -rf /tmp/puppeteer-cache/chrome
+          npx puppeteer browsers install chrome
         env:
           PUPPETEER_CACHE_DIR: /tmp/puppeteer-cache
       - name: Install Chromium dependencies
