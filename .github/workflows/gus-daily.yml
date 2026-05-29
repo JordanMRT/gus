@@ -44,15 +44,11 @@ jobs:
       - name: Install Chrome for Puppeteer
         run: npx puppeteer browsers install chrome@stable
 
-      - name: Get Chrome executable path
-        run: echo "PUPPETEER_EXECUTABLE_PATH=$(npx puppeteer browsers install chrome@stable --format '{{path}}')" >> $GITHUB_ENV
-
       - name: Générer et envoyer le ticket GUS
         env:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_PASS: ${{ secrets.GMAIL_PASS }}
           RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
-          PUPPETEER_EXECUTABLE_PATH: ${{ env.PUPPETEER_EXECUTABLE_PATH }}
         run: node send.js
 
       - name: Archiver le ticket dans le repo
