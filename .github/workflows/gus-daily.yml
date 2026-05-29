@@ -44,6 +44,13 @@ jobs:
           GMAIL_PASS: ${{ secrets.GMAIL_PASS }}
           RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
         run: node send.js
+      - name: Debug — lister les fichiers output
+        if: always()
+        run: |
+          echo "=== Contenu du dossier racine ==="
+          ls -la
+          echo "=== Contenu de output/ (si existe) ==="
+          ls -la output/ 2>/dev/null || echo "Dossier output absent"
       - name: Archiver le ticket dans le repo
         run: |
           DATE=$(date +%Y-%m-%d)
