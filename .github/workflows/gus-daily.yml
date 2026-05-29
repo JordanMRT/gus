@@ -18,25 +18,13 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm ci
-      - name: Install Chromium via Puppeteer
+      - name: Install Chrome
         run: |
-          rm -rf ~/.cache/puppeteer/chrome
-          npx puppeteer browsers install chrome
-      - name: Install Chromium dependencies
-        run: |
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
           sudo apt-get update
-          sudo apt-get install -y \
-            libnss3 \
-            libatk1.0-0 \
-            libatk-bridge2.0-0 \
-            libcups2 \
-            libdrm2 \
-            libxkbcommon0 \
-            libxcomposite1 \
-            libxdamage1 \
-            libxfixes3 \
-            libgbm1 \
-            libasound2t64
+          sudo apt-get install -y google-chrome-stable
+          echo "PUPPETEER_EXECUTABLE_PATH=$(which google-chrome-stable)" >> $GITHUB_ENV
       - name: Générer et envoyer le ticket GUS
         env:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
