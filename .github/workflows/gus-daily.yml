@@ -19,7 +19,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Install Chromium via Puppeteer
-        run: npx puppeteer browsers install chrome
+        run: |
+          rm -rf ~/.cache/puppeteer/chrome
+          npx puppeteer browsers install chrome
       - name: Install Chromium dependencies
         run: |
           sudo apt-get update
