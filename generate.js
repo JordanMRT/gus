@@ -3,20 +3,11 @@
 // Ouvre ticket.html avec Puppeteer, génère ticket.png
 // ═══════════════════════════════════════════════════
 
-const puppeteer = require('puppeteer');
-const path = require('path');
-const fs = require('fs');
+const { executablePath } = require('puppeteer');
 
-async function generateTicket() {
-  console.log('[GUS] Démarrage de la génération...');
-
-  // Crée le dossier output si nécessaire
-  const outputDir = path.join(__dirname, 'output');
-  if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
-
-  const browser = await puppeteer.launch({
+const browser = await puppeteer.launch({
   headless: 'new',
-  executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || null,
+  executablePath: executablePath(),
   args: ['--no-sandbox', '--disable-setuid-sandbox']
 });
 
