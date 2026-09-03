@@ -2265,10 +2265,12 @@ function getWeatherAscii(code) {
 
 function getEdition(code, date) {
   const d = date.getDay();
+  const j = date.getDate();
   if(code>=95) return 'ÉDITION ORAGE';
   if(code>=61&&code<=82) return 'ÉDITION PLUIE';
-  if(d===0||d===6) return 'ÉDITION WEEK-END';
   const m = date.getMonth();
+  if(m===8 && j<=7) return 'ÉDITION VENDANGES';
+  if(d===0||d===6) return 'ÉDITION WEEK-END';
   if(m>=5&&m<=7) return 'ÉDITION ÉTÉ';
   if(m>=11||m<=1) return 'ÉDITION HIVER';
   if(m>=2&&m<=4) return 'ÉDITION PRINTEMPS';
@@ -3872,9 +3874,6 @@ if (jalon) return {
   asciiRarity: '✦✦✦✦ jalon · unique',
   messageSecret: jalon.messageSecret,
 };
-  
-  // ── VENDANGES (1ère semaine de septembre) ──
-  if (m === 9 && j <= 7)    return EDITIONS.vendanges;
 
   // ── DÉTECTION TEMPÉRATURE ──
   // Première chaleur estivale (1-7 juin, temp > 27°C)
